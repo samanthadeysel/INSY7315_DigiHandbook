@@ -64,6 +64,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/policiesCardOne"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="12dp"
@@ -80,6 +81,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/policiesCardTwo"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="12dp"
@@ -96,6 +98,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/policiesCardThree"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="12dp"
@@ -112,6 +115,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/policiesCardFour"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="12dp"
@@ -164,11 +168,11 @@
                 android:orientation="horizontal"
                 android:paddingHorizontal="24dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintVertical_bias="0.0"
                 tools:listitem="@layout/item_doctor_card" />
         </androidx.constraintlayout.widget.ConstraintLayout>
