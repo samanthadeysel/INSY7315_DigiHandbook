@@ -14,7 +14,7 @@
     android:layout_height="101dp"
     android:layout_marginTop="4dp"
     android:adjustViewBounds="true"
-    android:src="@drawable/peh_logo_full_colour_landscape"
+    android:src="@drawable/peh_landscape_logo_in_white"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.397"
     app:layout_constraintStart_toStartOf="parent"
