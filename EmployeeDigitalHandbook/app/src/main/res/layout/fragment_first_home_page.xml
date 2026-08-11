@@ -51,18 +51,20 @@
                     android:id="@+id/tvGreetingPrefix"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/raleway_bold"
                     android:text="Good morning, "
                     android:textColor="@color/black"
-                    android:textSize="30sp"
+                    android:textSize="32sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/raleway_bold"
                     android:text="Sr. Anna!"
                     android:textColor="@color/black"
-                    android:textSize="30sp"
+                    android:textSize="32sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -70,12 +72,13 @@
                 android:id="@+id/bentoGridLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="60dp"
                 android:alignmentMode="alignMargins"
                 android:columnCount="2"
                 android:paddingHorizontal="16dp"
                 android:rowCount="2"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/greetingLinearLayout">
 
@@ -100,14 +103,17 @@
                         <ImageView
                             android:layout_width="44dp"
                             android:layout_height="44dp"
-                            android:src="@drawable/ic_policies"
                             app:tint="#81C241"
+                            android:src="@drawable/ic_policies2"
+
                             tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
+
+                            android:fontFamily="@font/raleway_bold"
                             android:text="Policies"
                             android:textColor="#2D3748"
                             android:textSize="20sp"
@@ -117,6 +123,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
+                            android:fontFamily="@font/raleway"
                             android:gravity="center"
                             android:text="Clinical &amp; Ward Rules"
                             android:textColor="#718096"
@@ -145,7 +152,7 @@
                         <ImageView
                             android:layout_width="44dp"
                             android:layout_height="44dp"
-                            android:src="@drawable/ic_bragbook"
+                            android:src="@drawable/ic_bragbook2"
                             app:tint="#2690CF"
                             tools:ignore="ContentDescription" />
 
@@ -153,6 +160,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
+                            android:fontFamily="@font/raleway_bold"
                             android:text="Brag Book"
                             android:textColor="#2D3748"
                             android:textSize="20sp"
@@ -163,6 +171,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:gravity="center"
+                            android:fontFamily="@font/raleway"
                             android:text="Staff Shoutouts"
                             android:textColor="#718096"
                             android:textSize="16sp" />
@@ -190,13 +199,14 @@
                         <ImageView
                             android:layout_width="44dp"
                             android:layout_height="44dp"
-                            android:src="@drawable/ic_community"
+                            android:src="@drawable/ic_community2"
                             tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
+                            android:fontFamily="@font/raleway_bold"
                             android:text="Community"
                             android:textColor="#2D3748"
                             android:textSize="20sp"
@@ -207,6 +217,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:gravity="center"
+                            android:fontFamily="@font/raleway"
                             android:text="Hospital Events"
                             android:textColor="#718096"
                             android:textSize="16sp" />
@@ -234,13 +245,15 @@
                         <ImageView
                             android:layout_width="44dp"
                             android:layout_height="44dp"
-                            android:src="@drawable/ic_cpd"
+                            app:tint="#81C241"
+                            android:src="@drawable/ic_resources2"
                             tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
+                            android:fontFamily="@font/raleway_bold"
                             android:text="Resources"
                             android:textColor="#2D3748"
                             android:textSize="20sp"
@@ -251,7 +264,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:gravity="center"
-                            android:text="Training &amp; Modules"
+                            android:fontFamily="@font/raleway"
+                            android:text="Mental Health &amp; CPD"
                             android:textColor="#718096"
                             android:textSize="16sp" />
                     </LinearLayout>

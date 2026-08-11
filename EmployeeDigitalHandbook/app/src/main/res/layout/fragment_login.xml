@@ -36,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="220dp"
+        android:fontFamily="@font/raleway_bold"
         android:text="Login"
         android:textColor="@android:color/white"
         android:textSize="56sp"
@@ -49,6 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="300dp"
+        android:fontFamily="@font/raleway"
         android:text="Sign in to continue."
         android:textColor="@android:color/white"
         android:textSize="16sp"
@@ -127,6 +129,7 @@
         android:layout_marginStart="48dp"
         android:layout_marginTop="530dp"
         android:layout_marginEnd="48dp"
+        android:fontFamily="@font/raleway_bold"
         android:text="Log in"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
@@ -138,10 +141,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView android:id="@+id/forgotPasswordTextView"
+    <TextView
+        android:id="@+id/forgotPasswordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="620dp"
+        android:fontFamily="@font/raleway"
         android:text="Forgot Password?"
         android:textColor="@android:color/white"
         android:textSize="16sp"
@@ -149,10 +154,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView android:id="@+id/supportTextView"
+    <TextView
+        android:id="@+id/supportTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="670dp"
+        android:fontFamily="@font/raleway"
         android:text="Contact your admin\nsupport for assistance"
         android:textAlignment="center"
         android:textColor="@android:color/white"
