@@ -1,11 +1,13 @@
-package com.example.employeedigitalhandbook
+package com.example.employeedigitalhandbook.homePages
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.example.employeedigitalhandbook.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
 
 //var
@@ -31,5 +33,9 @@ class HomePageFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home_page, container, false)
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNav.visibility = View.VISIBLE  // show for this fragment
+    }
 }

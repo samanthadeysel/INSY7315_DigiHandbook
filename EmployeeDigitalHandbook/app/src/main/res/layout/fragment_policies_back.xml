@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#8BC34A"
-    tools:context=".PoliciesFrontFragment">
+    tools:context=".policies.PoliciesFrontFragment">
 
 
     <androidx.core.widget.NestedScrollView
@@ -31,8 +31,8 @@
 
             <ImageView
                 android:id="@+id/backArrowImageView"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -41,14 +41,15 @@
                 android:src="@android:drawable/ic_media_previous"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/black" />
+                app:tint="@color/black"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/pageTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="64dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginStart="72dp"
+                android:layout_marginTop="32dp"
                 android:fontFamily="@font/raleway_bold"
                 android:text="Nursing Policies"
                 android:textColor="@color/black"
@@ -60,14 +61,14 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/pdfOuterGreyCard"
                 android:layout_width="0dp"
-                android:layout_height="480dp"
+                android:layout_height="600dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="80dp"
                 android:layout_marginEnd="24dp"
                 app:cardBackgroundColor="#E0E0E0"
                 app:cardCornerRadius="32dp"
                 app:cardElevation="0dp"
                 app:contentPadding="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.366"
                 app:layout_constraintStart_toStartOf="parent"
@@ -160,8 +161,8 @@
 
                             <ImageView
                                 android:id="@+id/previousPageIcon"
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
+                                android:layout_width="82dp"
+                                android:layout_height="50dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
                                 android:focusable="true"
@@ -170,24 +171,26 @@
 
                             <ImageView
                                 android:id="@+id/searchPdfIcon"
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
+                                android:layout_width="175dp"
+                                android:layout_height="50dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:src="@android:drawable/ic_menu_search"
-                                app:tint="@color/black" />
+                                app:tint="@color/black"
+                                tools:ignore="SpeakableTextPresentCheck" />
 
                             <ImageView
                                 android:id="@+id/nextPageIcon"
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
+                                android:layout_width="68dp"
+                                android:layout_height="50dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:rotation="180"
                                 android:src="@android:drawable/ic_media_previous"
-                                app:tint="@color/black" />
+                                app:tint="@color/black"
+                                tools:ignore="SpeakableTextPresentCheck" />
 
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -208,6 +211,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainScrollView"
         app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

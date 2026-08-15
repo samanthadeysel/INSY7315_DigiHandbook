@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.employeedigitalhandbook.admin.LoginFragment"
+        android:label="Login">
+        <action
+            android:id="@+id/action_loginFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homePageFragment"
+        android:name="com.example.employeedigitalhandbook.homePages.HomePageFragment"
+        android:label="Home" />
+
+    <fragment
+        android:id="@+id/newHomePageFragment"
+        android:name="com.example.employeedigitalhandbook.homePages.NewHomePageFragment"
+        android:label="NewHomePage">
+        <action
+            android:id="@+id/action_newHomePageFragment_to_policiesFrontFragment"
+            app:destination="@+id/policiesFrontFragment" />
+        <action
+            android:id="@+id/action_newHomePageFragment_to_bragBookFragment"
+            app:destination="@+id/bragBookFragment" />
+        <action
+            android:id="@+id/action_newHomePageFragment_to_communityFragment"
+            app:destination="@+id/communityFragment" />
+        <action
+            android:id="@+id/action_newHomePageFragment_to_cpdFragment"
+            app:destination="@+id/cpdFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bragBookFragment"
+        android:name="com.example.employeedigitalhandbook.features.BragBookFragment"
+        android:label="BragBook" />
+
+    <fragment
+        android:id="@+id/policiesFrontFragment"
+        android:name="com.example.employeedigitalhandbook.policies.PoliciesFrontFragment"
+        android:label="Policies" >
+        <action
+            android:id="@+id/action_policiesFrontFragment_to_newHomePageFragment"
+            app:destination="@+id/newHomePageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/policiesBackFragment"
+        android:name="com.example.employeedigitalhandbook.policies.PoliciesBackFragment"
+        android:label="Policies" >
+        <action
+            android:id="@+id/action_policiesBackFragment_to_policiesFrontFragment"
+            app:destination="@+id/policiesFrontFragment" />
+    </fragment>
+</navigation>

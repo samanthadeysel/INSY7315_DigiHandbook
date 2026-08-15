@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#8BC34A"
-    tools:context=".FirstHomePage">
+    tools:context=".homePages.NewHomePageFragment">
 
     <ImageView
         android:id="@+id/homeLogoImageView"
@@ -72,7 +72,7 @@
                 android:id="@+id/bentoGridLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="104dp"
                 android:alignmentMode="alignMargins"
                 android:columnCount="2"
                 android:paddingHorizontal="16dp"
@@ -103,8 +103,8 @@
                         <ImageView
                             android:layout_width="44dp"
                             android:layout_height="44dp"
-                            app:tint="#81C241"
                             android:src="@drawable/ic_policies2"
+                            app:tint="#81C241"
 
                             tools:ignore="ContentDescription" />
 
@@ -170,8 +170,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:gravity="center"
                             android:fontFamily="@font/raleway"
+                            android:gravity="center"
                             android:text="Staff Shoutouts"
                             android:textColor="#718096"
                             android:textSize="16sp" />
@@ -216,8 +216,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:gravity="center"
                             android:fontFamily="@font/raleway"
+                            android:gravity="center"
                             android:text="Hospital Events"
                             android:textColor="#718096"
                             android:textSize="16sp" />
@@ -245,8 +245,8 @@
                         <ImageView
                             android:layout_width="44dp"
                             android:layout_height="44dp"
-                            app:tint="#81C241"
                             android:src="@drawable/ic_resources2"
+                            app:tint="#81C241"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -263,8 +263,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:gravity="center"
                             android:fontFamily="@font/raleway"
+                            android:gravity="center"
                             android:text="Mental Health &amp; CPD"
                             android:textColor="#718096"
                             android:textSize="16sp" />
