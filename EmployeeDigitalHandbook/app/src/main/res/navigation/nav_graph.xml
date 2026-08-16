@@ -58,4 +58,13 @@
             android:id="@+id/action_policiesBackFragment_to_policiesFrontFragment"
             app:destination="@+id/policiesFrontFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/comingSoonFragment"
+        android:name="com.example.employeedigitalhandbook.features.ComingSoonFragment"
+        android:label="ComingSoon">
+        <action
+            android:id="@+id/action_comingSoonFragment_to_homePageFragment"
+            app:destination="@+id/homePageFragment" />
+    </fragment>
 </navigation>
