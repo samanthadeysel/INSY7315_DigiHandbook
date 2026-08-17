@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_newHomePageFragment_to_cpdFragment"
             app:destination="@+id/cpdFragment" />
+        <action
+            android:id="@+id/action_newHomePageFragment_to_comingSoonFragment"
+            app:destination="@+id/policiesFrontFragment" />
     </fragment>
 
     <fragment

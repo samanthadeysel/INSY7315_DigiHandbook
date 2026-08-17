@@ -44,15 +44,15 @@ class NewHomePageFragment : Fragment() {
         }
 
         cardBragBook.setOnClickListener {
-            findNavController().navigate(R.id.action_newHomePageFragment_to_bragBookFragment)
+            findNavController().navigate(R.id.action_newHomePageFragment_to_comingSoonFragment)
         }
 
         cardCommunity.setOnClickListener {
-            findNavController().navigate(R.id.action_newHomePageFragment_to_communityFragment)
+            findNavController().navigate(R.id.action_newHomePageFragment_to_comingSoonFragment)
         }
 
         cardCPD.setOnClickListener {
-            findNavController().navigate(R.id.action_newHomePageFragment_to_cpdFragment)
+            findNavController().navigate(R.id.action_newHomePageFragment_to_comingSoonFragment)
         }
     }
 }
