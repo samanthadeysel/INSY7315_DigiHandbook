@@ -31,5 +31,4 @@ class DoctorFragment : Fragment() {
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNav.visibility = View.VISIBLE  // show for this fragment
     }
-
 }
