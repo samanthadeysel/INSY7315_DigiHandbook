@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Digital_Handbook_Portal/Digital_Handbook_Portal.csproj" />
+  <Project Path="HandbookApi/HandbookApi.csproj" />
+</Solution>

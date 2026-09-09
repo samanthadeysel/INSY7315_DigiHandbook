@@ -1,0 +1,6 @@
+@HandbookApi_HostAddress = http://localhost:5227
+
+GET {{HandbookApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
