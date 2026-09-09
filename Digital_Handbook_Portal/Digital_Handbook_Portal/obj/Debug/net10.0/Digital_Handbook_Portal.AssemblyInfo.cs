@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Digital_Handbook_Portal")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5e0f381eeed0ac6425155ba97a2a2a58f144c641")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2fe5a64fccee8c4aef0a4f16134cd9d605c72d1f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Digital_Handbook_Portal")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Digital_Handbook_Portal")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
