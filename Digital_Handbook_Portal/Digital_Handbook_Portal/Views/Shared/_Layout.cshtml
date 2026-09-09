@@ -2,39 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PMB Eye Hospital</title>
-    <link rel="stylesheet" href="~/css/site.css" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800&family=Verdana&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    @* header *@
+
     <header class="top-banner">
-        <div class="hospital-identity">
-            <img src="~/images/pmb-logo.png"
-                 alt="Pietermaritzburg Eye Hospital"
-                 class="top-nav-logo"
-                 asp-append-version="true" />
 
-            <div class="portal-tag-divider"></div>
-            <span class="portal-badge-text">Desktop Management Portal</span>
-        </div>
+        <img src="~/images/pmb-logo.png"
+             alt="Pietermaritzburg Eye Hospital"
+             class="top-nav-logo"
+             asp-append-version="true" />
 
-        <div class="admin-profile-badge">
-            <span><i class="fa-solid fa-user-shield"></i> @ViewBag.AdminName ?? (Admin)</span>
-            <a href="/Account/Login" class="logout-link"><i class="fa-solid fa-power-off"></i> Logout</a>
-        </div>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        <div class="portal-tag-divider"></div>
+        <span class="portal-badge-text">Desktop Management Portal</span>
     </div>
 
-    <footer class="portal-footer">
-        &copy; 2026 Pietermaritzburg Eye Hospital &bull; Employee Digital Handbook System
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <div class="admin-profile-badge">
+        <span><i class="fa-solid fa-user-shield"></i> @(ViewBag.AdminName ?? "Admin")</span>
+        <a href="/Account/Login" class="logout-link"><i class="fa-solid fa-power-off"></i> Logout</a>
+    </div>
+</header>
+
+<div class="main-container">
+    <main role="main" class="content-card">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="portal-footer">
+    &copy; 2026 Pietermaritzburg Eye Hospital &bull; Employee Digital Handbook System
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -15,7 +15,7 @@ public class UsersController : Controller
     // GET: USERS
     public async Task<IActionResult> Index()    
     {
-        return View(await _context.User.ToListAsync());
+        return View();
     }
 
     // GET: USERS/Details/5
