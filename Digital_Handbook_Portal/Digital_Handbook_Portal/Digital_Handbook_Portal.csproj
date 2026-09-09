@@ -7,7 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="..\..\..\..\..\Downloads\pmb-logo.PNG" Link="Images\pmb-logo.PNG" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.OpenApi" Version="3.10.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Images\" />
+    <Folder Include="Views\Events\" />
+    <Folder Include="Views\Bragbook\" />
+    <Folder Include="Views\Resources\" />
+    <Folder Include="Views\Users\" />
+    <Folder Include="Views\Policies\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

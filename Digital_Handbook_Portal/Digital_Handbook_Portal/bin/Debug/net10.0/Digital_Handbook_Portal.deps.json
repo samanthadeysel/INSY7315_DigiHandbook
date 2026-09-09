@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "Digital_Handbook_Portal/1.0.0": {
+        "dependencies": {
+          "Microsoft.OpenApi": "3.10.2"
+        },
+        "runtime": {
+          "Digital_Handbook_Portal.dll": {}
+        }
+      },
+      "Microsoft.OpenApi/3.10.2": {
+        "runtime": {
+          "lib/net8.0/Microsoft.OpenApi.dll": {
+            "assemblyVersion": "3.10.2.0",
+            "fileVersion": "3.10.2.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Digital_Handbook_Portal/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.OpenApi/3.10.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qzg4a3WmgQm28Azaporbnsu+KHA+vq5sgpQQFLiJgB06Rra2S+kzGAU7pzUB8/UIwZJCSCY2JEE/M5e0hQ2K8w==",
+      "path": "microsoft.openapi/3.10.2",
+      "hashPath": "microsoft.openapi.3.10.2.nupkg.sha512"
+    }
+  }
+}

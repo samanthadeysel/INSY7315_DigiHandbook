@@ -1,0 +1,241 @@
+﻿@{
+    Layout = null; //no navbar for the login
+    ViewData["Title"] = "Admin Portal Login - PMB Eye Hospital";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+   @* using raleway font as required *@
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&family=Verdana&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Raleway', 'Verdana', sans-serif;
+        }
+
+        body {
+            background-color: #F8FAFC;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .hospital-brand-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .hospital-logo {
+            max-width: 190px;
+            height: auto;
+            margin-bottom: 8px;
+        }
+
+        .portal-badge {
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #64748B;
+        }
+
+        .login-card-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+        }
+
+ 
+        .green-accent-border {
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            width: 90px;
+            height: 90px;
+            border-top: 6px solid #81C241;
+            border-left: 6px solid #81C241;
+            border-top-left-radius: 36px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .login-card {
+            position: relative;
+            background: #2690CF;
+            border-radius: 28px;
+            padding: 44px 36px 36px 36px;
+            color: #FFFFFF;
+            box-shadow: 0 12px 30px rgba(38, 144, 207, 0.22);
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .login-card::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 10%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .card-header-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .card-header-subtitle {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 18px;
+            background-color: #A3D2F3;
+            border: 2px solid transparent;
+            border-radius: 20px;
+            color: #0F172A;
+            font-size: 0.95rem;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .form-input::placeholder {
+            color: rgba(15, 23, 42, 0.55);
+        }
+
+        .form-input:focus {
+            background-color: #FFFFFF;
+            border-color: #81C241;
+            box-shadow: 0 0 0 4px rgba(129, 194, 65, 0.25);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            background-color: #1E293B;
+            color: #FFFFFF;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #0F172A;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+        }
+
+        .support-text {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.4;
+        }
+
+        .support-text a {
+            color: #FFFFFF;
+            text-decoration: underline;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    @* logo *@
+    <div class="hospital-brand-header">
+        <img src="~/images/pmb-eye-hospital-logo.png" 
+             alt="Pietermaritzburg Eye Hospital Logo" 
+             class="hospital-logo" 
+             onerror="this.style.display='none'" />
+        <div class="portal-badge">Desktop Management Portal</div>
+    </div>
+
+    @* login card  *@
+    <div class="login-card-wrapper">
+        <div class="green-accent-border"></div>
+
+        <div class="login-card">
+            <h1 class="card-header-title">Login</h1>
+            <p class="card-header-subtitle">Sign in to continue.</p>
+
+            <form method="post" action="/Account/Login">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label class="form-label" for="Email">Email</label>
+                    <input type="email" 
+                           id="Email" 
+                           name="Email" 
+                           class="form-input" 
+                           placeholder="admin@pmbeyehospital.co.za" 
+                           required 
+                           autocomplete="email" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="Password">Password</label>
+                    <input type="password" 
+                           id="Password" 
+                           name="Password" 
+                           class="form-input" 
+                           placeholder="••••••" 
+                           required 
+                           autocomplete="current-password" />
+                </div>
+
+                <a href="/Home/Index" class="btn-submit" style="display: block; text-align: center; text-decoration: none;">Log in</a>
+
+                <p class="support-text">
+                    Contact your IT support or admin lead for assistance.
+                </p>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

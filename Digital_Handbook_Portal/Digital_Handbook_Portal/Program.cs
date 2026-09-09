@@ -9,6 +9,7 @@ namespace Digital_Handbook_Portal
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -20,15 +21,24 @@ namespace Digital_Handbook_Portal
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthorization();
 
             app.MapStaticAssets();
+   
+            //default root - will open login page first
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=Account}/{action=Login}/{id?}")
+                //pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
+        //pattern: "{controller=Account}/{action=Login}/{id?}");
+
+
 
             app.Run();
         }

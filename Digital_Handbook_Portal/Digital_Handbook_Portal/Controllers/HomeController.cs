@@ -8,6 +8,8 @@ namespace Digital_Handbook_Portal.Controllers
     {
         public IActionResult Index()
         {
+            //for demo purposes
+            ViewBag.AdminName = "Tracy";
             return View();
         }
 

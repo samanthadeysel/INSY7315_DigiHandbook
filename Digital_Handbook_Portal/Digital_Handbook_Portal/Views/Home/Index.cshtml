@@ -1,8 +1,296 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    Layout = null;
+    ViewData["Title"] = "Admin Management Hub - PMB Eye Hospital";
+    var adminName = ViewBag.AdminName ?? "Tracy";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    @* raleway font *@
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800&family=Verdana&display=swap" rel="stylesheet">
+  
+    @* icons *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --brand-green: #81C241;
+            --brand-blue: #2690CF;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --card-bg: #FFFFFF;
+            --bg-canvas: #F4F7F9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Raleway', 'Verdana', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-banner {
+            background-color: var(--brand-green);
+            padding: 24px 32px 64px 32px;
+            color: #FFFFFF;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hospital-identity {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .hospital-logo-emblem {
+            font-size: 2.2rem;
+            color: #FFFFFF;
+        }
+
+        .hospital-title-wrap h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        .hospital-title-wrap span {
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .admin-profile-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .logout-link {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .logout-link:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+   
+        .main-container {
+            max-width: 1080px;
+            width: 100%;
+            margin: -40px auto 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .content-card {
+            background: var(--card-bg);
+            border-radius: 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            padding: 36px 40px;
+        }
+
+        .greeting-header {
+            margin-bottom: 32px;
+            border-bottom: 2px solid #F1F5F9;
+            padding-bottom: 16px;
+        }
+
+        .greeting-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .greeting-header p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .module-tile {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .module-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .tile-green-border {
+            border: 3px solid var(--brand-green);
+        }
+
+        .tile-blue-border {
+            border: 3px solid var(--brand-blue);
+        }
+
+        .tile-icon {
+            font-size: 2.8rem;
+            margin-bottom: 16px;
+        }
+
+        .icon-green {
+            color: var(--brand-green);
+        }
+
+        .icon-blue {
+            color: var(--brand-blue);
+        }
+
+        .tile-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .tile-subtitle {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .admin-tag {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: #EFF6FF;
+            color: var(--brand-blue);
+        }
+
+        .portal-footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+  @* header *@
+    <header class="top-banner">
+        <div class="hospital-identity">
+        <img src="Images/pmb-logo.PNG" 
+             alt="Pietermaritzburg Eye Hospital" 
+             class="top-nav-logo" 
+             asp-append-version="true" />
+
+        <div class="portal-tag-divider"></div>
+        <span class="portal-badge-text">Desktop Management Portal</span>
+    </div>
+
+        <div class="admin-profile-badge">
+            <span><i class="fa-solid fa-user-shield"></i> @adminName (Admin)</span>
+            <a href="/Account/Login" class="logout-link"><i class="fa-solid fa-power-off"></i> Logout</a>
+        </div>
+    </header>
+
+@* main section *@
+    <main class="main-container">
+        <div class="content-card">
+            
+            <div class="greeting-header">
+                <h2>Good Morning, @adminName!</h2>
+                <p>Select a module below.</p>
+            </div>
+
+            <div class="dashboard-grid">
+
+                @* user  *@
+                <a href="/Users" class="module-tile tile-blue-border">
+                    <i class="fa-solid fa-users-gear tile-icon icon-blue"></i>
+                    <h3 class="tile-title">Users</h3>
+                    <p class="tile-subtitle">Users, Reset Passwords & Roles</p>
+                </a>
+
+                @* policies *@
+                <a href="/Policies" class="module-tile tile-green-border">
+                    <i class="fa-solid fa-shield-halved tile-icon icon-green"></i>
+                    <h3 class="tile-title">Policies</h3>
+                    <p class="tile-subtitle">Clinical Policies</p>
+                </a>
+
+                @* bragbook *@
+                <a href="/BragBook" class="module-tile tile-blue-border">
+                    <i class="fa-solid fa-star tile-icon icon-blue"></i>
+                    <h3 class="tile-title">Brag Book</h3>
+                    <p class="tile-subtitle">Peer Compliments & Morale Posts</p>
+                </a>
+
+                @* community and events *@
+                <a href="/Community" class="module-tile tile-blue-border">
+                    <i class="fa-solid fa-people-group tile-icon icon-blue"></i>
+                    <h3 class="tile-title">Community</h3>
+                    <p class="tile-subtitle">Hospital Social Events & Gatherings</p>
+                </a>
+
+                @* resources and cpd *@
+                <a href="/Resources" class="module-tile tile-green-border">
+                    <i class="fa-solid fa-graduation-cap tile-icon icon-green"></i>
+                    <h3 class="tile-title">Resources & CPD</h3>
+                    <p class="tile-subtitle">Quizzes & Points</p>
+                </a>
+
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="portal-footer">
+        &copy; 2026 Pietermaritzburg Eye Hospital &bull; Employee Digital Handbook System
+    </footer>
+
+</body>
+</html>
