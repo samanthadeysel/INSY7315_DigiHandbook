@@ -8,7 +8,9 @@ namespace Digital_Handbook_Portal.Controllers
     {
         public IActionResult Index()
         {
+            ViewBag.AdminName = "Tracy";
             return View();
+
         }
 
         public IActionResult Privacy()

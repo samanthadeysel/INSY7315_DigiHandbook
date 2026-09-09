@@ -1,8 +1,12 @@
-﻿namespace Digital_Handbook_Portal.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Digital_Handbook_Portal.Models
 {
     public class Quiz
     {
+        [Key]
         public int quizId { get; set; }
+
         public string title { get; set; }
         public string questions { get; set; }
         public string answers { get; set; } = string.Empty;

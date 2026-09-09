@@ -1,0 +1,9 @@
+C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\HandbookApi\obj\Debug\net10.0\HandbookApi.csproj.AssemblyReference.cache
+C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\HandbookApi\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\HandbookApi\obj\Debug\net10.0\HandbookApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\HandbookApi\obj\Debug\net10.0\HandbookApi.AssemblyInfoInputs.cache
+C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\HandbookApi\obj\Debug\net10.0\HandbookApi.AssemblyInfo.cs
+C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\HandbookApi\obj\Debug\net10.0\HandbookApi.csproj.CoreCompileInputs.cache
+C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\HandbookApi\obj\Debug\net10.0\HandbookApi.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\HandbookApi\obj\Debug\net10.0\HandbookApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\HandbookApi\obj\Debug\net10.0\HandbookApi.sourcelink.json
