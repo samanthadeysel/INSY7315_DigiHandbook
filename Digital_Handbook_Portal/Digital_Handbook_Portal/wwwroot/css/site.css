@@ -1,5 +1,23 @@
+:root {
+    --brand-green: #81C241;
+    --brand-blue: #2690CF;
+    --text-dark: #1E293B;
+    --text-muted: #64748B;
+    --card-bg: #FFFFFF;
+    --bg-canvas: #F4F7F9;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', 'Verdana', sans-serif;
+}
+
 html {
     font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -8,17 +26,16 @@ html {
     }
 }
 
+body {
+    background-color: var(--bg-canvas);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 60px;
+}
+
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-body {
-    margin-bottom: 60px;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -30,14 +47,166 @@ body {
     text-align: start;
 }
 
-.top-nav-logo {
-    max-height: 80px; 
-    width: auto; 
-    display: block;
+header.top-banner {
+    background-color: var(--brand-green);
+    padding: 24px 32px 64px 32px;
+    color: #FFFFFF;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
 }
 
 .hospital-identity {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 16px;
+}
+
+.top-nav-logo {
+    max-height: 50px;
+    width: auto;
+    display: block;
+}
+
+.portal-tag-divider {
+    width: 2px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.4);
+    margin: 0 8px;
+}
+
+.portal-badge-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
+
+.admin-profile-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.logout-link {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+    .logout-link:hover {
+        background: rgba(0, 0, 0, 0.4);
+        color: #FFFFFF;
+    }
+
+.main-container {
+    max-width: 1080px;
+    width: 100%;
+    margin: -40px auto 40px auto;
+    padding: 0 20px;
+    flex: 1;
+    z-index: 10;
+}
+
+.content-card {
+    background: var(--card-bg);
+    border-radius: 28px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    padding: 36px 40px;
+}
+
+.greeting-header {
+    margin-bottom: 32px;
+    border-bottom: 2px solid #F1F5F9;
+    padding-bottom: 16px;
+}
+
+    .greeting-header h2 {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--text-dark);
+    }
+
+    .greeting-header p {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+        font-weight: 600;
+        margin-top: 4px;
+    }
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.module-tile {
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+    .module-tile:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+.tile-green-border {
+    border: 3px solid var(--brand-green);
+}
+
+.tile-blue-border {
+    border: 3px solid var(--brand-blue);
+}
+
+.tile-icon {
+    font-size: 2.8rem;
+    margin-bottom: 16px;
+}
+
+.icon-green {
+    color: var(--brand-green);
+}
+
+.icon-blue {
+    color: var(--brand-blue);
+}
+
+.tile-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+.tile-subtitle {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.portal-footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
 }
