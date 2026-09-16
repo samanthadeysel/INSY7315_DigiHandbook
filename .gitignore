@@ -1,8 +1,0 @@
-## Visual Studio build artifacts
-[Bb]in/
-[Oo]bj/
-*.dll
-*.exe
-*.pdb
-*.user
-.vs/
