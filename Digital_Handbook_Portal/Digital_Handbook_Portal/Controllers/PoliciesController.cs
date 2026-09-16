@@ -47,7 +47,7 @@ public class PoliciesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("policyId,Title,contentSummary,fileUrl")] Policy policy)
+    public async Task<IActionResult> Create([Bind("policyId,Title,contentSummary,generalCategory,specificCategory,fileUrl")] Policy policy)
     {
         if (ModelState.IsValid)
         {
@@ -79,7 +79,7 @@ public class PoliciesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? policyid, [Bind("policyId,Title,contentSummary,fileUrl")] Policy policy)
+    public async Task<IActionResult> Edit(int? policyid, [Bind("policyId,Title,contentSummary,generalCategory,specificCategoryfileUrl")] Policy policy)
     {
         if (policyid != policy.policyId)
         {

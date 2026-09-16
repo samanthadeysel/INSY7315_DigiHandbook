@@ -1,0 +1,186 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|c:\\insy7315_digihandbook\\digital_handbook_portal\\digital_handbook_portal\\models\\doctor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|solutionrelative:digital_handbook_portal\\models\\doctor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|c:\\insy7315_digihandbook\\digital_handbook_portal\\digital_handbook_portal\\models\\quiz.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|solutionrelative:digital_handbook_portal\\models\\quiz.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|c:\\insy7315_digihandbook\\digital_handbook_portal\\digital_handbook_portal\\models\\policy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|solutionrelative:digital_handbook_portal\\models\\policy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|c:\\insy7315_digihandbook\\digital_handbook_portal\\digital_handbook_portal\\controllers\\policiescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|solutionrelative:digital_handbook_portal\\controllers\\policiescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|c:\\insy7315_digihandbook\\digital_handbook_portal\\digital_handbook_portal\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|solutionrelative:digital_handbook_portal\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|c:\\insy7315_digihandbook\\digital_handbook_portal\\digital_handbook_portal\\controllers\\bragbookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|solutionrelative:digital_handbook_portal\\controllers\\bragbookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|c:\\insy7315_digihandbook\\digital_handbook_portal\\digital_handbook_portal\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|solutionrelative:digital_handbook_portal\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|c:\\insy7315_digihandbook\\digital_handbook_portal\\digital_handbook_portal\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|solutionrelative:digital_handbook_portal\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|c:\\insy7315_digihandbook\\digital_handbook_portal\\digital_handbook_portal\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|solutionrelative:digital_handbook_portal\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|c:\\insy7315_digihandbook\\digital_handbook_portal\\digital_handbook_portal\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{AA3075FF-0230-07BE-D167-0E4B7C20A1EE}|Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj|solutionrelative:digital_handbook_portal\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Doctor.cs",
+              "DocumentMoniker": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Models\\Doctor.cs",
+              "RelativeDocumentMoniker": "Digital_Handbook_Portal\\Models\\Doctor.cs",
+              "ToolTip": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Models\\Doctor.cs",
+              "RelativeToolTip": "Digital_Handbook_Portal\\Models\\Doctor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-16T16:41:26.01Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Quiz.cs",
+              "DocumentMoniker": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Models\\Quiz.cs",
+              "RelativeDocumentMoniker": "Digital_Handbook_Portal\\Models\\Quiz.cs",
+              "ToolTip": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Models\\Quiz.cs",
+              "RelativeToolTip": "Digital_Handbook_Portal\\Models\\Quiz.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAiwCcAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-16T18:42:21.406Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PoliciesController.cs",
+              "DocumentMoniker": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Controllers\\PoliciesController.cs",
+              "RelativeDocumentMoniker": "Digital_Handbook_Portal\\Controllers\\PoliciesController.cs",
+              "ToolTip": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Controllers\\PoliciesController.cs",
+              "RelativeToolTip": "Digital_Handbook_Portal\\Controllers\\PoliciesController.cs",
+              "ViewState": "AgIAAHMAAAAAAAAAAADwv1EAAAB+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-16T18:30:10.906Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Digital_Handbook_Portal\\Models\\User.cs",
+              "ToolTip": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Models\\User.cs",
+              "RelativeToolTip": "Digital_Handbook_Portal\\Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-16T18:29:30.007Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Policy.cs",
+              "DocumentMoniker": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Models\\Policy.cs",
+              "RelativeDocumentMoniker": "Digital_Handbook_Portal\\Models\\Policy.cs",
+              "ToolTip": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Models\\Policy.cs",
+              "RelativeToolTip": "Digital_Handbook_Portal\\Models\\Policy.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-16T16:36:38.74Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BragBooksController.cs",
+              "DocumentMoniker": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Controllers\\BragBooksController.cs",
+              "RelativeDocumentMoniker": "Digital_Handbook_Portal\\Controllers\\BragBooksController.cs",
+              "ToolTip": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Controllers\\BragBooksController.cs",
+              "RelativeToolTip": "Digital_Handbook_Portal\\Controllers\\BragBooksController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-16T06:56:36.595Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Digital_Handbook_Portal\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Digital_Handbook_Portal\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-16T06:56:33.823Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Program.cs",
+              "RelativeDocumentMoniker": "Digital_Handbook_Portal\\Program.cs",
+              "ToolTip": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Program.cs",
+              "RelativeToolTip": "Digital_Handbook_Portal\\Program.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-14T19:28:09.568Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Digital_Handbook_Portal\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Digital_Handbook_Portal\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-14T19:27:54.078Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Digital_Handbook_Portal\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Digital_Handbook_Portal\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAM8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-14T19:27:38.044Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
