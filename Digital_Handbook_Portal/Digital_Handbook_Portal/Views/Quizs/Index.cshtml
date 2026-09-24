@@ -1,0 +1,65 @@
+@model IEnumerable<Digital_Handbook_Portal.Models.Quiz>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.questions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.answers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.score)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.totalQuestions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.estimateTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.title)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.questions)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.answers)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.score)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.totalQuestions)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.estimateTime)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.quizId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.quizId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.quizId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Admin Management Hub";
+    ViewBag.AdminName = ViewBag.AdminName ?? "Tracy";
+}
+
+<div class="greeting-header">
+    <h2>Good Morning, @ViewBag.AdminName!</h2>
+    <p>Select a module below.</p>
+</div>
+
+<div class="dashboard-grid">
+
+    @* user  *@
+    <a asp-controller="Users" asp-action="Index" class="module-tile tile-blue-border">
+        <i class="fa-solid fa-users-gear tile-icon icon-blue"></i>
+        <h3 class="tile-title">Users</h3>
+        <p class="tile-subtitle">Users, Reset Passwords & Roles</p>
+    </a>
+
+    @* policies *@
+    <a asp-controller="Policies" asp-action="Index" class="module-tile tile-green-border">
+        <i class="fa-solid fa-shield-halved tile-icon icon-green"></i>
+        <h3 class="tile-title">Policies</h3>
+        <p class="tile-subtitle">Clinical Policies</p>
+    </a>
+
+    @* bragbook *@
+    <a asp-controller="BragBooks" asp-action="Index" class="module-tile tile-blue-border">
+        <i class="fa-solid fa-star tile-icon icon-blue"></i>
+        <h3 class="tile-title">Brag Book</h3>
+        <p class="tile-subtitle">Peer Compliments & Morale Posts</p>
+    </a>
+
+    @* community and events *@
+    <a asp-controller="Communities" asp-action="Index" class="module-tile tile-blue-border">
+        <i class="fa-solid fa-people-group tile-icon icon-blue"></i>
+        <h3 class="tile-title">Community</h3>
+        <p class="tile-subtitle">Hospital Social Events & Gatherings</p>
+    </a>
+
+    @* resources and cpd *@
+    <a asp-controller="Resources" asp-action="Index" class="module-tile tile-green-border">
+        <i class="fa-solid fa-graduation-cap tile-icon icon-green"></i>
+        <h3 class="tile-title">Resources & CPD</h3>
+        <p class="tile-subtitle">Quizzes & Points</p>
+    </a>
+</div>
