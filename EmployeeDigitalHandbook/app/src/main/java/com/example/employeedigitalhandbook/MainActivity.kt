@@ -2,6 +2,7 @@ package com.example.employeedigitalhandbook
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -26,16 +27,19 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                // Show only on your 3 core menu screens
                 R.id.newHomePageFragment,
                 R.id.policiesFrontFragment -> {
                     bottomNav.visibility = View.VISIBLE
                 }
-                // Automatically hide on login, coming soon, or any sub-screens
                 else -> {
                     bottomNav.visibility = View.GONE
                 }
             }
         }
+
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
     }
 }
