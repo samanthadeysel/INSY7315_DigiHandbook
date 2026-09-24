@@ -19,10 +19,13 @@
 
     <header class="top-banner">
 
+        @* when user clicks image, they will be taken back home *@
+        <a asp-controller="Home" asp-action="Index" class="logo-link">
         <img src="~/images/pmb-logo.png"
              alt="Pietermaritzburg Eye Hospital"
              class="top-nav-logo"
              asp-append-version="true" />
+             </a>
 
         <div class="portal-tag-divider"></div>
         <span class="portal-badge-text">Desktop Management Portal</span>

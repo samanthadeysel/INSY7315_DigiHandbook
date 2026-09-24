@@ -104,6 +104,42 @@ namespace Digital_Handbook_Portal.Migrations
                     b.ToTable("Community");
                 });
 
+            modelBuilder.Entity("Digital_Handbook_Portal.Models.Doctor", b =>
+                {
+                    b.Property<int>("doctorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("doctorId"));
+
+                    b.Property<string>("doctorImg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("fName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("lName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("suiteNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("doctorId");
+
+                    b.ToTable("Doctor");
+                });
+
             modelBuilder.Entity("Digital_Handbook_Portal.Models.Policy", b =>
                 {
                     b.Property<int>("policyId")
@@ -118,11 +154,22 @@ namespace Digital_Handbook_Portal.Migrations
 
                     b.Property<string>("contentSummary")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("fileUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("generalCategory")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("specificCategory")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("policyId");
 
@@ -137,17 +184,15 @@ namespace Digital_Handbook_Portal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("quizId"));
 
-                    b.Property<string>("answers")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("estimateTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("questions")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("passingScore")
+                        .HasColumnType("int");
 
                     b.Property<int>("score")
                         .HasColumnType("int");
@@ -162,6 +207,53 @@ namespace Digital_Handbook_Portal.Migrations
                     b.HasKey("quizId");
 
                     b.ToTable("Quiz");
+                });
+
+            modelBuilder.Entity("Digital_Handbook_Portal.Models.QuizOption", b =>
+                {
+                    b.Property<int>("optionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("optionId"));
+
+                    b.Property<bool>("isCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("optionText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("questionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("optionId");
+
+                    b.HasIndex("questionId");
+
+                    b.ToTable("QuizOption");
+                });
+
+            modelBuilder.Entity("Digital_Handbook_Portal.Models.QuizQuestion", b =>
+                {
+                    b.Property<int>("questionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("questionId"));
+
+                    b.Property<string>("questionText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("quizId")
+                        .HasColumnType("int");
+
+                    b.HasKey("questionId");
+
+                    b.HasIndex("quizId");
+
+                    b.ToTable("QuizQuestion");
                 });
 
             modelBuilder.Entity("Digital_Handbook_Portal.Models.Resource", b =>
@@ -201,6 +293,38 @@ namespace Digital_Handbook_Portal.Migrations
                     b.HasKey("userId");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("Digital_Handbook_Portal.Models.QuizOption", b =>
+                {
+                    b.HasOne("Digital_Handbook_Portal.Models.QuizQuestion", "question")
+                        .WithMany("options")
+                        .HasForeignKey("questionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("question");
+                });
+
+            modelBuilder.Entity("Digital_Handbook_Portal.Models.QuizQuestion", b =>
+                {
+                    b.HasOne("Digital_Handbook_Portal.Models.Quiz", "quiz")
+                        .WithMany("questions")
+                        .HasForeignKey("quizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("quiz");
+                });
+
+            modelBuilder.Entity("Digital_Handbook_Portal.Models.Quiz", b =>
+                {
+                    b.Navigation("questions");
+                });
+
+            modelBuilder.Entity("Digital_Handbook_Portal.Models.QuizQuestion", b =>
+                {
+                    b.Navigation("options");
                 });
 #pragma warning restore 612, 618
         }

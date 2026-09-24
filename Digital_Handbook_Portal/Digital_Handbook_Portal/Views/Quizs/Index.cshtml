@@ -16,12 +16,6 @@
                 @Html.DisplayNameFor(model => model.title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.questions)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.answers)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.score)
             </th>
             <th>
@@ -29,6 +23,15 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.estimateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.createdAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.passingScore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.questions)
             </th>
             <th></th>
         </tr>
@@ -40,12 +43,6 @@
                 @Html.DisplayFor(model => item.title)
             </td>
             <td>
-                @Html.DisplayFor(model => item.questions)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.answers)
-            </td>
-            <td>
                 @Html.DisplayFor(model => item.score)
             </td>
             <td>
@@ -53,6 +50,15 @@
             </td>
             <td>
                 @Html.DisplayFor(model => item.estimateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.createdAt)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.passingScore)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.questions)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.quizId">Edit</a> |

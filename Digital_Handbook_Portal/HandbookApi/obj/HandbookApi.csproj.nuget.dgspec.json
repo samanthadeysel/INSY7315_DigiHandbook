@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\saman\\Desktop\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\HandbookApi\\HandbookApi.csproj": {}
+    "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\HandbookApi\\HandbookApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\saman\\Desktop\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj": {
+    "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\saman\\Desktop\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj",
+        "projectUniqueName": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj",
         "projectName": "Digital_Handbook_Portal",
-        "projectPath": "C:\\Users\\saman\\Desktop\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj",
-        "packagesPath": "C:\\Users\\saman\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\saman\\Desktop\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\obj\\",
+        "projectPath": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj",
+        "packagesPath": "C:\\Users\\nia1s\\.nuget\\packages\\",
+        "outputPath": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\saman\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nia1s\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -504,20 +505,20 @@
         }
       }
     },
-    "C:\\Users\\saman\\Desktop\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\HandbookApi\\HandbookApi.csproj": {
+    "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\HandbookApi\\HandbookApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\saman\\Desktop\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\HandbookApi\\HandbookApi.csproj",
+        "projectUniqueName": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\HandbookApi\\HandbookApi.csproj",
         "projectName": "HandbookApi",
-        "projectPath": "C:\\Users\\saman\\Desktop\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\HandbookApi\\HandbookApi.csproj",
-        "packagesPath": "C:\\Users\\saman\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\saman\\Desktop\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\HandbookApi\\obj\\",
+        "projectPath": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\HandbookApi\\HandbookApi.csproj",
+        "packagesPath": "C:\\Users\\nia1s\\.nuget\\packages\\",
+        "outputPath": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\HandbookApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\saman\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nia1s\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -526,6 +527,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -533,8 +535,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\Users\\saman\\Desktop\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj": {
-                "projectPath": "C:\\Users\\saman\\Desktop\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj"
+              "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj": {
+                "projectPath": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj"
               }
             }
           }

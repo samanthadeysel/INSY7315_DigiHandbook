@@ -41,7 +41,15 @@
     @* resources and cpd *@
     <a asp-controller="Resources" asp-action="Index" class="module-tile tile-green-border">
         <i class="fa-solid fa-graduation-cap tile-icon icon-green"></i>
-        <h3 class="tile-title">Resources & CPD</h3>
-        <p class="tile-subtitle">Quizzes & Points</p>
+        <h3 class="tile-title">Resources</h3>
+        <p class="tile-subtitle">Training Links, Handbooks & Clinical References</p>
+    </a>
+
+    @* cpd *@
+    @* <a asp-controller="Quizs" asp-action="Index" class="module-tile tile-blue-border"> *@
+    <a href="/Quizs/Index" class="module-tile tile-blue-border">
+        <i class="fa-solid fa-list-check tile-icon icon-blue"></i>
+        <h3 class="tile-title">CPD Quizzes</h3>
+        <p class="tile-subtitle">3-Minute Assessments & MCQ Scoring</p>
     </a>
 </div>

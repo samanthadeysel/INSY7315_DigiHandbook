@@ -20,22 +20,6 @@
     </dl>
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.questions)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.questions)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.answers)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.answers)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.score)
         </dt>
         <dd class = "col-sm-10">
@@ -56,6 +40,30 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.estimateTime)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.createdAt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.createdAt)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.passingScore)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.passingScore)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.questions)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.questions)
         </dd>
     </dl>
     <form asp-action="Delete">

@@ -19,6 +19,18 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
+            <div class="form-group mb-3">
+                <label asp-for="generalCategory" class="control-label fw-semibold">General Category</label>
+                <input asp-for="generalCategory" class="form-control" placeholder="e.g., Nursing Policies, HR Policies" />
+                <span asp-validation-for="generalCategory" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="specificCategory" class="control-label fw-semibold">Specific Category</label>
+                <input asp-for="specificCategory" class="form-control" placeholder="e.g., Patient Care, Leave Policies" />
+                <span asp-validation-for="specificCategory" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="contentSummary" class="control-label"></label>
                 <input asp-for="contentSummary" class="form-control" />
