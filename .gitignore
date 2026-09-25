@@ -1,52 +1,8 @@
-#visual studio config files
-.vs/
-*.user
-*.userosscache
-*.sln.docstates
-*.suo
-
-
+## Visual Studio build artifacts
 [Bb]in/
 [Oo]bj/
-[Dd]ebug/
-[Rr]elease/
 *.dll
 *.exe
 *.pdb
-*.cache
-*.db
-*.sqlite
-*.sqlite3
-
-#asp.net files
-appsettings.Development.json
-appsettings.Local.json
-secrets.json
-
-# gradle packages
-.gradle/
-build/
-*/build/
-*/*/build/
-
-#android studio config files
-.idea/
-*.iml
-.cxx/
-local.properties
-captures/
-.externalNativeBuild/
-*.jks
-*.keystore
-signing.properties
-*.apk
-*.aab
-*.ap_
-
-
-##environment files
-.DS_Store
-Thumbs.db
-ehthumbs.db
-desktop.ini
-*.log
+*.user
+.vs/

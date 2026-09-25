@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "kYTMC/LzCnM=",
+  "dgSpecHash": "2ZmiTjYN+8A=",
   "success": true,
   "projectFilePath": "C:\\INSY7315_DigiHandbook\\Digital_Handbook_Portal\\Digital_Handbook_Portal\\Digital_Handbook_Portal.csproj",
   "expectedPackageFiles": [
@@ -35,7 +35,7 @@
     "C:\\Users\\nia1s\\.nuget\\packages\\microsoft.identitymodel.protocols\\7.7.1\\microsoft.identitymodel.protocols.7.7.1.nupkg.sha512",
     "C:\\Users\\nia1s\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\7.7.1\\microsoft.identitymodel.protocols.openidconnect.7.7.1.nupkg.sha512",
     "C:\\Users\\nia1s\\.nuget\\packages\\microsoft.identitymodel.tokens\\7.7.1\\microsoft.identitymodel.tokens.7.7.1.nupkg.sha512",
-    "C:\\Users\\nia1s\\.nuget\\packages\\microsoft.openapi\\3.10.2\\microsoft.openapi.3.10.2.nupkg.sha512",
+    "C:\\Users\\nia1s\\.nuget\\packages\\microsoft.openapi\\1.6.23\\microsoft.openapi.1.6.23.nupkg.sha512",
     "C:\\Users\\nia1s\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\nia1s\\.nuget\\packages\\microsoft.visualstudio.solutionpersistence\\1.0.52\\microsoft.visualstudio.solutionpersistence.1.0.52.nupkg.sha512",
     "C:\\Users\\nia1s\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",

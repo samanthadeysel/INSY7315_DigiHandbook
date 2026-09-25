@@ -1,5 +1,0 @@
-C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\obj\Debug\net10.0\staticwebassets.build.json
-C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\obj\Debug\net10.0\staticwebassets.build.json
-C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\obj\Debug\net10.0\staticwebassets.build.json
-C:\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\obj\Debug\net10.0\staticwebassets.build.json
-C:\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\obj\Debug\net10.0\staticwebassets.build.json

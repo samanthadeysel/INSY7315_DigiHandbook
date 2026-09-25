@@ -47,7 +47,7 @@ public class QuizsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("quizId,title,score,totalQuestions,estimateTime,createdAt,passingScore,questions")] Quiz quiz)
+    public async Task<IActionResult> Create([Bind("quizId,title,questions,answers,score,totalQuestions,estimateTime")] Quiz quiz)
     {
         if (ModelState.IsValid)
         {
@@ -79,7 +79,7 @@ public class QuizsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? quizid, [Bind("quizId,title,score,totalQuestions,estimateTime,createdAt,passingScore,questions")] Quiz quiz)
+    public async Task<IActionResult> Edit(int? quizid, [Bind("quizId,title,questions,answers,score,totalQuestions,estimateTime")] Quiz quiz)
     {
         if (quizid != quiz.quizId)
         {
