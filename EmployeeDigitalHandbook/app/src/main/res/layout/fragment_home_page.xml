@@ -8,27 +8,28 @@
     android:background="#8BC34A"
     tools:context=".homePages.HomePageFragment">
 
+    <!-- Brand Header Logo -->
     <ImageView
-    android:id="@+id/homeLogoImageView"
-    android:layout_width="318dp"
-    android:layout_height="101dp"
-    android:layout_marginTop="4dp"
-    android:adjustViewBounds="true"
-    android:src="@drawable/peh_landscape_logo_in_white"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.397"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-    <!-- lets us make sure that all the components [headers, policies, doctors] are well spaced -->
+        android:id="@+id/homeLogoImageView"
+        android:layout_width="318dp"
+        android:layout_height="101dp"
+        android:layout_marginTop="4dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/peh_landscape_logo_in_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.397"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Main Scrollable Body -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/mainScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="115dp"
-        android:layout_marginBottom="56dp"
         android:background="@drawable/bg_white_rounded_top"
         android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -38,149 +39,292 @@
             android:layout_height="wrap_content"
             android:paddingBottom="24dp">
 
-            <TextView
-                android:id="@+id/policiesTitleTextView"
+            <!-- Dynamic Greeting Header -->
+            <LinearLayout
+                android:id="@+id/greetingLinearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="32dp"
-                android:fontFamily="@font/raleway_bold"
-                android:text="Home"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <GridLayout
-                android:id="@+id/policiesGridLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="88dp"
-                android:alignmentMode="alignBounds"
-                android:columnCount="2"
-                android:rowCount="2"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/policiesCardOne"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="12dp"
-                    app:cardBackgroundColor="#3498db"
+                <TextView
+                    android:id="@+id/tvGreetingPrefix"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/raleway_bold"
+                    android:text="Good morning, "
+                    android:textColor="@color/black"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/raleway_bold"
+                    android:text="Sr. Anna!"
+                    android:textColor="@color/black"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Bento Navigation Cards Grid -->
+            <GridLayout
+                android:id="@+id/bentoGridLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:alignmentMode="alignMargins"
+                android:columnCount="2"
+                android:paddingHorizontal="16dp"
+                android:rowCount="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/greetingLinearLayout">
+
+                <!-- 1. Policies Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardPolicies"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:foreground="?attr/selectableItemBackground"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
+                    app:cardElevation="2dp">
 
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center"
-                        android:src="@android:drawable/ic_menu_agenda" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/card_border_green"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-                </com.google.android.material.card.MaterialCardView>
+                        <ImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:src="@drawable/ic_policies2"
+                            app:tint="#81C241"
+                            tools:ignore="ContentDescription" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/policiesCardTwo"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="12dp"
-                    app:cardBackgroundColor="#8BC34A"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/raleway_bold"
+                            android:text="Policies"
+                            android:textColor="#2D3748"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/raleway"
+                            android:gravity="center"
+                            android:text="Clinical &amp; Ward Rules"
+                            android:textColor="#718096"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 2. Brag Book Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardBragBook"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:foreground="?attr/selectableItemBackground"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
+                    app:cardElevation="2dp">
 
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center"
-                        android:src="@android:drawable/ic_menu_add" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/card_border_blue"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-                </com.google.android.material.card.MaterialCardView>
+                        <ImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:src="@drawable/ic_bragbook2"
+                            app:tint="#2690CF"
+                            tools:ignore="ContentDescription" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/policiesCardThree"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="12dp"
-                    app:cardBackgroundColor="#4CAF50"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/raleway_bold"
+                            android:text="Brag Book"
+                            android:textColor="#2D3748"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/raleway"
+                            android:gravity="center"
+                            android:text="Staff Shoutouts"
+                            android:textColor="#718096"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 3. Community Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCommunity"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:foreground="?attr/selectableItemBackground"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
+                    app:cardElevation="2dp">
 
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center"
-                        android:src="@android:drawable/ic_menu_view" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/card_border_blue"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-                </com.google.android.material.card.MaterialCardView>
+                        <ImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:src="@drawable/ic_community2"
+                            tools:ignore="ContentDescription" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/policiesCardFour"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="12dp"
-                    app:cardBackgroundColor="#2980b9"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/raleway_bold"
+                            android:text="Community"
+                            android:textColor="#2D3748"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/raleway"
+                            android:gravity="center"
+                            android:text="Hospital Events"
+                            android:textColor="#718096"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 4. Resources & CPD Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCPD"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:foreground="?attr/selectableItemBackground"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
+                    app:cardElevation="2dp">
 
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center"
-                        android:src="@android:drawable/ic_menu_gallery" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/card_border_green"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-                </com.google.android.material.card.MaterialCardView>
+                        <ImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:src="@drawable/ic_resources2"
+                            app:tint="#81C241"
+                            tools:ignore="ContentDescription" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/raleway_bold"
+                            android:text="Resources"
+                            android:textColor="#2D3748"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/raleway"
+                            android:gravity="center"
+                            android:text="Mental Health &amp; CPD"
+                            android:textColor="#718096"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </GridLayout>
 
+            <!-- Doctors Section Background -->
             <View
                 android:id="@+id/doctorsBackgroundView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="350dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/bg_grey_rounded_top"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/bentoGridLayout" />
 
+            <!-- Doctors Section Title -->
             <TextView
                 android:id="@+id/doctorsTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="374dp"
+                android:layout_marginTop="24dp"
                 android:fontFamily="@font/raleway_bold"
                 android:text="Doctors"
                 android:textColor="@color/black"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/doctorsBackgroundView" />
 
+            <!-- Horizontal Doctors List -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/doctorsRecyclerView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="410dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
                 android:clipToPadding="false"
                 android:orientation="horizontal"
-                android:paddingHorizontal="24dp"
+                android:paddingHorizontal="20dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/doctorsBackgroundView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintTop_toBottomOf="@id/doctorsTitleTextView"
                 tools:listitem="@layout/item_doctor_card" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Nav Bar -->
+    <!-- Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="0dp"

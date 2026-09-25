@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardEvent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="#2690CF"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="24dp">
+
+        <TextView
+            android:id="@+id/txtEventTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_bold"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Event Title" />
+
+        <TextView
+            android:id="@+id/txtEventDateTitle"
+            android:layout_width="76dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/raleway"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtEventTitle"
+            tools:text="Date:" />
+
+        <TextView
+            android:id="@+id/txtEventDate"
+            android:layout_width="294dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/raleway"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.637"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtEventTitle"
+            tools:text="Day, 00 Month" />
+
+        <TextView
+            android:id="@+id/txtEventTimeTitle"
+            android:layout_width="134dp"
+            android:layout_height="21dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/raleway"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtEventTitle"
+            tools:text="Time:" />
+
+        <TextView
+            android:id="@+id/txtEventTime"
+            android:layout_width="87dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/raleway"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtEventTitle"
+            tools:text="00:00 PM" />
+
+
+        <TextView
+            android:id="@+id/txtEventLocationTitle"
+            android:layout_width="81dp"
+            android:layout_height="21dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/raleway"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtEventDate"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="Location:" />
+
+        <TextView
+            android:id="@+id/txtEventLocation"
+            android:layout_width="271dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/raleway"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.728"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtEventDate"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="Location Here" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

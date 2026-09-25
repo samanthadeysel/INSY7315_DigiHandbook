@@ -62,7 +62,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/txtBragDate"
                 app:layout_constraintStart_toEndOf="@+id/txtToLabel"
                 app:layout_constraintTop_toTopOf="@+id/txtToLabel"
-                tools:text="Sister Dlamini &amp; Theatre Team" />
+                tools:text="Brag recipient" />
 
             <!-- Post Date (Right Corner) -->
             <TextView
@@ -101,7 +101,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dividerLine"
-                tools:text="Thank you so much for stepping in during the emergency vitrectomy yesterday afternoon! Your calm presence and swift prep work kept everything seamless for the patient." />
+                tools:text="Brag message here" />
 
             <!-- Sender Signature (Bottom Right) -->
             <TextView
@@ -116,23 +116,22 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtBragMessage"
-                tools:text="— Dr. Patel (Ophthalmology)" />
+                tools:text="- Brag sender" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Visual Push-Pin (Anchored over the top edge) -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/pinHead"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        app:cardBackgroundColor="#E53935"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
+    <!-- Custom Realistic Push-Pin -->
+    <ImageView
+        android:id="@+id/imgPushPin"
+        android:layout_width="30dp"
+        android:layout_height="34dp"
+        android:contentDescription="Pinned Note"
+        android:elevation="8dp"
+        android:src="@drawable/ic_pushpin"
+        app:layout_constraintBottom_toTopOf="@+id/cardPostIt"
         app:layout_constraintEnd_toEndOf="@+id/cardPostIt"
         app:layout_constraintStart_toStartOf="@+id/cardPostIt"
-        app:layout_constraintTop_toTopOf="@+id/cardPostIt"
-        app:strokeColor="#FFFFFF"
-        app:strokeWidth="1.5dp" />
+        app:layout_constraintTop_toTopOf="@+id/cardPostIt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
