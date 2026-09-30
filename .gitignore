@@ -1,8 +1,13 @@
-## Visual Studio build artifacts
+# Visual Studio / Rider
+.vs/
+*.user
+*.suo
+
+# Build Outputs
 [Bb]in/
 [Oo]bj/
-*.dll
-*.exe
-*.pdb
-*.user
-.vs/
+
+# Android Studio / IntelliJ
+.idea/
+.gradle/
+build/
