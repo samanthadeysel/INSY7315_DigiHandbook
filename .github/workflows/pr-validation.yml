@@ -11,6 +11,9 @@ jobs:
   test-backend:
     name: Build and Test Backend
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Digital_Handbook_Portal
 
     steps:
       - name: Checkout Code
@@ -36,6 +39,9 @@ jobs:
   test-android:
     name: Build and Test Android
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./EmployeeDigitalHandbook
 
     steps:
       - name: Checkout Code
