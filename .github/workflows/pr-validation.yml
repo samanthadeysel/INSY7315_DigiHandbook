@@ -1,0 +1,63 @@
+name: Pre-Merge Validation
+
+#defines the event that triggers this workflow - pull requests on main branch
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  #test + build the .NET Backend
+  test-backend:
+    name: Build and Test Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Digital_Handbook_Portal
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET Sdk
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Packages and Dependencies
+        run: dotnet restore
+
+      - name: Run .NET Linter
+        run: dotnet format --verify-no-changes
+        
+      - name: Run Tests
+        run: dotnet test
+        
+ 
+
+  #test + build the Android Frontend
+  test-android:
+    name: Build and Test Android
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./EmployeeDigitalHandbook
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java Sdk
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Make Gradlew Executable 
+        run: chmod +x ./gradlew
+
+      - name: Run Android Lint
+        run: ./gradlew lintDebug
+
+      - name: Run Unit Tests
+        run: ./gradlew testDebugUnitTest
