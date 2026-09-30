@@ -35,7 +35,7 @@ class QuizListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_quiz_list2, container, false)
+        return inflater.inflate(R.layout.fragment_quiz_list, container, false)
     }
 
     companion object {

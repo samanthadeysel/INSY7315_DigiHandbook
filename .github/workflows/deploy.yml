@@ -1,0 +1,76 @@
+name: Post-Merge Production Pipeline
+
+#triggers when pushes are made to main 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  #job 1: compile API  concurrency: concurrency + inject secrets
+  deploy-api:
+    name: Compile & Package API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Digital_Handbook_Portal/HandbookApi
+
+    steps:
+      - name: Checkout Main
+        uses: actions/checkout@v4
+
+      - name: Setup .NET Sdk
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore HandbookApi.csproj
+
+      - name: Compile and Publish API
+        env:
+          ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
+          Jwt__Key: ${{ secrets.JWT_SECRET_KEY }}
+        run: dotnet publish HandbookApi.csproj --configuration Release --output ./publish/api
+      
+      - name: Compile and Publish Admin Dashboard
+        run: dotnet publish Digital_Handbook_Portal/Digital_Handbook_Portal/Digital_Handbook_Portal.csproj --configuration Release --output ./publish/dashboard
+
+      - name: Upload Published API Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pmb-eye-hospital-api
+          path: ./Digital_Handbook_Portal/HandbookApi
+          
+#job 2: build android apk + inject secrets
+  build-apk:
+    name: Build Release APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./EmployeeDigitalHandbook
+
+    steps:
+      - name: Checkout Main
+        uses: actions/checkout@v4
+
+      - name: Setup Java Jdk
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Grant Execute Permission to Gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build Android Release APK
+        env:
+          PROD_API_URL: ${{ secrets.PROD_API_URL }}
+        run: ./gradlew assembleRelease
+
+      #save generated apk so it can be douwnloaded
+      - name: Upload Android Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: pmb-eye-hospital-release-apk
+          path: EmployeeDigitalHandbook/app/build/outputs/apk/release/*.apk

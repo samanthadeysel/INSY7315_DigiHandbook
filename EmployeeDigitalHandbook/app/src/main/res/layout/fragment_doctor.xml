@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/raleway"
-                android:text="Dr. Tracy Shereece"
+                android:text="Dr Name"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/raleway"
-                android:text="Ophthalmologist &amp; Eye Surgeon"
+                android:text="Speciality"
                 android:textColor="#718096"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/raleway_bold"
-                android:text="Surgical Ward A • Room 104"
+                android:text="Suite Number"
                 android:textColor="#81C241"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -129,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/raleway_bold"
-                    android:text="033 812 3456"
+                    android:text="000 000 0000"
                     android:textColor="#2D3748"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/raleway"
-                    android:text="t.shereece@pmbeyehospital.co.za"
+                    android:text="doctor@pmbeyehospital.co.za"
                     android:textColor="#2690CF"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -192,124 +192,41 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/actionButtonsContainer" />
 
+            <!-- Policies Section Header -->
             <TextView
-                android:id="@+id/categoryOneTextView"
-                android:layout_width="wrap_content"
+                android:id="@+id/txtDoctorPoliciesHeader"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
                 android:fontFamily="@font/raleway_bold"
-                android:text="Pre-Op &amp; Surgical Protocols"
+                android:text="Policies"
                 android:textColor="@color/black"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/greySheetBackground" />
 
-            <TextView
-                android:id="@+id/policyOneCatOne"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="12dp"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:fontFamily="@font/raleway"
-                android:paddingVertical="4dp"
-                android:paddingEnd="16dp"
-                android:text="> Policy 1"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/categoryOneTextView" />
 
-            <TextView
-                android:id="@+id/policyTwoCatOne"
-                android:layout_width="wrap_content"
+            <!-- Dynamic Policies RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/doctorPoliciesRecyclerView"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:fontFamily="@font/raleway"
-                android:paddingVertical="4dp"
-                android:paddingEnd="16dp"
-                android:text="> Policy 2"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/policyOneCatOne" />
-
-            <TextView
-                android:id="@+id/policyThreeCatOne"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:fontFamily="@font/raleway"
-                android:paddingVertical="4dp"
-                android:paddingEnd="16dp"
-                android:text="> Policy 3"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/policyTwoCatOne" />
-
-            <TextView
-                android:id="@+id/categoryTwoTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="28dp"
-                android:fontFamily="@font/raleway_bold"
-                android:text="Bedside &amp; Inpatient Care"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/policyThreeCatOne" />
-
-            <TextView
-                android:id="@+id/policyOneCatTwo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="12dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:fontFamily="@font/raleway"
-                android:paddingVertical="4dp"
-                android:paddingEnd="16dp"
-                android:text="> Policy 1"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/categoryTwoTextView" />
-
-            <TextView
-                android:id="@+id/policyTwoCatTwo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="32dp"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:fontFamily="@font/raleway"
-                android:paddingVertical="4dp"
-                android:paddingEnd="16dp"
-                android:text="> Policy 2"
-                android:textColor="@color/black"
-                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingHorizontal="20dp"
+                android:paddingBottom="24dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/policyOneCatTwo" />
+                app:layout_constraintTop_toBottomOf="@id/txtDoctorPoliciesHeader"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_policy_card" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
