@@ -1,7 +1,7 @@
 
+using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Digital_Handbook_Portal.Models;
 
 public class UsersController : Controller
 {
@@ -15,7 +15,7 @@ public class UsersController : Controller
     // GET: USERS
     public async Task<IActionResult> Index()    
     {
-        return View();
+        return View(await _context.User.ToListAsync());
     }
 
     // GET: USERS/Details/5

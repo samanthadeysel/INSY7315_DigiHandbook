@@ -121,6 +121,6 @@ C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Han
 C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
 C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
 C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\wwwroot\js\site.js
 C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\wwwroot\favicon.ico
 C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\wwwroot\css\site.css
-C:\Users\saman\Desktop\INSY7315_DigiHandbook\Digital_Handbook_Portal\Digital_Handbook_Portal\wwwroot\js\site.js

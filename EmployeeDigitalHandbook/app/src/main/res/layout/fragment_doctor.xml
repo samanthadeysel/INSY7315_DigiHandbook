@@ -73,7 +73,7 @@
                 app:layout_constraintTop_toTopOf="@id/whiteSheetBackground" />
 
             <TextView
-                android:id="@+id/tvDoctorName"
+                android:id="@+id/txtDoctorName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -87,7 +87,7 @@
                 app:layout_constraintTop_toBottomOf="@id/imgDoctorProfile" />
 
             <TextView
-                android:id="@+id/tvDoctorSpecialty"
+                android:id="@+id/txtDoctorSpecialty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -97,10 +97,10 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvDoctorName" />
+                app:layout_constraintTop_toBottomOf="@id/txtDoctorName" />
 
             <TextView
-                android:id="@+id/tvDoctorLocation"
+                android:id="@+id/txtDoctorSuite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
@@ -111,7 +111,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvDoctorSpecialty" />
+                app:layout_constraintTop_toBottomOf="@id/txtDoctorSpecialty" />
 
             <LinearLayout
                 android:id="@+id/contactInfoDisplayContainer"
@@ -122,10 +122,10 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvDoctorLocation">
+                app:layout_constraintTop_toBottomOf="@id/txtDoctorSuite">
 
                 <TextView
-                    android:id="@+id/tvDoctorPhone"
+                    android:id="@+id/txtDoctorPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/raleway_bold"
@@ -135,7 +135,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvDoctorEmail"
+                    android:id="@+id/txtDoctorEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"

@@ -1,0 +1,72 @@
+@model Digital_Handbook_Portal.Models.Quiz
+
+@{
+    ViewData["Title"] = "Create CPD Quiz";
+}
+
+<div class="container-fluid p-0">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Create New CPD Quiz</h2>
+            <p class="text-muted small mb-0">Set up the assessment details and scoring thresholds for mobile app users.</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+            <i class="fa-solid fa-arrow-left me-1"></i> Back to Quizzes
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 col-lg-8">
+        <div class="card-body p-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="title" class="control-label fw-semibold">Quiz Title</label>
+                    <input asp-for="title" class="form-control" placeholder="e.g., Aseptic Technique & Eye Drop Administration" />
+                    <span asp-validation-for="title" class="text-danger small"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 form-group mb-3">
+                        <label asp-for="passingScore" class="control-label fw-semibold">Passing Score (%)</label>
+                        <input asp-for="passingScore" type="number" min="1" max="100" class="form-control" value="80" />
+                        <span asp-validation-for="passingScore" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label asp-for="estimateTime" class="control-label fw-semibold">Estimated Duration</label>
+                        <input asp-for="estimateTime" class="form-control" placeholder="e.g., 3 mins" value="3 mins" />
+                        <span asp-validation-for="estimateTime" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 form-group mb-3">
+                        <label asp-for="totalQuestions" class="control-label fw-semibold">Target Total Questions</label>
+                        <input asp-for="totalQuestions" type="number" min="1" class="form-control" placeholder="e.g., 5" />
+                        <span asp-validation-for="totalQuestions" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 form-group mb-4">
+                        <label asp-for="score" class="control-label fw-semibold">CPD Points Awarded</label>
+                        <input asp-for="score" type="number" min="1" class="form-control" value="1" />
+                        <span asp-validation-for="score" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary" style="background-color: #2690CF; border-color: #2690CF;">
+                        <i class="fa-solid fa-check me-1"></i> Save and Add Questions
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

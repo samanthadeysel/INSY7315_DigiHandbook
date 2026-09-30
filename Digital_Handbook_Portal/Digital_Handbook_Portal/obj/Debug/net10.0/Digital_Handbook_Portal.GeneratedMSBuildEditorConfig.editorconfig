@@ -35,44 +35,64 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/BragBooks/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhZ0Jvb2tzXENyZWF0ZS5jc2h0bWw=
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/BragBook/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhZ0Jvb2tcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/BragBooks/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhZ0Jvb2tzXERlbGV0ZS5jc2h0bWw=
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/BragBook/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhZ0Jvb2tcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/BragBooks/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhZ0Jvb2tzXERldGFpbHMuY3NodG1s
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/BragBook/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhZ0Jvb2tcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/BragBooks/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhZ0Jvb2tzXEVkaXQuY3NodG1s
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/BragBook/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhZ0Jvb2tcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/BragBooks/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhZ0Jvb2tzXEluZGV4LmNzaHRtbA==
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/BragBook/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhZ0Jvb2tcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Communities/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbXVuaXRpZXNcQ3JlYXRlLmNzaHRtbA==
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Community/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbXVuaXR5XENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Communities/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbXVuaXRpZXNcRGVsZXRlLmNzaHRtbA==
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Community/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbXVuaXR5XERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Communities/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbXVuaXRpZXNcRGV0YWlscy5jc2h0bWw=
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Community/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbXVuaXR5XERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Communities/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbXVuaXRpZXNcRWRpdC5jc2h0bWw=
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Community/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbXVuaXR5XEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Communities/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbXVuaXRpZXNcSW5kZXguY3NodG1s
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Community/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tbXVuaXR5XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Doctor/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Doctor/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Doctor/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Doctor/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Doctor/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Home/Index.cshtml]
@@ -103,24 +123,44 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUG9saWNpZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Quizs/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVpenNcQ3JlYXRlLmNzaHRtbA==
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/PolicyCategory/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUG9saWN5Q2F0ZWdvcnlcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Quizs/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVpenNcRGVsZXRlLmNzaHRtbA==
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/PolicyCategory/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUG9saWN5Q2F0ZWdvcnlcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Quizs/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVpenNcRGV0YWlscy5jc2h0bWw=
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/PolicyCategory/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUG9saWN5Q2F0ZWdvcnlcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Quizs/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVpenNcRWRpdC5jc2h0bWw=
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/PolicyCategory/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUG9saWN5Q2F0ZWdvcnlcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Quizs/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVpenNcSW5kZXguY3NodG1s
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/PolicyCategory/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUG9saWN5Q2F0ZWdvcnlcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Quiz/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVpelxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Quiz/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVpelxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Quiz/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVpelxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Quiz/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVpelxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Quiz/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVpelxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/saman/Desktop/INSY7315_DigiHandbook/Digital_Handbook_Portal/Digital_Handbook_Portal/Views/Resources/Create.cshtml]

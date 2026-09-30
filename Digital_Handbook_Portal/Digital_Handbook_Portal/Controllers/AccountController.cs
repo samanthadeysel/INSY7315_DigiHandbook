@@ -5,79 +5,52 @@ namespace Digital_Handbook_Portal.Controllers
 {
     public class AccountController : Controller
     {
-        // GET: AccountController
+        private readonly List<(string Email, string Password, string Name)> _admins = new()
+        {
+            ("admin1@pmbeye.co.za", "Admin123!", "Tracy"),
+            ("admin2@pmbeye.co.za", "Admin123!", "Allison"),
+            ("admin3@pmbeye.co.za", "Admin123!", "Admin 3")
+        };
+
+        // GET: Account/Login
+        [HttpGet]
         public ActionResult Login()
         {
             return View();
         }
 
-        // GET: AccountController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: AccountController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: AccountController/Create
+        // POST: Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Login(string email, string password)
         {
-            try
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
+                ViewBag.ErrorMessage = "Please enter both email and password.";
                 return View();
             }
-        }
 
-        // GET: AccountController/Edit/5
-        public ActionResult Edit(int id)
-        {
+            var admin = _admins.FirstOrDefault(a =>
+                a.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
+                a.Password == password);
+
+            if (admin != default)
+            {
+                HttpContext.Session.SetString("AdminEmail", admin.Email);
+                HttpContext.Session.SetString("AdminName", admin.Name);
+
+                return RedirectToAction("Index", "Users");
+            }
+
+            ViewBag.ErrorMessage = "Invalid admin credentials.";
             return View();
         }
 
-        // POST: AccountController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        // GET: Account/Logout
+        public ActionResult Logout()
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: AccountController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: AccountController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            HttpContext.Session.Clear();
+            return RedirectToAction(nameof(Login));
         }
     }
 }

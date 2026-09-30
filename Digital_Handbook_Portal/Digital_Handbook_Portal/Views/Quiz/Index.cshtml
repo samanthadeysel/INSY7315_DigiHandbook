@@ -1,0 +1,91 @@
+@model IEnumerable<Digital_Handbook_Portal.Models.Quiz>
+
+@{
+    ViewData["Title"] = "CPD Quizzes";
+}
+
+<div class="container-fluid p-0">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">CPD Quizzes & Assessments</h2>
+            <p class="text-muted small mb-0">Create and oversee multiple choice knowledge checks for hospital staff.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary shadow-sm" style="background-color: #2690CF; border-color: #2690CF;">
+            <i class="fa-solid fa-plus me-1"></i> Create New Quiz
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-uppercase fs-7 fw-semibold border-bottom">
+                    <tr>
+                        <th class="ps-4" style="width: 30%;">Quiz Title</th>
+                        <th style="width: 15%;">Questions</th>
+                        <th style="width: 15%;">Passing Score</th>
+                        <th style="width: 15%;">Est. Time</th>
+                        <th style="width: 15%;">Created</th>
+                        <th class="text-end pe-4" style="width: 10%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-dark">
+                                    <i class="fa-solid fa-list-check text-primary me-2"></i> @item.title
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-light text-dark border">
+                                        <i class="fa-regular fa-circle-question me-1 text-info"></i>
+                                        @(item.questions?.Count ?? item.totalQuestions) Questions
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                        <i class="fa-solid fa-bullseye me-1"></i> @item.passingScore% Pass
+                                    </span>
+                                </td>
+
+                                <td class="text-secondary small">
+                                    <i class="fa-regular fa-clock me-1 text-muted"></i> @item.estimateTime
+                                </td>
+
+                                <td class="text-secondary small">
+                                    @item.createdAt.ToString("dd MMM yyyy")
+                                </td>
+
+                                <td class="text-end pe-4">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a asp-action="Edit" asp-route-id="@item.quizId" class="btn btn-outline-secondary" title="Edit Quiz">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.quizId" class="btn btn-outline-info" title="Quiz Details">
+                                            <i class="fa-solid fa-circle-info"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.quizId" class="btn btn-outline-danger" title="Delete Quiz">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="fa-solid fa-clipboard-question fs-2 mb-2 d-block text-black-50"></i>
+                                No CPD quizzes recorded yet. Click "Create New Quiz" to add one.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
