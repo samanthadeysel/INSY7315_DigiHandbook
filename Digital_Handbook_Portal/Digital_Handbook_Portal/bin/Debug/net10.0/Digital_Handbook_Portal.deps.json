@@ -10,7 +10,7 @@
         "dependencies": {
           "Microsoft.EntityFrameworkCore.SqlServer": "10.0.12",
           "Microsoft.EntityFrameworkCore.Tools": "10.0.12",
-          "Microsoft.OpenApi": "3.10.2"
+          "Microsoft.OpenApi": "1.6.23"
         },
         "runtime": {
           "Digital_Handbook_Portal.dll": {}
@@ -645,11 +645,11 @@
           }
         }
       },
-      "Microsoft.OpenApi/3.10.2": {
+      "Microsoft.OpenApi/1.6.23": {
         "runtime": {
-          "lib/net8.0/Microsoft.OpenApi.dll": {
-            "assemblyVersion": "3.10.2.0",
-            "fileVersion": "3.10.2.0"
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+            "assemblyVersion": "1.6.23.0",
+            "fileVersion": "1.6.23.0"
           }
         }
       },
@@ -1017,12 +1017,12 @@
       "path": "microsoft.identitymodel.tokens/7.7.1",
       "hashPath": "microsoft.identitymodel.tokens.7.7.1.nupkg.sha512"
     },
-    "Microsoft.OpenApi/3.10.2": {
+    "Microsoft.OpenApi/1.6.23": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-qzg4a3WmgQm28Azaporbnsu+KHA+vq5sgpQQFLiJgB06Rra2S+kzGAU7pzUB8/UIwZJCSCY2JEE/M5e0hQ2K8w==",
-      "path": "microsoft.openapi/3.10.2",
-      "hashPath": "microsoft.openapi.3.10.2.nupkg.sha512"
+      "sha512": "sha512-tZ1I0KXnn98CWuV8cpI247A17jaY+ILS9vvF7yhI0uPPEqF4P1d7BWL5Uwtel10w9NucllHB3nTkfYTAcHAh8g==",
+      "path": "microsoft.openapi/1.6.23",
+      "hashPath": "microsoft.openapi.1.6.23.nupkg.sha512"
     },
     "Microsoft.SqlServer.Server/1.0.0": {
       "type": "package",

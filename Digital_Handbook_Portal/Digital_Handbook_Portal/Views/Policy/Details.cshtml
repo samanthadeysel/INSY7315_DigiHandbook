@@ -1,52 +1,51 @@
 @model Digital_Handbook_Portal.Models.Policy
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Policy Details";
 }
 
-<h1>Details</h1>
+<div class="container py-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h4 class="card-title fw-bold mb-0">Policy Details</h4>
+                    <span class="badge bg-primary">ID: #@Model.policyId</span>
+                </div>
+                <div class="card-body p-4">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-3 text-muted">@Html.DisplayNameFor(model => model.Title)</dt>
+                        <dd class="col-sm-9 fw-bold">@Html.DisplayFor(model => model.Title)</dd>
 
-<div>
-    <h4>Policy</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.contentSummary)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.contentSummary)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.specificCategory)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.specificCategory)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.fileUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.fileUrl)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.policyId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                        <dt class="col-sm-3 text-muted">@Html.DisplayNameFor(model => model.Category)</dt>
+                        <dd class="col-sm-9">@(Model.Category?.categoryName ?? "Unassigned")</dd>
+
+                        <dt class="col-sm-3 text-muted">@Html.DisplayNameFor(model => model.specificCategory)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.specificCategory)</dd>
+
+                        <dt class="col-sm-3 text-muted">@Html.DisplayNameFor(model => model.contentSummary)</dt>
+                        <dd class="col-sm-9 text-secondary">@Html.DisplayFor(model => model.contentSummary)</dd>
+
+                        <dt class="col-sm-3 text-muted">Document</dt>
+                        <dd class="col-sm-9">
+                            @if (!string.IsNullOrEmpty(Model.fileUrl))
+                            {
+                                <a href="@Model.fileUrl" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    Open Policy Document
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No document uploaded</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+                <div class="card-footer bg-light py-3 d-flex gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model?.policyId" class="btn btn-primary">Edit Policy</a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,53 +1,67 @@
 @model IEnumerable<Digital_Handbook_Portal.Models.BragBook>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Brag Book";
 }
 
-<h1>Index</h1>
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="form-section-title fs-3">Brag Book & Staff Recognitions</h2>
+            <p class="form-section-subtitle mb-0">Review peer compliments, awards, and team shoutouts across departments</p>
+        </div>
+        <a asp-action="Create" class="btn btn-hospital-primary">
+            + Post New Shoutout
+        </a>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.senderType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.recipientName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.datePosted)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.content)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.senderType)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.recipientName)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.datePosted)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.bragId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.bragId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.bragId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="dashboard-card">
+        <div class="table-responsive">
+            <table class="table table-hover table-policy mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-3">Recipient</th>
+                        <th>Sender Type</th>
+                        <th>Shoutout Message</th>
+                        <th>Date Posted</th>
+                        <th class="text-end pe-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">
+                                No shoutouts recorded yet.
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-3 fw-semibold text-dark">
+                                @Html.DisplayFor(model => item.recipientName)
+                            </td>
+                            <td>
+                                <span class="badge-category">
+                                    @Html.DisplayFor(model => item.senderType)
+                                </span>
+                            </td>
+                            <td class="policy-summary-cell">
+                                @Html.DisplayFor(model => item.content)
+                            </td>
+                            <td class="text-muted small">
+                                @item.datePosted.ToString("dd MMM yyyy, HH:mm")
+                            </td>
+                            <td class="text-end pe-3">
+                                <a asp-action="Edit" asp-route-id="@item.bragId" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.bragId" class="btn btn-sm btn-outline-secondary me-1">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.bragId" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

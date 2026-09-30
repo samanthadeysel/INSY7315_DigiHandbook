@@ -1,53 +1,71 @@
 @model IEnumerable<Digital_Handbook_Portal.Models.Community>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Community Events";
 }
 
-<h1>Index</h1>
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="form-section-title fs-3">Hospital Community Events</h2>
+            <p class="form-section-subtitle mb-0">Schedule social gatherings, wellness sessions, and hospital team-building events</p>
+        </div>
+        <a asp-action="Create" class="btn btn-hospital-primary">
+            + Schedule New Event
+        </a>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.eventDateTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.location)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.title)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.description)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.eventDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.location)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.eventId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.eventId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.eventId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="dashboard-card">
+        <div class="table-responsive">
+            <table class="table table-hover table-policy mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-3">@Html.DisplayNameFor(model => model.title)</th>
+                        <th>@Html.DisplayNameFor(model => model.eventCategory)</th>
+                        <th>@Html.DisplayNameFor(model => model.eventDateTime)</th>
+                        <th>@Html.DisplayNameFor(model => model.location)</th>
+                        <th>@Html.DisplayNameFor(model => model.description)</th>
+                        <th class="text-end pe-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">
+                                No upcoming hospital community events scheduled yet.
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-3 fw-semibold text-dark">
+                                @Html.DisplayFor(model => item.title)
+                            </td>
+                            <td>
+                                <span class="badge-category">
+                                    @Html.DisplayFor(model => item.eventCategory)
+                                </span>
+                            </td>
+                            <td class="text-nowrap">
+                                @item.eventDateTime.ToString("dd MMM yyyy, HH:mm")
+                            </td>
+                            <td>
+                                <span class="text-secondary">@Html.DisplayFor(model => item.location)</span>
+                            </td>
+                            <td class="policy-summary-cell">
+                                @Html.DisplayFor(model => item.description)
+                            </td>
+                            <td class="text-end pe-3">
+                                <a asp-action="Edit" asp-route-id="@item.eventId" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.eventId" class="btn btn-sm btn-outline-secondary me-1">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.eventId" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
