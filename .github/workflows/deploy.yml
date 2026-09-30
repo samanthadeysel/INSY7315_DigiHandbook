@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./Digital_Handbook_Portal
+        working-directory: ./Digital_Handbook_Portal/HandbookApi
 
     steps:
       - name: Checkout Main
@@ -34,7 +34,7 @@ jobs:
         run: dotnet publish HandbookApi.csproj --configuration Release --output ./publish/api
       
       - name: Compile and Publish Admin Dashboard
-        run: dotnet publish Digital_Handbook_Portal/Digital_Handbook_Portal.csproj --configuration Release --output ./publish/dashboard
+        run: dotnet publish Digital_Handbook_Portal/Digital_Handbook_Portal/Digital_Handbook_Portal.csproj --configuration Release --output ./publish/dashboard
 
       - name: Upload Published API Artifact
         uses: actions/upload-artifact@v4
