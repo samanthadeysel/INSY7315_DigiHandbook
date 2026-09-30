@@ -21,14 +21,16 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore Packages
+      - name: Restore Packages and Dependencies
         run: dotnet restore
 
-      - name: Build Project
-        run: dotnet build
-
+      - name: Run .NET Linter
+        run: dotnet format --verify-no-changes
+        
       - name: Run Tests
         run: dotnet test
+        
+ 
 
   #test + build the Android Frontend
   test-android:
@@ -45,8 +47,11 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Make Gradlew Executable
+      - name: Make Gradlew Executable 
         run: chmod +x ./gradlew
+
+      - name: Run Android Lint
+        run: ./gradlew lintDebug
 
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest
