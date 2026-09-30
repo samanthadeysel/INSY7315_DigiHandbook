@@ -19,7 +19,7 @@
         </div>
 
         <div class="admin-profile-badge">
-            <span><i class="fa-solid fa-user-shield"></i> @ViewBag.AdminName ?? (Admin)</span>
+            <span><i class="fa-solid fa-user-shield"></i> @(ViewBag.AdminName ?? "Admin Lead") (Admin)</span>
             <a href="/Account/Login" class="logout-link"><i class="fa-solid fa-power-off"></i> Logout</a>
         </div>
     </header>

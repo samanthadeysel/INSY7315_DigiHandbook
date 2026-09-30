@@ -1,7 +1,7 @@
 
+using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Digital_Handbook_Portal.Models;
 
 public class UsersController : Controller
 {
