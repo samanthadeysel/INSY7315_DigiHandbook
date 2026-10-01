@@ -20,11 +20,11 @@ namespace Digital_Handbook_Portal.Controllers
         }
 
         // READ DETAILS
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int? id)
         {
-            if (string.IsNullOrEmpty(id)) return NotFound();
+            if (id == null) return NotFound();
 
-            var doctor = await _context.Doctor.FirstOrDefaultAsync(m => m.Id == id);
+            var doctor = await _context.Doctor.FirstOrDefaultAsync(m => m.doctorId == id);
             if (doctor == null) return NotFound();
 
             return View(doctor);
@@ -41,11 +41,6 @@ namespace Digital_Handbook_Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Doctor doctor)
         {
-            if (string.IsNullOrEmpty(doctor.Id))
-            {
-                doctor.Id = Guid.NewGuid().ToString();
-            }
-
             if (ModelState.IsValid)
             {
                 _context.Add(doctor);
@@ -56,9 +51,9 @@ namespace Digital_Handbook_Portal.Controllers
         }
 
         // UPDATE (GET)
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            if (string.IsNullOrEmpty(id)) return NotFound();
+            if (id == null) return NotFound();
 
             var doctor = await _context.Doctor.FindAsync(id);
             if (doctor == null) return NotFound();
@@ -69,9 +64,9 @@ namespace Digital_Handbook_Portal.Controllers
         // UPDATE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, Doctor doctor)
+        public async Task<IActionResult> Edit(int id, Doctor doctor)
         {
-            if (id != doctor.Id) return NotFound();
+            if (id != doctor.doctorId) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -82,7 +77,7 @@ namespace Digital_Handbook_Portal.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Doctor.Any(e => e.Id == doctor.Id)) return NotFound();
+                    if (!_context.Doctor.Any(e => e.doctorId == doctor.doctorId)) return NotFound();
                     else throw;
                 }
                 return RedirectToAction(nameof(Index));
@@ -91,11 +86,11 @@ namespace Digital_Handbook_Portal.Controllers
         }
 
         // DELETE (GET)
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            if (string.IsNullOrEmpty(id)) return NotFound();
+            if (id == null) return NotFound();
 
-            var doctor = await _context.Doctor.FirstOrDefaultAsync(m => m.Id == id);
+            var doctor = await _context.Doctor.FirstOrDefaultAsync(m => m.doctorId == id);
             if (doctor == null) return NotFound();
 
             return View(doctor);
@@ -104,7 +99,7 @@ namespace Digital_Handbook_Portal.Controllers
         // DELETE (POST)
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var doctor = await _context.Doctor.FindAsync(id);
             if (doctor != null)

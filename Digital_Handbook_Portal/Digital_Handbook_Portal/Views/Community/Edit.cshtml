@@ -25,7 +25,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="eventCategory" class="form-label fw-semibold"></label>
-                                <select asp-for="eventCategory" class="form-select" asp-items="Html.GetEnumSelectList<Digital_Handbook_Portal.Models.EventCategory>()">
+                                <select asp-for="eventCategory" class="form-select" asp-items="Html.GetEnumSelectList<Digital_Handbook_Portal.Models.Community.EventCategory>()">
                                 </select>
                                 <span asp-validation-for="eventCategory" class="text-danger small"></span>
                             </div>

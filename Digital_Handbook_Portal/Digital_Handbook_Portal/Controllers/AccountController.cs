@@ -9,7 +9,7 @@ namespace Digital_Handbook_Portal.Controllers
         {
             ("admin1@pmbeye.co.za", "Admin123!", "Tracy"),
             ("admin2@pmbeye.co.za", "Admin123!", "Allison"),
-            ("admin3@pmbeye.co.za", "Admin123!", "Admin 3")
+            ("admin3@pmbeye.co.za", "Admin123!", "Kelly")
         };
 
         // GET: Account/Login
