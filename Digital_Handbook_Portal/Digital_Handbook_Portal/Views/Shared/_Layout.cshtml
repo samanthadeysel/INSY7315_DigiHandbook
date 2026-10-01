@@ -5,6 +5,35 @@
     <title>@ViewData["Title"] - PMB Eye Hospital</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
+<script>
+    // Disable Right-Click Context Menu
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+
+    // Block Keyboard Shortcuts (Ctrl+C, Ctrl+P, Ctrl+U, Ctrl+S, PrintScreen)
+    document.addEventListener('keydown', function (e) {
+        // Block Ctrl+C (Copy), Ctrl+U (Source Code), Ctrl+P (Print), Ctrl+S (Save)
+        if (e.ctrlKey && (e.key === 'c' || e.key === 'C' ||
+                          e.key === 'u' || e.key === 'U' ||
+                          e.key === 'p' || e.key === 'P' ||
+                          e.key === 's' || e.key === 'S')) {
+            e.preventDefault();
+            return false;
+        }
+
+        // Clear clipboard if PrintScreen key is pressed
+        if (e.key === 'PrintScreen') {
+            navigator.clipboard.writeText('');
+            alert('Screenshots are disabled on this portal.');
+        }
+    });
+
+    //Clear Clipboard on Copy attempt
+    document.addEventListener('copy', function (e) {
+        e.preventDefault();
+    });
+</script>
 <body>
     @* header *@
     <header class="top-banner">

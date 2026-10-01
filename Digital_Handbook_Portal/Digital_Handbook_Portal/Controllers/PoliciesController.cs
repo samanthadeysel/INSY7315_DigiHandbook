@@ -1,149 +1,158 @@
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Digital_Handbook_Portal.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
-public class PoliciesController : Controller
+namespace Digital_Handbook_Portal.Controllers
 {
-    private readonly Digital_Handbook_PortalContext _context;
-
-    public PoliciesController(Digital_Handbook_PortalContext context)
+    public class PoliciesController : Controller
     {
-        _context = context;
-    }
+        private readonly Digital_Handbook_PortalContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-    // GET: POLICYS
-    public async Task<IActionResult> Index()    
-    {
-        return View(await _context.Policy.ToListAsync());
-    }
-
-    // GET: POLICYS/Details/5
-    public async Task<IActionResult> Details(int? policyid)
-    {
-        if (policyid == null)
+        public PoliciesController(Digital_Handbook_PortalContext context, IWebHostEnvironment environment)
         {
-            return NotFound();
+            _context = context;
+            _environment = environment;
         }
 
-        var policy = await _context.Policy
-            .FirstOrDefaultAsync(m => m.policyId == policyid);
-        if (policy == null)
+        // READ ALL
+        public async Task<IActionResult> Index()
         {
-            return NotFound();
+            var policies = await _context.Policy.Include(p => p.Category).ToListAsync();
+            return View(policies);
         }
 
-        return View(policy);
-    }
-
-    // GET: POLICYS/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: POLICYS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("policyId,Title,contentSummary,specificCategory,fileUrl,Category")] Policy policy)
-    {
-        if (ModelState.IsValid)
+        // READ DETAILS
+        public async Task<IActionResult> Details(int? id)
         {
-            _context.Add(policy);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(policy);
-    }
+            if (id == null) return NotFound();
 
-    // GET: POLICYS/Edit/5
-    public async Task<IActionResult> Edit(int? policyid)
-    {
-        if (policyid == null)
-        {
-            return NotFound();
+            var policy = await _context.Policy
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(m => m.policyId == id);
+
+            if (policy == null) return NotFound();
+
+            return View(policy);
         }
 
-        var policy = await _context.Policy.FindAsync(policyid);
-        if (policy == null)
+        // CREATE (GET)
+        public async Task<IActionResult> Create()
         {
-            return NotFound();
-        }
-        return View(policy);
-    }
-
-    // POST: POLICYS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? policyid, [Bind("policyId,Title,contentSummary,specificCategory,fileUrl,Category")] Policy policy)
-    {
-        if (policyid != policy.policyId)
-        {
-            return NotFound();
+            ViewBag.Categories = new SelectList(await _context.PolicyCategory.ToListAsync(), "categoryId", "categoryName");
+            return View();
         }
 
-        if (ModelState.IsValid)
+        // CREATE (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Policy policy, IFormFile? pdfFile)
         {
-            try
+            if (pdfFile != null && pdfFile.Length > 0)
             {
-                _context.Update(policy);
+                policy.fileUrl = await SaveUploadedFileAsync(pdfFile);
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(policy);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.Categories = new SelectList(await _context.PolicyCategory.ToListAsync(), "categoryId", "categoryName", policy.categoryId);
+            return View(policy);
+        }
+
+        // UPDATE (GET)
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var policy = await _context.Policy.FindAsync(id);
+            if (policy == null) return NotFound();
+
+            ViewBag.Categories = new SelectList(await _context.PolicyCategory.ToListAsync(), "categoryId", "categoryName", policy.categoryId);
+            return View(policy);
+        }
+
+        // UPDATE (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Policy policy, IFormFile? pdfFile)
+        {
+            if (id != policy.policyId) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (pdfFile != null && pdfFile.Length > 0)
+                    {
+                        policy.fileUrl = await SaveUploadedFileAsync(pdfFile);
+                    }
+
+                    _context.Update(policy);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Policy.Any(e => e.policyId == policy.policyId)) return NotFound();
+                    else throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.Categories = new SelectList(await _context.PolicyCategory.ToListAsync(), "categoryId", "categoryName", policy.categoryId);
+            return View(policy);
+        }
+
+        // DELETE (GET)
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var policy = await _context.Policy
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(m => m.policyId == id);
+
+            if (policy == null) return NotFound();
+
+            return View(policy);
+        }
+
+        // DELETE (POST)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var policy = await _context.Policy.FindAsync(id);
+            if (policy != null)
+            {
+                _context.Policy.Remove(policy);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PolicyExists(policy.policyId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
             return RedirectToAction(nameof(Index));
         }
-        return View(policy);
-    }
 
-    // GET: POLICYS/Delete/5
-    public async Task<IActionResult> Delete(int? policyid)
-    {
-        if (policyid == null)
+        private async Task<string> SaveUploadedFileAsync(IFormFile pdfFile)
         {
-            return NotFound();
+            string uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            string uniqueFileName = $"{Guid.NewGuid()}_{pdfFile.FileName}";
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await pdfFile.CopyToAsync(fileStream);
+            }
+
+            return $"/uploads/{uniqueFileName}";
         }
-
-        var policy = await _context.Policy
-            .FirstOrDefaultAsync(m => m.policyId == policyid);
-        if (policy == null)
-        {
-            return NotFound();
-        }
-
-        return View(policy);
-    }
-
-    // POST: POLICYS/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? policyid)
-    {
-        var policy = await _context.Policy.FindAsync(policyid);
-        if (policy != null)
-        {
-            _context.Policy.Remove(policy);
-        }
-
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool PolicyExists(int? policyid)
-    {
-        return _context.Policy.Any(e => e.policyId == policyid);
     }
 }
