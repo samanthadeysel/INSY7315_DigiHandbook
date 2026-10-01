@@ -2,149 +2,63 @@
     ViewData["Title"] = "Admin Management Hub";
 }
 
-<style>
-    :root {
-        --brand-green: #81C241;
-        --brand-blue: #2690CF;
-        --text-dark: #1E293B;
-        --text-muted: #64748B;
-        --card-bg: #FFFFFF;
-    }
-
-    .main-container {
-        max-width: 1080px;
-        width: 100%;
-        margin: 20px auto 40px auto;
-    }
-
-    .content-card {
-        background: var(--card-bg);
-        border-radius: 28px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-        padding: 36px 40px;
-    }
-
-    .greeting-header {
-        margin-bottom: 32px;
-        border-bottom: 2px solid #F1F5F9;
-        padding-bottom: 16px;
-    }
-
-        .greeting-header h2 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--text-dark);
-        }
-
-        .greeting-header p {
-            color: var(--text-muted);
-            font-size: 0.92rem;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 24px;
-    }
-
-    .module-tile {
-        background: #FFFFFF;
-        border-radius: 20px;
-        padding: 28px 24px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        text-decoration: none;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        position: relative;
-    }
-
-        .module-tile:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-        }
-
-    .tile-green-border {
-        border: 3px solid var(--brand-green);
-    }
-
-    .tile-blue-border {
-        border: 3px solid var(--brand-blue);
-    }
-
-    .tile-icon {
-        font-size: 2.8rem;
-        margin-bottom: 16px;
-    }
-
-    .icon-green {
-        color: var(--brand-green);
-    }
-
-    .icon-blue {
-        color: var(--brand-blue);
-    }
-
-    .tile-title {
-        font-size: 1.2rem;
-        font-weight: 800;
-        color: var(--text-dark);
-        margin-bottom: 6px;
-    }
-
-    .tile-subtitle {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--text-muted);
-    }
-</style>
-
 <main class="main-container">
     <div class="content-card">
 
         <div class="greeting-header">
-            <h2>Good Morning, @ViewBag.AdminName!</h2>
-            <p>Select a module below.</p>
+            <h2>Good Morning, @(ViewBag.AdminName ?? "Administrator")!</h2>
+            <p>Select a portal management module below.</p>
         </div>
 
         <div class="dashboard-grid">
 
-            @* user management *@
-            <a href="/Users" class="module-tile tile-blue-border">
+            @* User Accounts Management *@
+            <a asp-controller="User" asp-action="Index" class="module-tile tile-blue-border">
                 <i class="fa-solid fa-users-gear tile-icon icon-blue"></i>
-                <h3 class="tile-title">Users</h3>
-                <p class="tile-subtitle">Users, Reset Passwords & Roles</p>
+                <h3 class="tile-title">Staff Accounts</h3>
+                <p class="tile-subtitle">User Credentials, Passwords & Access</p>
             </a>
 
-            @* policies *@
-            <a href="/Policies" class="module-tile tile-green-border">
-                <i class="fa-solid fa-shield-halved tile-icon icon-green"></i>
+            @* Hospital Policies *@
+            <a asp-controller="Policy" asp-action="Index" class="module-tile tile-green-border">
+                <i class="fa-solid fa-file-shield tile-icon icon-green"></i>
                 <h3 class="tile-title">Policies</h3>
-                <p class="tile-subtitle">Clinical Policies</p>
+                <p class="tile-subtitle">Clinical Protocols & Ward Guidelines</p>
             </a>
 
-            @* bragbook *@
-            <a href="/BragBook" class="module-tile tile-blue-border">
-                <i class="fa-solid fa-star tile-icon icon-blue"></i>
+            @* Doctors Directory *@
+            <a asp-controller="Doctors" asp-action="Index" class="module-tile tile-blue-border">
+                <i class="fa-solid fa-user-doctor tile-icon icon-blue"></i>
+                <h3 class="tile-title">Doctors Directory</h3>
+                <p class="tile-subtitle">Physicians, Specialties & Consulting Rooms</p>
+            </a>
+
+            @* Brag Book & Shoutouts *@
+            <a asp-controller="BragBook" asp-action="Index" class="module-tile tile-green-border">
+                <i class="fa-solid fa-award tile-icon icon-green"></i>
                 <h3 class="tile-title">Brag Book</h3>
-                <p class="tile-subtitle">Peer Compliments & Morale Posts</p>
+                <p class="tile-subtitle">Staff Shoutouts & Appreciation Feed</p>
             </a>
 
-            @* community and events *@
-            <a href="/Community" class="module-tile tile-blue-border">
+            @* Community & Social Events *@
+            <a asp-controller="Community" asp-action="Index" class="module-tile tile-blue-border">
                 <i class="fa-solid fa-people-group tile-icon icon-blue"></i>
                 <h3 class="tile-title">Community</h3>
-                <p class="tile-subtitle">Hospital Social Events & Gatherings</p>
+                <p class="tile-subtitle">Hospital Outreach & Wellness Gatherings</p>
             </a>
 
-            @* resources and cpd *@
-            <a href="/Resources" class="module-tile tile-green-border">
-                <i class="fa-solid fa-graduation-cap tile-icon icon-green"></i>
-                <h3 class="tile-title">Resources & CPD</h3>
-                <p class="tile-subtitle">Quizzes & Points</p>
+            @* Resources Module *@
+            <a asp-controller="Resources" asp-action="Index" class="module-tile tile-green-border">
+                <i class="fa-solid fa-folder-open tile-icon icon-green"></i>
+                <h3 class="tile-title">Resources</h3>
+                <p class="tile-subtitle">Staff Wellness Guides & Support Booklets</p>
+            </a>
+
+            @* Quiz & CPD Assessment Creation *@
+            <a asp-controller="Quiz" asp-action="Create" class="module-tile tile-blue-border">
+                <i class="fa-solid fa-list-check tile-icon icon-blue"></i>
+                <h3 class="tile-title">Create Quiz</h3>
+                <p class="tile-subtitle">CPD Assessments, Questions & Answers</p>
             </a>
 
         </div>

@@ -1,65 +1,72 @@
 @model IEnumerable<Digital_Handbook_Portal.Models.Doctor>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Doctors Directory";
 }
 
-<h1>Index</h1>
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="form-section-title fs-3">Hospital Medical Specialists</h2>
+            <p class="form-section-subtitle mb-0">Directory of ophthalmologists, surgeons, and resident medical staff</p>
+        </div>
+        <a asp-action="Create" class="btn btn-hospital-primary">
+            + Add New Doctor
+        </a>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.doctorImg)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.fName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.lName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.suiteNumber)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.doctorImg)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.fName)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.lName)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.email)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.phone)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.suiteNumber)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.doctorId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.doctorId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.doctorId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="dashboard-card">
+        <div class="table-responsive">
+            <table class="table table-hover table-policy mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-3">Doctor</th>
+                        <th>Suite #</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th class="text-end pe-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">
+                                No doctors registered in the directory yet.
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-3 fw-semibold text-dark">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center text-secondary fw-bold" style="width: 38px; height: 38px;">
+                                        @item.fName.Substring(0, 1)@item.lName.Substring(0, 1)
+                                    </div>
+                                    <div>
+                                        <span>@item.FullName</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge-category">Suite @item.suiteNumber</span>
+                            </td>
+                            <td>
+                                <a href="mailto:@item.email" class="text-decoration-none">@item.email</a>
+                            </td>
+                            <td>
+                                <span class="text-secondary">@item.phone</span>
+                            </td>
+                            <td class="text-end pe-3">
+                                <a asp-action="Edit" asp-route-id="@item.doctorId" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.doctorId" class="btn btn-sm btn-outline-secondary me-1">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.doctorId" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

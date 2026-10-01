@@ -1,36 +1,45 @@
 @model Digital_Handbook_Portal.Models.User
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create User Account";
 }
 
-<h1>Create</h1>
+<div class="container py-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <h4 class="form-section-title mb-0">Create Staff User Account</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
 
-<h4>User</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="mb-3">
+                            <label asp-for="email" class="form-label fw-semibold"></label>
+                            <input asp-for="email" type="email" class="form-control" placeholder="staff.member@pmbeyehospital.co.za" autocomplete="off" />
+                            <span asp-validation-for="email" class="text-danger small"></span>
+                        </div>
 
-            <div class="form-group">
-                <label asp-for="email" class="control-label"></label>
-                <input asp-for="email" class="form-control" />
-                <span asp-validation-for="email" class="text-danger"></span>
-            </div>
+                        <div class="mb-4">
+                            <label asp-for="password" class="form-label fw-semibold"></label>
+                            <input asp-for="password" type="password" class="form-control" placeholder="Assign initial temporary password" autocomplete="new-password" />
+                            <span asp-validation-for="password" class="text-danger small"></span>
+                        </div>
 
-            <div class="form-group">
-                <label asp-for="password" class="control-label"></label>
-                <input asp-for="password" class="form-control" />
-                <span asp-validation-for="password" class="text-danger"></span>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-hospital-primary px-4">Create Account</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

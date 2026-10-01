@@ -16,5 +16,8 @@ namespace Digital_Handbook_Portal.Models
         public string phone { get; set; }
         [Required(ErrorMessage = "Suite number is required")]
         public int suiteNumber { get; set; }
+
+        [Display(Name = "Doctor Name")]
+        public string FullName => $"Dr. {fName} {lName}";
     }
 }

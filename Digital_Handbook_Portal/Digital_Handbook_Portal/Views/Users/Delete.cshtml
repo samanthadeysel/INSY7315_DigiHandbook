@@ -1,34 +1,33 @@
 @model Digital_Handbook_Portal.Models.User
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete User Account";
 }
 
-<h1>Delete</h1>
+<div class="container py-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-danger shadow-sm">
+                <div class="card-header bg-danger text-white py-3">
+                    <h5 class="card-title mb-0 fw-bold">Revoke Account Access</h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-danger fw-semibold">Are you sure you want to permanently delete this user account? They will immediately lose access to the portal.</p>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Digital_Handbook_Portal.Models.User</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.email)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.password)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.password)
-        </dd>
-    </dl>
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="userId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4 text-muted">@Html.DisplayNameFor(model => model.email)</dt>
+                        <dd class="col-sm-8 fw-bold text-dark">@Html.DisplayFor(model => model.email)</dd>
+                    </dl>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="userId" />
+                        <div class="d-flex gap-2 mt-4">
+                            <input type="submit" value="Revoke & Delete" class="btn btn-danger px-3" />
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
