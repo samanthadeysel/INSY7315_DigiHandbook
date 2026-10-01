@@ -1,20 +1,40 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Digital_Handbook_Portal.Models
 {
     public class Doctor
     {
-        public int doctorId { get; set; }
-        public string doctorImg { get; set; } = string.Empty;
-        [Required(ErrorMessage = "First Name is required")]
-        public string fName { get; set; }
-        [Required(ErrorMessage = "Last Name is required")]
-        public string lName { get; set; }
-        [Required(ErrorMessage = "Email is required")]
-        public string email { get; set; }
-        [Required(ErrorMessage = "Contact number is required")]
-        public string phone { get; set; }
-        [Required(ErrorMessage = "Suite number is required")]
-        public int suiteNumber { get; set; }
+        [Key]
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = string.Empty;
+
+        [Required]
+        [JsonPropertyName("fName")]
+        public string FName { get; set; } = string.Empty;
+
+        [Required]
+        [JsonPropertyName("lName")]
+        public string LName { get; set; } = string.Empty;
+
+        [JsonPropertyName("specialty")]
+        public string Specialty { get; set; } = "General Practitioner";
+
+        [Required]
+        [JsonPropertyName("email")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        [JsonPropertyName("phone")]
+        public string Phone { get; set; } = string.Empty;
+
+        [JsonPropertyName("suiteNumber")]
+        public string SuiteNumber { get; set; } = string.Empty;
+
+        [JsonPropertyName("imageUrl")]
+        public string? ImageUrl { get; set; }
+
+        [JsonPropertyName("fullNameWithTitle")]
+        public string FullNameWithTitle => $"Dr. {FName} {LName}".Trim();
     }
 }

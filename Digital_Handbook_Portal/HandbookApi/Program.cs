@@ -1,3 +1,7 @@
+using Digital_Handbook_Portal.Models;
+using Digital_Handbook_Portal.Services;
+using Microsoft.EntityFrameworkCore;
+
 namespace HandbookApi
 {
     public class Program
@@ -6,36 +10,49 @@ namespace HandbookApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllersWithViews();
+            var connectionString = builder.Configuration.GetConnectionString("Digital_Handbook_PortalContext")
+                ?? throw new InvalidOperationException("Connection string 'Digital_Handbook_PortalContext' not found.");
 
-            builder.Services.AddSession(options =>
+            builder.Services.AddDbContext<Digital_Handbook_PortalContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                });
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+
+            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddCors(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
             });
-
-            builder.Services.AddOpenApi();
 
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Handbook API v1");
+                });
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseSession();
-
+            app.UseCors("AllowAll");
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Account}/{action=Login}/{id?}");
+            app.MapControllers();
 
             app.Run();
         }

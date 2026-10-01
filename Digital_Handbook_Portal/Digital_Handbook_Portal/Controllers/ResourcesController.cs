@@ -1,149 +1,113 @@
-
+using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Digital_Handbook_Portal.Models;
 
-public class ResourcesController : Controller
+namespace Digital_Handbook_Portal.Controllers
 {
-    private readonly Digital_Handbook_PortalContext _context;
-
-    public ResourcesController(Digital_Handbook_PortalContext context)
+    public class ResourcesController : Controller
     {
-        _context = context;
-    }
+        private readonly Digital_Handbook_PortalContext _context;
 
-    // GET: RESOURCES
-    public async Task<IActionResult> Index()    
-    {
-        return View(await _context.Resource.ToListAsync());
-    }
-
-    // GET: RESOURCES/Details/5
-    public async Task<IActionResult> Details(string? title)
-    {
-        if (title == null)
+        public ResourcesController(Digital_Handbook_PortalContext context)
         {
-            return NotFound();
+            _context = context;
         }
 
-        var resource = await _context.Resource
-            .FirstOrDefaultAsync(m => m.Title == title);
-        if (resource == null)
+        // READ ALL
+        public async Task<IActionResult> Index()
         {
-            return NotFound();
+            return View(await _context.Resource.ToListAsync());
         }
 
-        return View(resource);
-    }
-
-    // GET: RESOURCES/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: RESOURCES/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Title,resourceType,linkUrl")] Resource resource)
-    {
-        if (ModelState.IsValid)
+        // READ DETAILS
+        public async Task<IActionResult> Details(string id)
         {
-            _context.Add(resource);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(resource);
-    }
+            if (string.IsNullOrEmpty(id)) return NotFound();
 
-    // GET: RESOURCES/Edit/5
-    public async Task<IActionResult> Edit(string? title)
-    {
-        if (title == null)
-        {
-            return NotFound();
+            var resource = await _context.Resource.FirstOrDefaultAsync(m => m.Title == id);
+            if (resource == null) return NotFound();
+
+            return View(resource);
         }
 
-        var resource = await _context.Resource.FindAsync(title);
-        if (resource == null)
+        // CREATE (GET)
+        public IActionResult Create()
         {
-            return NotFound();
-        }
-        return View(resource);
-    }
-
-    // POST: RESOURCES/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(string? title, [Bind("Title,resourceType,linkUrl")] Resource resource)
-    {
-        if (title != resource.Title)
-        {
-            return NotFound();
+            return View();
         }
 
-        if (ModelState.IsValid)
+        // CREATE (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Resource resource)
         {
-            try
+            if (ModelState.IsValid)
             {
-                _context.Update(resource);
+                _context.Add(resource);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(resource);
+        }
+
+        // UPDATE (GET)
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return NotFound();
+
+            var resource = await _context.Resource.FindAsync(id);
+            if (resource == null) return NotFound();
+
+            return View(resource);
+        }
+
+        // UPDATE (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, Resource resource)
+        {
+            if (id != resource.Title) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(resource);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Resource.Any(e => e.Title == resource.Title)) return NotFound();
+                    else throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(resource);
+        }
+
+        // DELETE (GET)
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return NotFound();
+
+            var resource = await _context.Resource.FirstOrDefaultAsync(m => m.Title == id);
+            if (resource == null) return NotFound();
+
+            return View(resource);
+        }
+
+        // DELETE (POST)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var resource = await _context.Resource.FindAsync(id);
+            if (resource != null)
+            {
+                _context.Resource.Remove(resource);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ResourceExists(resource.Title))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
             return RedirectToAction(nameof(Index));
         }
-        return View(resource);
-    }
-
-    // GET: RESOURCES/Delete/5
-    public async Task<IActionResult> Delete(string? title)
-    {
-        if (title == null)
-        {
-            return NotFound();
-        }
-
-        var resource = await _context.Resource
-            .FirstOrDefaultAsync(m => m.Title == title);
-        if (resource == null)
-        {
-            return NotFound();
-        }
-
-        return View(resource);
-    }
-
-    // POST: RESOURCES/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(string? title)
-    {
-        var resource = await _context.Resource.FindAsync(title);
-        if (resource != null)
-        {
-            _context.Resource.Remove(resource);
-        }
-
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool ResourceExists(string? title)
-    {
-        return _context.Resource.Any(e => e.Title == title);
     }
 }

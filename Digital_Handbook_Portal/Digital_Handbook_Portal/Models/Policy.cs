@@ -19,6 +19,8 @@ namespace Digital_Handbook_Portal.Models
         public string specificCategory { get; set; }  //eg: Nursing policies -> Patient care, HR policies -> Leave policies, etc
         public string fileUrl { get; set; }
 
+        public int categoryId { get; set; }
+
         //linking to policy category table
         [ForeignKey("categoryId")]
         public virtual PolicyCategory? Category { get; set; }

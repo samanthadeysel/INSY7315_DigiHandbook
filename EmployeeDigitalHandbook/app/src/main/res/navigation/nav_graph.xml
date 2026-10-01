@@ -71,6 +71,11 @@
         android:label="Community" />
 
     <fragment
+        android:id="@+id/resourceFragment"
+        android:name="com.example.employeedigitalhandbook.features."
+        android:label="Community" />
+
+    <fragment
         android:id="@+id/comingSoonFragment"
         android:name="com.example.employeedigitalhandbook.features.ComingSoonFragment"
         android:label="Coming Soon" />

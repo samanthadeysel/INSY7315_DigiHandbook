@@ -1,7 +1,6 @@
-using System.Threading.Tasks;
+using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Digital_Handbook_Portal.Models;
 
 namespace Digital_Handbook_Portal.Controllers
 {
@@ -14,42 +13,39 @@ namespace Digital_Handbook_Portal.Controllers
             _context = context;
         }
 
-        // GET: Doctors
+        // READ ALL
         public async Task<IActionResult> Index()
         {
             return View(await _context.Doctor.ToListAsync());
         }
 
-        // GET: Doctors/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // READ DETAILS
+        public async Task<IActionResult> Details(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (string.IsNullOrEmpty(id)) return NotFound();
 
-            var doctor = await _context.Doctor
-                .FirstOrDefaultAsync(m => m.DoctorId == id);
-
-            if (doctor == null)
-            {
-                return NotFound();
-            }
+            var doctor = await _context.Doctor.FirstOrDefaultAsync(m => m.Id == id);
+            if (doctor == null) return NotFound();
 
             return View(doctor);
         }
 
-        // GET: Doctors/Create
+        // CREATE (GET)
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Doctors/Create
+        // CREATE (POST)
         [HttpPost]
-        @* [ValidateAntiForgeryToken] *@
-        public async Task<IActionResult> Create([Bind("DoctorId,DoctorImg,FName,LName,Email,Phone,SuiteNumber")] Doctor doctor)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Doctor doctor)
         {
+            if (string.IsNullOrEmpty(doctor.Id))
+            {
+                doctor.Id = Guid.NewGuid().ToString();
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(doctor);
@@ -59,31 +55,23 @@ namespace Digital_Handbook_Portal.Controllers
             return View(doctor);
         }
 
-        // GET: Doctors/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // UPDATE (GET)
+        public async Task<IActionResult> Edit(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (string.IsNullOrEmpty(id)) return NotFound();
 
             var doctor = await _context.Doctor.FindAsync(id);
-            if (doctor == null)
-            {
-                return NotFound();
-            }
+            if (doctor == null) return NotFound();
+
             return View(doctor);
         }
 
-        // POST: Doctors/Edit/5
+        // UPDATE (POST)
         [HttpPost]
-        @* [ValidateAntiForgeryToken] *@
-        public async Task<IActionResult> Edit(int id, [Bind("DoctorId,DoctorImg,FName,LName,Email,Phone,SuiteNumber")] Doctor doctor)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, Doctor doctor)
         {
-            if (id != doctor.doctorId)
-            {
-                return NotFound();
-            }
+            if (id != doctor.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -94,43 +82,29 @@ namespace Digital_Handbook_Portal.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DoctorExists(doctor.doctorId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!_context.Doctor.Any(e => e.Id == doctor.Id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(doctor);
         }
 
-        // GET: Doctors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE (GET)
+        public async Task<IActionResult> Delete(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (string.IsNullOrEmpty(id)) return NotFound();
 
-            var doctor = await _context.Doctor
-                .FirstOrDefaultAsync(m => m.doctorId == id);
-
-            if (doctor == null)
-            {
-                return NotFound();
-            }
+            var doctor = await _context.Doctor.FirstOrDefaultAsync(m => m.Id == id);
+            if (doctor == null) return NotFound();
 
             return View(doctor);
         }
 
-        // POST: Doctors/Delete/5
+        // DELETE (POST)
         [HttpPost, ActionName("Delete")]
-        @* [ValidateAntiForgeryToken] *@
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var doctor = await _context.Doctor.FindAsync(id);
             if (doctor != null)
@@ -138,13 +112,7 @@ namespace Digital_Handbook_Portal.Controllers
                 _context.Doctor.Remove(doctor);
                 await _context.SaveChangesAsync();
             }
-
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool DoctorExists(int id)
-        {
-            return _context.Doctor.Any(e => e.doctorId == id);
         }
     }
 }

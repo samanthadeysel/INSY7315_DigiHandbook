@@ -1,3 +1,4 @@
+using Digital_Handbook_Portal.Models;
 using Microsoft.EntityFrameworkCore;
 
 public class Digital_Handbook_PortalContext(DbContextOptions<Digital_Handbook_PortalContext> options) : DbContext(options)
@@ -9,5 +10,7 @@ public class Digital_Handbook_PortalContext(DbContextOptions<Digital_Handbook_Po
     public DbSet<Digital_Handbook_Portal.Models.User> User { get; set; } = default!;
     public DbSet<Digital_Handbook_Portal.Models.Resource> Resource { get; set; } = default!;
     public DbSet<Digital_Handbook_Portal.Models.Quiz> Quiz { get; set; } = default!;
+    public DbSet<Digital_Handbook_Portal.Models.QuizOption> QuizOption { get; set; } = default!;
+    public DbSet<Digital_Handbook_Portal.Models.QuizQuestion> QuizQuestion { get; set; } = default!;
     public DbSet<Digital_Handbook_Portal.Models.Doctor> Doctor { get; set; } = default!;
 }
