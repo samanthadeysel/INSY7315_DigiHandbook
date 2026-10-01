@@ -1,49 +1,66 @@
 @model Digital_Handbook_Portal.Models.Community
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Event";
 }
 
-<h1>Edit</h1>
+<div class="container py-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <h4 class="form-section-title mb-0">Edit Community Event</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+                        <input type="hidden" asp-for="eventId" />
 
-<h4>Community</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="eventId" />
-            <div class="form-group">
-                <label asp-for="title" class="control-label"></label>
-                <input asp-for="title" class="form-control" />
-                <span asp-validation-for="title" class="text-danger"></span>
+                        <div class="mb-3">
+                            <label asp-for="title" class="form-label fw-semibold"></label>
+                            <input asp-for="title" class="form-control" />
+                            <span asp-validation-for="title" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="eventCategory" class="form-label fw-semibold"></label>
+                                <select asp-for="eventCategory" class="form-select" asp-items="Html.GetEnumSelectList<Digital_Handbook_Portal.Models.EventCategory>()">
+                                </select>
+                                <span asp-validation-for="eventCategory" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="location" class="form-label fw-semibold"></label>
+                                <input asp-for="location" class="form-control" />
+                                <span asp-validation-for="location" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="eventDateTime" class="form-label fw-semibold"></label>
+                            <input asp-for="eventDateTime" class="form-control" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+                            <span asp-validation-for="eventDateTime" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="description" class="form-label fw-semibold"></label>
+                            <textarea asp-for="description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="description" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-hospital-primary px-4">Save Changes</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="description" class="control-label"></label>
-                <input asp-for="description" class="form-control" />
-                <span asp-validation-for="description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="eventDateTime" class="control-label"></label>
-                <input asp-for="eventDateTime" class="form-control" />
-                <span asp-validation-for="eventDateTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="location" class="control-label"></label>
-                <input asp-for="location" class="form-control" />
-                <span asp-validation-for="location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

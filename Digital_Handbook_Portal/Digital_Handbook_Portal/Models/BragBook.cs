@@ -7,9 +7,20 @@ namespace Digital_Handbook_Portal.Models
         [Key]
         public int bragId { get; set; }
 
+        [Required(ErrorMessage = "Praise content is required")]
+        [StringLength(1000, ErrorMessage = "Content cannot exceed 1000 characters")]
+        [Display(Name = "Praise / Shoutout Content")]
         public string content { get; set; }
+
+        [Required(ErrorMessage = "Sender type is required")]
+        [Display(Name = "Sender Attribution")]
         public string senderType { get; set; }
+
+        [Required(ErrorMessage = "Recipient name is required")]
+        [Display(Name = "Recipient Name")]
         public string recipientName { get; set; }
-        public DateTime datePosted { get; set; }
+        [Display(Name = "Date Posted")]
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy, HH:mm}", ApplyFormatInEditMode = false)]
+        public DateTime datePosted { get; set; } = DateTime.Now;
     }
 }

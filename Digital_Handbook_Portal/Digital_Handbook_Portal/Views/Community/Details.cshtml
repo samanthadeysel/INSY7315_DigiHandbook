@@ -1,45 +1,42 @@
 @model Digital_Handbook_Portal.Models.Community
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Event Details";
 }
 
-<h1>Details</h1>
+<div class="container py-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="dashboard-card">
+                <div class="dashboard-card-header d-flex justify-content-between align-items-center">
+                    <h4 class="form-section-title mb-0">Event Details</h4>
+                    <span class="badge bg-primary">ID: #@Model.eventId</span>
+                </div>
+                <div class="card-body p-4">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-3 text-muted">@Html.DisplayNameFor(model => model.title)</dt>
+                        <dd class="col-sm-9 fw-bold">@Html.DisplayFor(model => model.title)</dd>
 
-<div>
-    <h4>Community</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.title)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.description)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.eventDateTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.eventDateTime)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.location)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.location)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.eventId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                        <dt class="col-sm-3 text-muted">@Html.DisplayNameFor(model => model.eventCategory)</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge-category">@Html.DisplayFor(model => model.eventCategory)</span>
+                        </dd>
+
+                        <dt class="col-sm-3 text-muted">@Html.DisplayNameFor(model => model.eventDateTime)</dt>
+                        <dd class="col-sm-9 text-secondary">@Model.eventDateTime.ToString("dddd, dd MMMM yyyy @ HH:mm")</dd>
+
+                        <dt class="col-sm-3 text-muted">@Html.DisplayNameFor(model => model.location)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.location)</dd>
+
+                        <dt class="col-sm-3 text-muted">@Html.DisplayNameFor(model => model.description)</dt>
+                        <dd class="col-sm-9 bg-light p-3 rounded">@Html.DisplayFor(model => model.description)</dd>
+                    </dl>
+                </div>
+                <div class="card-footer bg-light py-3 d-flex gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model?.eventId" class="btn btn-hospital-primary">Edit Event</a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

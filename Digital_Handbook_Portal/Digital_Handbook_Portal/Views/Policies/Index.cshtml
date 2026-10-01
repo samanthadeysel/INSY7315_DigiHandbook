@@ -1,59 +1,80 @@
 @model IEnumerable<Digital_Handbook_Portal.Models.Policy>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Policies";
 }
 
-<h1>Index</h1>
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="form-section-title fs-3">Hospital Policies</h2>
+            <p class="form-section-subtitle mb-0">Clinical guidelines, ward handbooks, and operational protocols</p>
+        </div>
+        <a asp-action="Create" class="btn btn-hospital-primary">
+            + Add New Policy
+        </a>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.contentSummary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.specificCategory)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.fileUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.contentSummary)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.specificCategory)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.fileUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Category)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.policyId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.policyId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.policyId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="dashboard-card">
+        <div class="table-responsive">
+            <table class="table table-hover table-policy mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-3">@Html.DisplayNameFor(model => model.Title)</th>
+                        <th>@Html.DisplayNameFor(model => model.Category)</th>
+                        <th>@Html.DisplayNameFor(model => model.specificCategory)</th>
+                        <th>@Html.DisplayNameFor(model => model.contentSummary)</th>
+                        <th>Document</th>
+                        <th class="text-end pe-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">
+                                No policies recorded yet.
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-3 fw-semibold text-dark">
+                                @Html.DisplayFor(model => item.Title)
+                            </td>
+                            <td>
+                                <span class="badge-category">
+                                    @(item.Category?.categoryName ?? "General")
+                                </span>
+                            </td>
+                            <td>
+                                <small class="text-muted">@Html.DisplayFor(model => item.specificCategory)</small>
+                            </td>
+                            <td class="policy-summary-cell">
+                                @Html.DisplayFor(model => item.contentSummary)
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.fileUrl))
+                                {
+                                    <a href="@item.fileUrl" target="_blank" class="btn btn-outline-info pdf-link-btn">
+                                        View PDF
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">No file</span>
+                                }
+                            </td>
+                            <td class="text-end pe-3">
+                                <a asp-action="Edit" asp-route-id="@item.policyId" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.policyId" class="btn btn-sm btn-outline-secondary me-1">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.policyId" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
