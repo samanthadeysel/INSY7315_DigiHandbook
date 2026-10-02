@@ -13,26 +13,26 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.employeedigitalhandbook.R
-import com.example.employeedigitalhandbook.adapters.ResourceAdapter
+import com.example.employeedigitalhandbook.adapters.PolicyAdapter
 import com.example.employeedigitalhandbook.api.ApiClient
-import com.example.employeedigitalhandbook.data.Resource
-import com.example.employeedigitalhandbook.databinding.FragmentResourcesFrontBinding
+import com.example.employeedigitalhandbook.data.Policy
+import com.example.employeedigitalhandbook.databinding.FragmentPoliciesFrontBinding
 import kotlinx.coroutines.launch
 
-class ResourcesFrontFragment : Fragment() {
+class PoliciesFrontFragment : Fragment() {
 
-    private var _binding: FragmentResourcesFrontBinding? = null
+    private var _binding: FragmentPoliciesFrontBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var resourceAdapter: ResourceAdapter
-    private var originalList: List<Resource> = emptyList()
+    private lateinit var policyAdapter: PolicyAdapter
+    private var originalPoliciesList: List<Policy> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentResourcesFrontBinding.inflate(inflater, container, false)
+        _binding = FragmentPoliciesFrontBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -41,65 +41,65 @@ class ResourcesFrontFragment : Fragment() {
 
         setupRecyclerView()
         setupListeners()
-        fetchResources()
+        fetchPolicies()
     }
 
     private fun setupRecyclerView() {
-        resourceAdapter = ResourceAdapter(emptyList()) { selectedResource ->
-            val bundle = bundleOf("RESOURCE_ID" to selectedResource.id)
+        policyAdapter = PolicyAdapter(emptyList()) { selectedPolicy ->
+            val bundle = bundleOf("POLICY_ID" to selectedPolicy.id)
             findNavController().navigate(
-                R.id.action_resourcesFrontFragment_to_resourcesBackFragment,
+                R.id.action_policiesFrontFragment_to_policiesBackFragment,
                 bundle
             )
         }
 
-        binding.recyclerViewResources.apply {
+        binding.recyclerViewPolicies.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = resourceAdapter
+            adapter = policyAdapter
         }
     }
 
     private fun setupListeners() {
         binding.backArrowImageView.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+            findNavController().navigateUp()
         }
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filterList(s?.toString().orEmpty())
+                filterPolicies(s?.toString().orEmpty())
             }
             override fun afterTextChanged(s: Editable?) {}
         })
     }
 
-    private fun fetchResources() {
+    private fun fetchPolicies() {
         lifecycleScope.launch {
             try {
-                // Updated to use ApiClient.apiService
-                val response = ApiClient.apiService.getResources()
+                val response = ApiClient.apiService.getPolicies()
                 if (response.isSuccessful && response.body() != null) {
-                    originalList = response.body()!!
-                    resourceAdapter.updateData(originalList)
+                    originalPoliciesList = response.body()!!
+                    policyAdapter.updateData(originalPoliciesList)
                 } else {
-                    Toast.makeText(requireContext(), "Failed to load resources", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to load policies", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
             }
         }
     }
-    private fun filterList(query: String) {
+
+    private fun filterPolicies(query: String) {
         val filtered = if (query.isEmpty()) {
-            originalList
+            originalPoliciesList
         } else {
-            originalList.filter {
+            originalPoliciesList.filter {
                 it.title.contains(query, ignoreCase = true) ||
                         it.category.contains(query, ignoreCase = true) ||
-                        (it.description?.contains(query, ignoreCase = true) == true)
+                        (it.summary?.contains(query, ignoreCase = true) == true)
             }
         }
-        resourceAdapter.updateData(filtered)
+        policyAdapter.updateData(filtered)
     }
 
     override fun onDestroyView() {

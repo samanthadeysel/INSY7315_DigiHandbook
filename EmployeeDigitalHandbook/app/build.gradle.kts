@@ -20,6 +20,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -48,10 +52,19 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     //navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.5")
+    implementation(libs.androidx.navigation.fragment.ktx.v285)
+    implementation(libs.androidx.navigation.ui.ktx.v285)
 
-    //connection to mvc
-    implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+
+    // Retrofit for API calls
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    // OkHttp Logging Interceptor (for debugging API calls)
+    implementation(libs.logging.interceptor)
+
+    // Kotlin Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
 }

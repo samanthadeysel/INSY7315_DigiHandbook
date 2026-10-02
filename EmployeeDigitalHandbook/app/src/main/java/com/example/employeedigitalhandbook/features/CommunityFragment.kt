@@ -1,60 +1,95 @@
 package com.example.employeedigitalhandbook.features
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.employeedigitalhandbook.R
+import com.example.employeedigitalhandbook.adapters.EventAdapter
+import com.example.employeedigitalhandbook.repositories.EventResult
+import com.example.employeedigitalhandbook.viewmodel.CommunityViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CommunityFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CommunityFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var communityViewModel: CommunityViewModel
+    private lateinit var eventAdapter: EventAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_community, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CommunityFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CommunityFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        communityViewModel = ViewModelProvider(this)[CommunityViewModel::class.java]
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewEvents)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        eventAdapter = EventAdapter(emptyList()) { selectedEvent ->
+            Toast.makeText(
+                requireContext(),
+                "${selectedEvent.title} - ${selectedEvent.location}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        recyclerView.adapter = eventAdapter
+
+        communityViewModel.eventsState.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is EventResult.Success -> {
+                    eventAdapter.updateData(result.events)
+                }
+                is EventResult.Error -> {
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
                 }
             }
+        }
+
+        val tabLayout = view.findViewById<TabLayout>(R.id.tabLayoutEvents)
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val category = when (tab?.position) {
+                    1 -> "Upcoming"
+                    2 -> "Social"
+                    3 -> "Wellness & Team"
+                    else -> "All"
+                }
+                communityViewModel.filterEventsByCategory(category)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+
+        communityViewModel.loadEvents()
+
+        val bottomNavigation = view.findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNavigation.selectedItemId = R.id.nav_home
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    findNavController().navigate(R.id.action_communityFragment_to_homePageFragment)
+                    true
+                }
+                R.id.nav_menu -> {
+                    findNavController().navigate(R.id.action_communityFragment_to_settingsFragment)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }

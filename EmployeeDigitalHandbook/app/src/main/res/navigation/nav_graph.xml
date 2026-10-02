@@ -19,7 +19,7 @@
             app:popUpToInclusive="true" />
     </fragment>
 
-    <!-- Home Page Destination -->
+<!-- Home Page Destination &ndash;&gt; -->
     <fragment
         android:id="@+id/homePageFragment"
         android:name="com.example.employeedigitalhandbook.homePages.HomePageFragment"
@@ -43,6 +43,10 @@
             app:destination="@id/communityFragment" />
 
         <action
+            android:id="@+id/action_homePageFragment_to_resourcesFrontFragment"
+            app:destination="@id/resourcesFrontFragment" />
+
+        <action
             android:id="@+id/action_homePageFragment_to_comingSoonFragment"
             app:destination="@id/comingSoonFragment" />
     </fragment>
@@ -54,30 +58,127 @@
         android:label="Settings"
         tools:layout="@layout/fragment_settings" />
 
-    <!-- Additional Destinations -->
+    <!-- Policies -->
     <fragment
         android:id="@+id/policiesFrontFragment"
-        android:name="com.example.employeedigitalhandbook.policies.PoliciesFrontFragment"
-        android:label="Policies" />
+        android:name="com.example.employeedigitalhandbook.features.PoliciesFrontFragment"
+        android:label="Policies Front"
+        tools:layout="@layout/fragment_policies_front">
 
+        <action
+            android:id="@+id/action_policiesFrontFragment_to_policiesBackFragment"
+            app:destination="@id/policiesBackFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/policiesBackFragment"
+        android:name="com.example.employeedigitalhandbook.features.PoliciesBackFragment"
+        android:label="Policies Back"
+        tools:layout="@layout/fragment_policies_back">
+
+        <argument
+            android:name="POLICY_ID"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+    <!-- Brag Book -->
     <fragment
         android:id="@+id/bragBookFragment"
         android:name="com.example.employeedigitalhandbook.features.BragBookFragment"
-        android:label="Brag Book" />
+        android:label="Staff Brag Book"
+        tools:layout="@layout/fragment_brag_book">
 
+        <action
+            android:id="@+id/action_bragBookFragment_to_createBragFragment"
+            app:destination="@id/createBragFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createBragFragment"
+        android:name="com.example.employeedigitalhandbook.features.CreateBragFragment"
+        android:label="Post to Brag Book"
+        tools:layout="@layout/fragment_create_brag" />
+
+    <!-- Community Destination -->
     <fragment
         android:id="@+id/communityFragment"
         android:name="com.example.employeedigitalhandbook.features.CommunityFragment"
         android:label="Community" />
 
+    <!-- Resources List Destination -->
     <fragment
-        android:id="@+id/resourceFragment"
-        android:name="com.example.employeedigitalhandbook.features."
-        android:label="Community" />
+        android:id="@+id/resourcesFrontFragment"
+        android:name="com.example.employeedigitalhandbook.features.ResourcesFrontFragment"
+        android:label="Resources"
+        tools:layout="@layout/fragment_resources_front">
 
+        <action
+            android:id="@+id/action_resourcesFrontFragment_to_resourcesBackFragment"
+            app:destination="@id/resourcesBackFragment" />
+    </fragment>
+
+    <!-- Resources Detail/WebView Destination -->
+    <fragment
+        android:id="@+id/resourcesBackFragment"
+        android:name="com.example.employeedigitalhandbook.features.ResourcesBackFragment"
+        android:label="Resource Detail"
+        tools:layout="@layout/fragment_resources_back">
+
+        <argument
+            android:name="RESOURCE_ID"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+    <!-- Coming Soon Destination -->
     <fragment
         android:id="@+id/comingSoonFragment"
         android:name="com.example.employeedigitalhandbook.features.ComingSoonFragment"
         android:label="Coming Soon" />
+
+    <!-- Doctor Destination -->
+    <fragment
+        android:id="@+id/doctorFragment"
+        android:name="com.example.employeedigitalhandbook.features.DoctorFragment"
+        android:label="Doctor">
+
+        <action
+            android:id="@+id/action_doctorFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+    </fragment>
+
+    <!-- Quiz -->
+    <fragment
+        android:id="@+id/quizResultFragment"
+        android:name="com.example.employeedigitalhandbook.features.QuizResultFragment"
+        android:label="Quiz Result"
+        tools:layout="@layout/fragment_quiz_result">
+
+        <action
+            android:id="@+id/action_quizResultFragment_to_quizListFragment"
+            app:destination="@id/QuizListFragment"
+            app:popUpTo="@id/QuizListFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_quizResultFragment_to_takeQuizFragment"
+            app:destination="@id/QuizTakeFragment"
+            app:popUpTo="@id/QuizTakeFragment" />
+    </fragment>
+
+    <!-- Quiz Destination -->
+
+    <fragment
+        android:id="@+id/QuizListFragment"
+        android:name="com.example.employeedigitalhandbook.features.QuizListFragment"
+        android:label="Quiz List"
+        tools:layout="@layout/fragment_quiz_list"/>
+
+    <fragment
+        android:id="@+id/QuizTakeFragment"
+        android:name="com.example.employeedigitalhandbook.features.QuizTakeFragment"
+        android:label="Quiz Take"
+        tools:layout="@layout/fragment_quiz_take"/>
 
 </navigation>

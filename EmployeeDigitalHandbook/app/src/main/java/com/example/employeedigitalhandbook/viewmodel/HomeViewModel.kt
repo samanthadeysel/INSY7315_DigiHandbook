@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.employeedigitalhandbook.repositories.DoctorRepository
 import com.example.employeedigitalhandbook.repositories.DoctorResult
 import kotlinx.coroutines.launch
 

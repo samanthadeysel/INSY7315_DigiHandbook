@@ -1,7 +1,7 @@
 package com.example.employeedigitalhandbook.repositories
 
 import com.example.employeedigitalhandbook.admin.AuthResult
-import com.example.employeedigitalhandbook.admin.UserSession
+import com.example.employeedigitalhandbook.sessions.UserSession
 import com.example.employeedigitalhandbook.api.ApiClient
 import com.example.employeedigitalhandbook.api.ApiLoginRequest
 

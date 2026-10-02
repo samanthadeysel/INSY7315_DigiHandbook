@@ -1,4 +1,4 @@
-package com.example.employeedigitalhandbook.admin
+package com.example.employeedigitalhandbook.sessions
 
 data class UserSession(
     val userId: String,

@@ -7,11 +7,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.employeedigitalhandbook.R
-import com.example.employeedigitalhandbook.api.ApiDoctor
+import com.example.employeedigitalhandbook.data.Doctor
 
 class DoctorAdapter(
-    private val doctorList: List<ApiDoctor>,
-    private val onDoctorClick: (ApiDoctor) -> Unit
+    private var doctors: List<Doctor>,
+    private val onItemClick: (Doctor) -> Unit
 ) : RecyclerView.Adapter<DoctorAdapter.DoctorViewHolder>() {
 
     class DoctorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -26,16 +26,19 @@ class DoctorAdapter(
     }
 
     override fun onBindViewHolder(holder: DoctorViewHolder, position: Int) {
-        val doctor = doctorList[position]
+        val doctor = doctors[position]
 
         holder.doctorNameTextView.text = doctor.fullNameWithTitle
 
-        holder.doctorImageView.setImageResource(R.drawable.peh_logo_black_wording_portrait)
-
         holder.itemView.setOnClickListener {
-            onDoctorClick(doctor)
+            onItemClick(doctor)
         }
     }
 
-    override fun getItemCount(): Int = doctorList.size
+    override fun getItemCount(): Int = doctors.size
+
+    fun updateData(newDoctors: List<Doctor>) {
+        doctors = newDoctors
+        notifyDataSetChanged()
+    }
 }

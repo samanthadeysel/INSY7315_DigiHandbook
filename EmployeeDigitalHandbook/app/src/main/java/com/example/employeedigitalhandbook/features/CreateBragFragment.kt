@@ -1,60 +1,91 @@
 package com.example.employeedigitalhandbook.features
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.employeedigitalhandbook.R
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.employeedigitalhandbook.api.ApiClient
+import com.example.employeedigitalhandbook.data.BragBook
+import com.example.employeedigitalhandbook.databinding.FragmentCreateBragBinding
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CreateBragFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CreateBragFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding: FragmentCreateBragBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCreateBragBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnBackBrag.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.btnSubmitBrag.setOnClickListener {
+            submitBragPost()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_brag, container, false)
+    private fun submitBragPost() {
+        val recipient = binding.edtRecipient.text?.toString()?.trim().orEmpty()
+        val message = binding.edtMessage.text?.toString()?.trim().orEmpty()
+        val isAnonymous = binding.switchAnonymous.isChecked
+
+        if (recipient.isEmpty()) {
+            binding.inputLayoutRecipient.error = "Please enter who you are complimenting"
+            return
+        } else {
+            binding.inputLayoutRecipient.error = null
+        }
+
+        if (message.isEmpty()) {
+            binding.inputLayoutMessage.error = "Please write a compliment"
+            return
+        } else {
+            binding.inputLayoutMessage.error = null
+        }
+
+        val newPost = BragBook(
+            recipientName = recipient,
+            content = message,
+            senderType = if (isAnonymous) "Anonymous" else "Peer",
+            isAnonymous = isAnonymous
+        )
+
+        binding.btnSubmitBrag.isEnabled = false
+
+        lifecycleScope.launch {
+            try {
+                val response = ApiClient.apiService.createBragPost(newPost)
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "Compliment posted successfully!", Toast.LENGTH_SHORT).show()
+                    findNavController().navigateUp()
+                } else {
+                    binding.btnSubmitBrag.isEnabled = true
+                    Toast.makeText(requireContext(), "Failed to post compliment", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                binding.btnSubmitBrag.isEnabled = true
+                Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CreateBragFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CreateBragFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

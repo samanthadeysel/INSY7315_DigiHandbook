@@ -12,19 +12,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.employeedigitalhandbook.api.ApiClient
-import com.example.employeedigitalhandbook.databinding.FragmentResourcesBackBinding
+import com.example.employeedigitalhandbook.databinding.FragmentPoliciesBackBinding
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 
-class ResourcesBackFragment : Fragment() {
+class PoliciesBackFragment : Fragment() {
 
-    private var _binding: FragmentResourcesBackBinding? = null
+    private var _binding: FragmentPoliciesBackBinding? = null
     private val binding get() = _binding!!
 
-    private var resourceId: Int = -1
+    private var policyId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        resourceId = arguments?.getInt("RESOURCE_ID", -1) ?: -1
+        policyId = arguments?.getInt("POLICY_ID", -1) ?: -1
     }
 
     override fun onCreateView(
@@ -32,7 +33,7 @@ class ResourcesBackFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentResourcesBackBinding.inflate(inflater, container, false)
+        _binding = FragmentPoliciesBackBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -42,15 +43,15 @@ class ResourcesBackFragment : Fragment() {
         setupWebView()
         setupControls()
 
-        if (resourceId != -1) {
-            fetchAndLoadResource(resourceId)
+        if (policyId != -1) {
+            fetchAndLoadPolicyDetails(policyId)
         } else {
-            Toast.makeText(requireContext(), "Invalid Resource ID", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Invalid Policy ID", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun setupWebView() {
-        binding.resourceWebView.apply {
+        binding.pdfWebView.apply {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             settings.builtInZoomControls = true
@@ -59,16 +60,16 @@ class ResourcesBackFragment : Fragment() {
             webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
-                    _binding?.resourceProgressBar?.visibility = View.GONE
+                    _binding?.pdfProgressBar?.visibility = View.GONE
                 }
             }
 
             webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView?, newProgress: Int) {
                     if (newProgress < 100) {
-                        _binding?.resourceProgressBar?.visibility = View.VISIBLE
+                        _binding?.pdfProgressBar?.visibility = View.VISIBLE
                     } else {
-                        _binding?.resourceProgressBar?.visibility = View.GONE
+                        _binding?.pdfProgressBar?.visibility = View.GONE
                     }
                 }
             }
@@ -81,50 +82,51 @@ class ResourcesBackFragment : Fragment() {
         }
 
         binding.previousPageIcon.setOnClickListener {
-            if (binding.resourceWebView.canGoBack()) {
-                binding.resourceWebView.goBack()
+            if (binding.pdfWebView.canGoBack()) {
+                binding.pdfWebView.goBack()
             }
         }
 
         binding.nextPageIcon.setOnClickListener {
-            if (binding.resourceWebView.canGoForward()) {
-                binding.resourceWebView.goForward()
+            if (binding.pdfWebView.canGoForward()) {
+                binding.pdfWebView.goForward()
             }
         }
 
-        binding.searchDocIcon.setOnClickListener {
-            binding.resourceWebView.showFindDialog(null, true)
+        binding.searchPdfIcon.setOnClickListener {
+            binding.pdfWebView.showFindDialog(null, true)
         }
     }
 
-    private fun fetchAndLoadResource(id: Int) {
-        binding.resourceProgressBar.visibility = View.VISIBLE
+    private fun fetchAndLoadPolicyDetails(id: Int) {
+        binding.pdfProgressBar.visibility = View.VISIBLE
 
         lifecycleScope.launch {
             try {
-                // Updated to use ApiClient.apiService
-                val response = ApiClient.apiService.getResourceById(id)
+                val response = ApiClient.apiService.getPolicyById(id)
                 if (response.isSuccessful && response.body() != null) {
-                    val resource = response.body()!!
+                    val policy = response.body()!!
 
-                    binding.pageTitleTextView.text = resource.title
-                    binding.breadcrumbTextView.text = resource.breadcrumbPath
-                        ?: "../${resource.category}/${resource.title}"
+                    binding.pageTitleTextView.text = policy.category
+                    binding.breadcrumbTextView.text = policy.breadcrumbPath
+                        ?: "../${policy.category}/${policy.title}"
 
-                    val targetUrl = resource.resourceUrl
-
-                    if (!targetUrl.isNullOrEmpty()) {
-                        binding.resourceWebView.loadUrl(targetUrl)
+                    val rawPdfUrl = policy.pdfUrl
+                    if (!rawPdfUrl.isNullOrEmpty()) {
+                        // Render PDF via Google Drive/Docs viewer inside WebView
+                        val encodedUrl = URLEncoder.encode(rawPdfUrl, "UTF-8")
+                        val webViewUrl = "https://docs.google.com/gview?embedded=true&url=$encodedUrl"
+                        binding.pdfWebView.loadUrl(webViewUrl)
                     } else {
-                        binding.resourceProgressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "No URL configured", Toast.LENGTH_SHORT).show()
+                        binding.pdfProgressBar.visibility = View.GONE
+                        Toast.makeText(requireContext(), "No PDF document attached", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    binding.resourceProgressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Failed to load details", Toast.LENGTH_SHORT).show()
+                    binding.pdfProgressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), "Failed to fetch policy details", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
-                binding.resourceProgressBar.visibility = View.GONE
+                binding.pdfProgressBar.visibility = View.GONE
                 Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
             }
         }

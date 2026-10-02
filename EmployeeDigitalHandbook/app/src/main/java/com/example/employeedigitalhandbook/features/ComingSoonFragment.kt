@@ -37,7 +37,7 @@ class ComingSoonFragment : Fragment() {
 
         btnBackToHome.setOnClickListener {
             //navigate to home page
-            findNavController().navigate(R.id.action_comingSoonFragment_to_homePageFragment)
+            //findNavController().navigate(R.id.action_comingSoonFragment_to_homePageFragment)
         }
 
     }

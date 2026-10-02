@@ -22,7 +22,7 @@ import java.util.Calendar
 
 class HomePageFragment : Fragment() {
 
-    private lateinit var HomeViewModel: HomeViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +34,7 @@ class HomePageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        HomeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         val tvGreetingPrefix = view.findViewById<TextView>(R.id.tvGreetingPrefix)
         val tvUserName = view.findViewById<TextView>(R.id.tvUserName)
@@ -48,6 +48,7 @@ class HomePageFragment : Fragment() {
             tvUserName.text = "User!"
         }
 
+        // card listeners
         view.findViewById<CardView>(R.id.cardPolicies).setOnClickListener {
             findNavController().navigate(R.id.action_homePageFragment_to_policiesFrontFragment)
         }
@@ -64,13 +65,14 @@ class HomePageFragment : Fragment() {
         val doctorsRecyclerView = view.findViewById<RecyclerView>(R.id.doctorsRecyclerView)
         doctorsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        HomeViewModel.doctorsState.observe(viewLifecycleOwner) { result ->
+        homeViewModel.doctorsState.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is DoctorResult.Success -> {
                     doctorsRecyclerView.adapter = DoctorAdapter(result.doctors) { doctor ->
+                        val nameDisplay = doctor.fullNameWithTitle.ifBlank { "Dr. ${doctor.fName} ${doctor.lName}" }
                         Toast.makeText(
                             requireContext(),
-                            "${doctor.fullNameWithTitle} - Suite ${doctor.suiteNumber}",
+                            "$nameDisplay - Suite ${doctor.suiteNumber}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -81,14 +83,15 @@ class HomePageFragment : Fragment() {
             }
         }
 
-        HomeViewModel.loadDoctors()
+        homeViewModel.loadDoctors()
 
+        // bottom nav
         val bottomNavigation = view.findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNavigation.selectedItemId = R.id.nav_home
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> true
-                R.id.nav_settings -> {
+                R.id.nav_menu -> {
                     findNavController().navigate(R.id.action_homePageFragment_to_settingsFragment)
                     true
                 }
@@ -97,6 +100,7 @@ class HomePageFragment : Fragment() {
         }
     }
 
+    //greeting
     private fun getGreetingPrefix(): String {
         return when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
             in 0..11 -> "Good morning, "

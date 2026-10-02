@@ -1,60 +1,102 @@
 package com.example.employeedigitalhandbook.features
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.employeedigitalhandbook.R
+import com.example.employeedigitalhandbook.api.ApiClient
+import com.example.employeedigitalhandbook.data.QuizSubmission
+import com.example.employeedigitalhandbook.databinding.FragmentQuizResultBinding
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [QuizResultFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class QuizResultFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding: FragmentQuizResultBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentQuizResultBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val quizId = arguments?.getInt("quizId") ?: 0
+        val quizTitle = arguments?.getString("quizTitle").orEmpty()
+        val scoreFraction = arguments?.getString("scoreFraction").orEmpty()
+        val scorePercentage = arguments?.getString("scorePercentage") ?: "0%"
+        val cpdPoints = arguments?.getString("cpdPoints") ?: "+0.0"
+        val passThreshold = arguments?.getString("passThreshold") ?: "80%"
+        val passed = arguments?.getBoolean("passed") ?: false
+
+        binding.txtQuizTitle.text = quizTitle
+        binding.txtScorePercentage.text = scorePercentage
+        binding.txtScoreFraction.text = scoreFraction
+        binding.txtCpdPointsEarned.text = cpdPoints
+        binding.txtPassThreshold.text = passThreshold
+
+        if (passed) {
+            binding.txtResultHeading.text = "Assessment Passed!"
+            binding.txtFeedbackMessage.text = "Congratulations! Your CPD points have been recorded to your staff profile."
+            binding.btnRetakeQuiz.visibility = View.GONE
+        } else {
+            binding.txtResultHeading.text = "Assessment Failed"
+            binding.txtFeedbackMessage.text = "You did not achieve the minimum required score to earn CPD points. Please review and try again."
+            binding.btnRetakeQuiz.visibility = View.VISIBLE
+        }
+
+        binding.btnDone.setOnClickListener {
+            findNavController().navigate(R.id.action_quizResultFragment_to_quizListFragment)
+        }
+
+        binding.btnRetakeQuiz.setOnClickListener {
+            val bundle = bundleOf("quizId" to quizId)
+            findNavController().navigate(R.id.action_quizResultFragment_to_takeQuizFragment, bundle)
+        }
+
+        postQuizResults(quizId, scoreFraction, scorePercentage, passed, cpdPoints)
+    }
+
+    private fun postQuizResults(
+        quizId: Int,
+        fraction: String,
+        percentageStr: String,
+        passed: Boolean,
+        pointsStr: String
+    ) {
+        val numericPercentage = percentageStr.replace("%", "").toIntOrNull() ?: 0
+        val numericPoints = pointsStr.replace("+", "").toDoubleOrNull() ?: 0.0
+
+        val submission = QuizSubmission(
+            quizId = quizId,
+            scoreFraction = fraction,
+            percentage = numericPercentage,
+            passed = passed,
+            cpdPointsEarned = numericPoints
+        )
+
+        lifecycleScope.launch {
+            try {
+                ApiClient.apiService.submitQuizResult(submission)
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Result sync error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_quiz_result, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment QuizResultFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            QuizResultFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
