@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Digital_Handbook_Portal.Models
 {
@@ -7,13 +8,27 @@ namespace Digital_Handbook_Portal.Models
         [Key]
         public int quizId { get; set; }
 
-        public string title { get; set; }
+        [Required(ErrorMessage = "Quiz title is required")]
+        [StringLength(150, ErrorMessage = "Title cannot exceed 150 characters")]
+        [Display(Name = "Quiz Title")]
+        public string title { get; set; } = string.Empty;
+
+        [Display(Name = "Total Points / Score")]
         public int score { get; set; } = 0;
+
+        [Display(Name = "Total Questions")]
         public int totalQuestions { get; set; } = 0;
-        public string estimateTime { get; set; }
-        public DateTime createdAt { get; set; } = DateTime.Now;
+
+        [Required(ErrorMessage = "Estimated completion time is required")]
+        [Display(Name = "Estimated Time")]
+        public string estimateTime { get; set; } = string.Empty;
+
+        [Display(Name = "Created At")]
+        public DateTime createdAt { get; set; } = DateTime.UtcNow;
+
+        [Display(Name = "Passing Score")]
         public int passingScore { get; set; } = 0;
-        //nav property because a quiz has many questions
+
         public virtual ICollection<QuizQuestion> questions { get; set; } = new List<QuizQuestion>();
     }
 
@@ -21,13 +36,16 @@ namespace Digital_Handbook_Portal.Models
     {
         [Key]
         public int questionId { get; set; }
-        public string questionText { get; set; }
-        //foreign key to quiz
-        public int quizId { get; set; }
-        //nav property because a question belongs to a quiz
-        public virtual Quiz quiz { get; set; }
 
-        //nav property because a question has many options
+        [Required(ErrorMessage = "Question text is required")]
+        [Display(Name = "Question")]
+        public string questionText { get; set; } = string.Empty;
+
+        public int quizId { get; set; }
+
+        [JsonIgnore]
+        public virtual Quiz? quiz { get; set; }
+
         public virtual ICollection<QuizOption> options { get; set; } = new List<QuizOption>();
     }
 
@@ -35,11 +53,19 @@ namespace Digital_Handbook_Portal.Models
     {
         [Key]
         public int optionId { get; set; }
-        public string optionText { get; set; }
+
+        [Required(ErrorMessage = "Option text is required")]
+        [Display(Name = "Option Text")]
+        public string optionText { get; set; } = string.Empty;
+
+        [Display(Name = "Is Correct Option")]
         public bool isCorrect { get; set; }
-        //foreign key to question
+
         public int questionId { get; set; }
-        //nav property because an option belongs to a question
-        public virtual QuizQuestion question { get; set; }
+
+        [JsonIgnore]
+        public virtual QuizQuestion? question { get; set; }
+
+
     }
 }

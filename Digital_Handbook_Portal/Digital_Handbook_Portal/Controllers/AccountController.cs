@@ -1,53 +1,58 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Digital_Handbook_Portal.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Digital_Handbook_Portal.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly List<(string Email, string Password, string Name)> _admins = new()
+        private readonly HttpClient _httpClient;
+
+        public AccountController(IHttpClientFactory httpClientFactory)
         {
-            ("admin1@pmbeye.co.za", "Admin123!", "Tracy"),
-            ("admin2@pmbeye.co.za", "Admin123!", "Allison"),
-            ("admin3@pmbeye.co.za", "Admin123!", "Kelly")
-        };
+            _httpClient = httpClientFactory.CreateClient("HandbookApi");
+        }
 
         // GET: Account/Login
         [HttpGet]
-        public ActionResult Login()
+        public IActionResult Login()
         {
             return View();
         }
 
-        // POST: Account/Login
+        // POST: Account/Login (Admin Portal Authentication)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(string email, string password)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
             {
                 ViewBag.ErrorMessage = "Please enter both email and password.";
-                return View();
+                return View(request);
             }
 
-            var admin = _admins.FirstOrDefault(a =>
-                a.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
-                a.Password == password);
+            var response = await _httpClient.PostAsJsonAsync("api/Auth/admin-login", request);
 
-            if (admin != default)
+            if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.SetString("AdminEmail", admin.Email);
-                HttpContext.Session.SetString("AdminName", admin.Name);
+                var result = await response.Content.ReadFromJsonAsync<ApiResponse<AuthResponse>>();
 
-                return RedirectToAction("Index", "Users");
+                if (result != null && result.Success && result.Data != null)
+                {
+                    HttpContext.Session.SetString("AdminEmail", result.Data.Email);
+                    HttpContext.Session.SetString("AdminName", result.Data.Name);
+                    HttpContext.Session.SetString("AdminToken", result.Data.Token);
+
+                    return RedirectToAction("Index", "Users");
+                }
             }
 
             ViewBag.ErrorMessage = "Invalid admin credentials.";
-            return View();
+            return View(request);
         }
 
         // GET: Account/Logout
-        public ActionResult Logout()
+        public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             return RedirectToAction(nameof(Login));

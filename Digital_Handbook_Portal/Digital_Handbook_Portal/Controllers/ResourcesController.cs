@@ -1,112 +1,104 @@
 using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Handbook_Portal.Controllers
 {
     public class ResourcesController : Controller
     {
-        private readonly Digital_Handbook_PortalContext _context;
+        private readonly HttpClient _httpClient;
 
-        public ResourcesController(Digital_Handbook_PortalContext context)
+        public ResourcesController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient("HandbookApi");
         }
 
-        // READ ALL
-        public async Task<IActionResult> Index()
+        // GET: Resources
+        public async Task<IActionResult> Index(string? query)
         {
-            return View(await _context.Resource.ToListAsync());
+            string requestUri = string.IsNullOrWhiteSpace(query)
+                ? "api/Resources"
+                : $"api/Resources?query={Uri.EscapeDataString(query)}";
+
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<Resource>>>(requestUri);
+            ViewData["CurrentFilter"] = query;
+            return View(response?.Data ?? new List<Resource>());
         }
 
-        // READ DETAILS
-        public async Task<IActionResult> Details(string id)
+        // GET: Resources/Details/5
+        public async Task<IActionResult> Details(int id)
         {
-            if (string.IsNullOrEmpty(id)) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Resource>>($"api/Resources/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var resource = await _context.Resource.FirstOrDefaultAsync(m => m.Title == id);
-            if (resource == null) return NotFound();
-
-            return View(resource);
+            return View(response.Data);
         }
 
-        // CREATE (GET)
+        // GET: Resources/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // CREATE (POST)
+        // POST: Resources/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Resource resource)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(resource);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.PostAsJsonAsync("api/Resources", resource);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError(string.Empty, "Failed to create resource entry via API.");
             }
             return View(resource);
         }
 
-        // UPDATE (GET)
-        public async Task<IActionResult> Edit(string id)
+        // GET: Resources/Edit/5
+        public async Task<IActionResult> Edit(int id)
         {
-            if (string.IsNullOrEmpty(id)) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Resource>>($"api/Resources/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var resource = await _context.Resource.FindAsync(id);
-            if (resource == null) return NotFound();
-
-            return View(resource);
+            return View(response.Data);
         }
 
-        // UPDATE (POST)
+        // POST: Resources/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, Resource resource)
+        public async Task<IActionResult> Edit(int id, Resource resource)
         {
-            if (id != resource.Title) return NotFound();
+            if (id != resource.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
+                var response = await _httpClient.PutAsJsonAsync($"api/Resources/{id}", resource);
+                if (response.IsSuccessStatusCode)
                 {
-                    _context.Update(resource);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Resource.Any(e => e.Title == resource.Title)) return NotFound();
-                    else throw;
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "Failed to update resource entry via API.");
             }
             return View(resource);
         }
 
-        // DELETE (GET)
-        public async Task<IActionResult> Delete(string id)
+        // GET: Resources/Delete/5
+        public async Task<IActionResult> Delete(int id)
         {
-            if (string.IsNullOrEmpty(id)) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Resource>>($"api/Resources/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var resource = await _context.Resource.FirstOrDefaultAsync(m => m.Title == id);
-            if (resource == null) return NotFound();
-
-            return View(resource);
+            return View(response.Data);
         }
 
-        // DELETE (POST)
+        // POST: Resources/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var resource = await _context.Resource.FindAsync(id);
-            if (resource != null)
-            {
-                _context.Resource.Remove(resource);
-                await _context.SaveChangesAsync();
-            }
+            await _httpClient.DeleteAsync($"api/Resources/{id}");
             return RedirectToAction(nameof(Index));
         }
     }

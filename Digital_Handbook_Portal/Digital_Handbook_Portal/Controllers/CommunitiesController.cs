@@ -1,67 +1,66 @@
 using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Handbook_Portal.Controllers
 {
     public class CommunitiesController : Controller
     {
-        private readonly Digital_Handbook_PortalContext _context;
+        private readonly HttpClient _httpClient;
 
-        public CommunitiesController(Digital_Handbook_PortalContext context)
+        public CommunitiesController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient("HandbookApi");
         }
 
-        // READ ALL
+        // GET: Communities
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Community.OrderByDescending(c => c.eventDateTime).ToListAsync());
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<Community>>>("api/Community");
+            return View(response?.Data ?? new List<Community>());
         }
 
-        // READ DETAILS
-        public async Task<IActionResult> Details(int? id)
+        // GET: Communities/Details/5
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Community>>($"api/Community/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var community = await _context.Community.FirstOrDefaultAsync(m => m.eventId == id);
-            if (community == null) return NotFound();
-
-            return View(community);
+            return View(response.Data);
         }
 
-        // CREATE (GET)
+        // GET: Communities/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // CREATE (POST)
+        // POST: Communities/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Community community)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(community);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.PostAsJsonAsync("api/Community", community);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError(string.Empty, "Failed to create community event via API.");
             }
             return View(community);
         }
 
-        // UPDATE (GET)
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Communities/Edit/5
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Community>>($"api/Community/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var community = await _context.Community.FindAsync(id);
-            if (community == null) return NotFound();
-
-            return View(community);
+            return View(response.Data);
         }
 
-        // UPDATE (POST)
+        // POST: Communities/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Community community)
@@ -70,43 +69,31 @@ namespace Digital_Handbook_Portal.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var response = await _httpClient.PutAsJsonAsync($"api/Community/{id}", community);
+                if (response.IsSuccessStatusCode)
                 {
-                    _context.Update(community);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Community.Any(e => e.eventId == community.eventId)) return NotFound();
-                    else throw;
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "Failed to update community event via API.");
             }
             return View(community);
         }
 
-        // DELETE (GET)
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Communities/Delete/5
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Community>>($"api/Community/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var community = await _context.Community.FirstOrDefaultAsync(m => m.eventId == id);
-            if (community == null) return NotFound();
-
-            return View(community);
+            return View(response.Data);
         }
 
-        // DELETE (POST)
+        // POST: Communities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var community = await _context.Community.FindAsync(id);
-            if (community != null)
-            {
-                _context.Community.Remove(community);
-                await _context.SaveChangesAsync();
-            }
+            await _httpClient.DeleteAsync($"api/Community/{id}");
             return RedirectToAction(nameof(Index));
         }
     }

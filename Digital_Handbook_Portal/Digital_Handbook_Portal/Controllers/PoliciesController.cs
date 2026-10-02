@@ -1,46 +1,39 @@
+using System.Net.Http.Headers;
 using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Handbook_Portal.Controllers
 {
     public class PoliciesController : Controller
     {
-        private readonly Digital_Handbook_PortalContext _context;
-        private readonly IWebHostEnvironment _environment;
+        private readonly HttpClient _httpClient;
 
-        public PoliciesController(Digital_Handbook_PortalContext context, IWebHostEnvironment environment)
+        public PoliciesController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
-            _environment = environment;
+            _httpClient = httpClientFactory.CreateClient("HandbookApi");
         }
 
         // READ ALL
         public async Task<IActionResult> Index()
         {
-            var policies = await _context.Policy.Include(p => p.Category).ToListAsync();
-            return View(policies);
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<Policy>>>("api/Policies");
+            return View(response?.Data ?? new List<Policy>());
         }
 
         // READ DETAILS
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Policy>>($"api/Policies/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var policy = await _context.Policy
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.policyId == id);
-
-            if (policy == null) return NotFound();
-
-            return View(policy);
+            return View(response.Data);
         }
 
         // CREATE (GET)
         public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = new SelectList(await _context.PolicyCategory.ToListAsync(), "categoryId", "categoryName");
+            await PopulateCategoryDropdownAsync();
             return View();
         }
 
@@ -49,32 +42,38 @@ namespace Digital_Handbook_Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Policy policy, IFormFile? pdfFile)
         {
+            using var content = new MultipartFormDataContent();
+            content.Add(new StringContent(policy.Title ?? string.Empty), nameof(policy.Title));
+            content.Add(new StringContent(policy.contentSummary ?? string.Empty), nameof(policy.contentSummary));
+            content.Add(new StringContent(policy.specificCategory ?? string.Empty), nameof(policy.specificCategory));
+            content.Add(new StringContent(policy.categoryId.ToString()), nameof(policy.categoryId));
+
             if (pdfFile != null && pdfFile.Length > 0)
             {
-                policy.fileUrl = await SaveUploadedFileAsync(pdfFile);
+                var fileContent = new StreamContent(pdfFile.OpenReadStream());
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(pdfFile.ContentType);
+                content.Add(fileContent, "pdfFile", pdfFile.FileName);
             }
 
-            if (ModelState.IsValid)
+            var response = await _httpClient.PostAsync("api/Policies", content);
+            if (response.IsSuccessStatusCode)
             {
-                _context.Add(policy);
-                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = new SelectList(await _context.PolicyCategory.ToListAsync(), "categoryId", "categoryName", policy.categoryId);
+            ModelState.AddModelError(string.Empty, "Failed to create policy document via API.");
+            await PopulateCategoryDropdownAsync(policy.categoryId);
             return View(policy);
         }
 
         // UPDATE (GET)
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Policy>>($"api/Policies/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var policy = await _context.Policy.FindAsync(id);
-            if (policy == null) return NotFound();
-
-            ViewBag.Categories = new SelectList(await _context.PolicyCategory.ToListAsync(), "categoryId", "categoryName", policy.categoryId);
-            return View(policy);
+            await PopulateCategoryDropdownAsync(response.Data?.categoryId);
+            return View(response.Data);
         }
 
         // UPDATE (POST)
@@ -82,44 +81,37 @@ namespace Digital_Handbook_Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Policy policy, IFormFile? pdfFile)
         {
-            if (id != policy.policyId) return NotFound();
+            using var content = new MultipartFormDataContent();
+            content.Add(new StringContent(policy.Title ?? string.Empty), nameof(policy.Title));
+            content.Add(new StringContent(policy.contentSummary ?? string.Empty), nameof(policy.contentSummary));
+            content.Add(new StringContent(policy.specificCategory ?? string.Empty), nameof(policy.specificCategory));
+            content.Add(new StringContent(policy.categoryId.ToString()), nameof(policy.categoryId));
 
-            if (ModelState.IsValid)
+            if (pdfFile != null && pdfFile.Length > 0)
             {
-                try
-                {
-                    if (pdfFile != null && pdfFile.Length > 0)
-                    {
-                        policy.fileUrl = await SaveUploadedFileAsync(pdfFile);
-                    }
+                var fileContent = new StreamContent(pdfFile.OpenReadStream());
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(pdfFile.ContentType);
+                content.Add(fileContent, "pdfFile", pdfFile.FileName);
+            }
 
-                    _context.Update(policy);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Policy.Any(e => e.policyId == policy.policyId)) return NotFound();
-                    else throw;
-                }
+            var response = await _httpClient.PutAsync($"api/Policies/{id}", content);
+            if (response.IsSuccessStatusCode)
+            {
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = new SelectList(await _context.PolicyCategory.ToListAsync(), "categoryId", "categoryName", policy.categoryId);
+            ModelState.AddModelError(string.Empty, "Failed to update policy document via API.");
+            await PopulateCategoryDropdownAsync(policy.categoryId);
             return View(policy);
         }
 
         // DELETE (GET)
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Policy>>($"api/Policies/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var policy = await _context.Policy
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.policyId == id);
-
-            if (policy == null) return NotFound();
-
-            return View(policy);
+            return View(response.Data);
         }
 
         // DELETE (POST)
@@ -127,32 +119,15 @@ namespace Digital_Handbook_Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var policy = await _context.Policy.FindAsync(id);
-            if (policy != null)
-            {
-                _context.Policy.Remove(policy);
-                await _context.SaveChangesAsync();
-            }
+            await _httpClient.DeleteAsync($"api/Policies/{id}");
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<string> SaveUploadedFileAsync(IFormFile pdfFile)
+        private async Task PopulateCategoryDropdownAsync(int? selectedCategoryId = null)
         {
-            string uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
-            if (!Directory.Exists(uploadsFolder))
-            {
-                Directory.CreateDirectory(uploadsFolder);
-            }
-
-            string uniqueFileName = $"{Guid.NewGuid()}_{pdfFile.FileName}";
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await pdfFile.CopyToAsync(fileStream);
-            }
-
-            return $"/uploads/{uniqueFileName}";
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<PolicyCategory>>>("api/PolicyCategories");
+            var categories = response?.Data ?? new List<PolicyCategory>();
+            ViewBag.Categories = new SelectList(categories, "categoryId", "categoryName", selectedCategoryId);
         }
     }
 }
