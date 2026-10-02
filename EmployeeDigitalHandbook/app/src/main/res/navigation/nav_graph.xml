@@ -19,7 +19,7 @@
             app:popUpToInclusive="true" />
     </fragment>
 
-<!-- Home Page Destination &ndash;&gt; -->
+    <!-- Home Page Destination -->
     <fragment
         android:id="@+id/homePageFragment"
         android:name="com.example.employeedigitalhandbook.homePages.HomePageFragment"
@@ -92,6 +92,14 @@
         <action
             android:id="@+id/action_bragBookFragment_to_createBragFragment"
             app:destination="@id/createBragFragment" />
+
+        <action
+            android:id="@+id/action_bragBookFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+
+        <action
+            android:id="@+id/action_bragBookFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
@@ -104,7 +112,16 @@
     <fragment
         android:id="@+id/communityFragment"
         android:name="com.example.employeedigitalhandbook.features.CommunityFragment"
-        android:label="Community" />
+        android:label="Community">
+
+        <action
+            android:id="@+id/action_communityFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+
+        <action
+            android:id="@+id/action_communityFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
 
     <!-- Resources List Destination -->
     <fragment
@@ -148,7 +165,7 @@
             app:destination="@id/homePageFragment" />
     </fragment>
 
-    <!-- Quiz -->
+    <!-- Quiz Destinations -->
     <fragment
         android:id="@+id/quizResultFragment"
         android:name="com.example.employeedigitalhandbook.features.QuizResultFragment"
@@ -157,28 +174,44 @@
 
         <action
             android:id="@+id/action_quizResultFragment_to_quizListFragment"
-            app:destination="@id/QuizListFragment"
-            app:popUpTo="@id/QuizListFragment"
+            app:destination="@id/quizListFragment"
+            app:popUpTo="@id/quizListFragment"
             app:popUpToInclusive="true" />
 
         <action
             android:id="@+id/action_quizResultFragment_to_takeQuizFragment"
-            app:destination="@id/QuizTakeFragment"
-            app:popUpTo="@id/QuizTakeFragment" />
+            app:destination="@id/takeQuizFragment"
+            app:popUpTo="@id/takeQuizFragment" />
     </fragment>
 
-    <!-- Quiz Destination -->
-
     <fragment
-        android:id="@+id/QuizListFragment"
+        android:id="@+id/quizListFragment"
         android:name="com.example.employeedigitalhandbook.features.QuizListFragment"
         android:label="Quiz List"
-        tools:layout="@layout/fragment_quiz_list"/>
+        tools:layout="@layout/fragment_quiz_list">
+
+        <action
+            android:id="@+id/action_quizListFragment_to_takeQuizFragment"
+            app:destination="@id/takeQuizFragment" />
+
+        <action
+            android:id="@+id/action_quizListFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+
+        <action
+            android:id="@+id/action_quizListFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
 
     <fragment
-        android:id="@+id/QuizTakeFragment"
+        android:id="@+id/takeQuizFragment"
         android:name="com.example.employeedigitalhandbook.features.QuizTakeFragment"
         android:label="Quiz Take"
-        tools:layout="@layout/fragment_quiz_take"/>
+        tools:layout="@layout/fragment_quiz_take">
+
+        <action
+            android:id="@+id/action_takeQuizFragment_to_quizResultFragment"
+            app:destination="@id/quizResultFragment" />
+    </fragment>
 
 </navigation>
