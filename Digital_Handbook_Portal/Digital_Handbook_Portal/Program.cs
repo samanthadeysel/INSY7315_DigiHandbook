@@ -10,8 +10,7 @@ namespace Digital_Handbook_Portal
 
             builder.Services.AddHttpClient("HandbookApi", client =>
             {
-                var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7123/";
-                client.BaseAddress = new Uri(apiBaseUrl);
+                client.BaseAddress = new Uri("https://localhost:7123/");
             });
 
             var app = builder.Build();
