@@ -1,25 +1,31 @@
+using System.Diagnostics;
 using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Handbook_Portal.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly Digital_Handbook_PortalContext _context;
+        private readonly HttpClient _httpClient;
 
-        public HomeController(Digital_Handbook_PortalContext context)
+        public HomeController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient("HandbookApi");
         }
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.TotalPolicies = await _context.Policy.CountAsync();
-            ViewBag.TotalQuizzes = await _context.Quiz.CountAsync();
-            ViewBag.TotalDoctors = await _context.Doctor.CountAsync();
-            ViewBag.TotalEvents = await _context.Community.CountAsync();
+            var policiesTask = GetEntityCountAsync<Policy>("api/Policy");
+            var quizzesTask = GetEntityCountAsync<Quiz>("api/Quiz");
+            var doctorsTask = GetEntityCountAsync<Doctor>("api/Doctors");
+            var eventsTask = GetEntityCountAsync<Community>("api/Community");
+
+            await Task.WhenAll(policiesTask, quizzesTask, doctorsTask, eventsTask);
+
+            ViewBag.TotalPolicies = await policiesTask;
+            ViewBag.TotalQuizzes = await quizzesTask;
+            ViewBag.TotalDoctors = await doctorsTask;
+            ViewBag.TotalEvents = await eventsTask;
 
             return View();
         }
@@ -28,6 +34,19 @@ namespace Digital_Handbook_Portal.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private async Task<int> GetEntityCountAsync<T>(string endpoint)
+        {
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<T>>>(endpoint);
+                return response?.Data?.Count ?? 0;
+            }
+            catch
+            {
+                return 0;
+            }
         }
     }
 }

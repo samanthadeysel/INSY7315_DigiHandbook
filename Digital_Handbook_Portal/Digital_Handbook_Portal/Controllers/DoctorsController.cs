@@ -1,112 +1,122 @@
+using System.Net.Http.Headers;
 using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Handbook_Portal.Controllers
 {
     public class DoctorsController : Controller
     {
-        private readonly Digital_Handbook_PortalContext _context;
+        private readonly HttpClient _httpClient;
 
-        public DoctorsController(Digital_Handbook_PortalContext context)
+        public DoctorsController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient("HandbookApi");
         }
 
-        // READ ALL
+        // GET: Doctors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Doctor.ToListAsync());
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<Doctor>>>("api/Doctors");
+            return View(response?.Data ?? new List<Doctor>());
         }
 
-        // READ DETAILS
-        public async Task<IActionResult> Details(int? id)
+        // GET: Doctors/Details/5
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Doctor>>($"api/Doctors/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var doctor = await _context.Doctor.FirstOrDefaultAsync(m => m.doctorId == id);
-            if (doctor == null) return NotFound();
-
-            return View(doctor);
+            return View(response.Data);
         }
 
-        // CREATE (GET)
+        // GET: Doctors/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // CREATE (POST)
+        // POST: Doctors/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Doctor doctor)
+        public async Task<IActionResult> Create(Doctor doctor, IFormFile? imageFile)
         {
-            if (ModelState.IsValid)
+            using var content = new MultipartFormDataContent();
+            content.Add(new StringContent(doctor.fName ?? string.Empty), nameof(doctor.fName));
+            content.Add(new StringContent(doctor.lName ?? string.Empty), nameof(doctor.lName));
+            content.Add(new StringContent(doctor.email ?? string.Empty), nameof(doctor.email));
+            content.Add(new StringContent(doctor.phone ?? string.Empty), nameof(doctor.phone));
+            content.Add(new StringContent(doctor.suiteNumber.ToString()), nameof(doctor.suiteNumber));
+
+            if (imageFile != null && imageFile.Length > 0)
             {
-                _context.Add(doctor);
-                await _context.SaveChangesAsync();
+                var fileContent = new StreamContent(imageFile.OpenReadStream());
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(imageFile.ContentType);
+                content.Add(fileContent, "imageFile", imageFile.FileName);
+            }
+
+            var response = await _httpClient.PostAsync("api/Doctors", content);
+            if (response.IsSuccessStatusCode)
+            {
                 return RedirectToAction(nameof(Index));
             }
+
+            ModelState.AddModelError(string.Empty, "Failed to create doctor entry via API.");
             return View(doctor);
         }
 
-        // UPDATE (GET)
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Doctors/Edit/5
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Doctor>>($"api/Doctors/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var doctor = await _context.Doctor.FindAsync(id);
-            if (doctor == null) return NotFound();
-
-            return View(doctor);
+            return View(response.Data);
         }
 
-        // UPDATE (POST)
+        // POST: Doctors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Doctor doctor)
+        public async Task<IActionResult> Edit(int id, Doctor doctor, IFormFile? imageFile)
         {
-            if (id != doctor.doctorId) return NotFound();
+            using var content = new MultipartFormDataContent();
+            content.Add(new StringContent(doctor.fName ?? string.Empty), nameof(doctor.fName));
+            content.Add(new StringContent(doctor.lName ?? string.Empty), nameof(doctor.lName));
+            content.Add(new StringContent(doctor.email ?? string.Empty), nameof(doctor.email));
+            content.Add(new StringContent(doctor.phone ?? string.Empty), nameof(doctor.phone));
+            content.Add(new StringContent(doctor.suiteNumber.ToString()), nameof(doctor.suiteNumber));
 
-            if (ModelState.IsValid)
+            if (imageFile != null && imageFile.Length > 0)
             {
-                try
-                {
-                    _context.Update(doctor);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Doctor.Any(e => e.doctorId == doctor.doctorId)) return NotFound();
-                    else throw;
-                }
+                var fileContent = new StreamContent(imageFile.OpenReadStream());
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(imageFile.ContentType);
+                content.Add(fileContent, "imageFile", imageFile.FileName);
+            }
+
+            var response = await _httpClient.PutAsync($"api/Doctors/{id}", content);
+            if (response.IsSuccessStatusCode)
+            {
                 return RedirectToAction(nameof(Index));
             }
+
+            ModelState.AddModelError(string.Empty, "Failed to update doctor entry via API.");
             return View(doctor);
         }
 
-        // DELETE (GET)
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Doctors/Delete/5
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Doctor>>($"api/Doctors/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var doctor = await _context.Doctor.FirstOrDefaultAsync(m => m.doctorId == id);
-            if (doctor == null) return NotFound();
-
-            return View(doctor);
+            return View(response.Data);
         }
 
-        // DELETE (POST)
+        // POST: Doctors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var doctor = await _context.Doctor.FindAsync(id);
-            if (doctor != null)
-            {
-                _context.Doctor.Remove(doctor);
-                await _context.SaveChangesAsync();
-            }
+            await _httpClient.DeleteAsync($"api/Doctors/{id}");
             return RedirectToAction(nameof(Index));
         }
     }

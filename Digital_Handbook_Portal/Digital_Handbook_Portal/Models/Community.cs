@@ -10,11 +10,12 @@ namespace Digital_Handbook_Portal.Models
         [Required(ErrorMessage = "Event title is required")]
         [StringLength(100, ErrorMessage = "Title cannot exceed 100 characters")]
         [Display(Name = "Event Title")]
-        public string title { get; set; }
+        public string title { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "Event description is required")]
         [StringLength(1000, ErrorMessage = "Description cannot exceed 1000 characters")]
         [Display(Name = "Description")]
-        public string description { get; set; }
+        public string description { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Event category is required")]
         [Display(Name = "Category")]
@@ -24,12 +25,12 @@ namespace Digital_Handbook_Portal.Models
         [Display(Name = "Date & Time")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy, HH:mm}", ApplyFormatInEditMode = true)]
-        public DateTime eventDateTime { get; set; }
+        public DateTime eventDateTime { get; set; } = DateTime.UtcNow;
 
         [Required(ErrorMessage = "Location is required")]
         [StringLength(150, ErrorMessage = "Location cannot exceed 150 characters")]
         [Display(Name = "Location / Venue")]
-        public string location { get; set; }
+        public string location { get; set; } = string.Empty;
 
         public enum EventCategory
         {

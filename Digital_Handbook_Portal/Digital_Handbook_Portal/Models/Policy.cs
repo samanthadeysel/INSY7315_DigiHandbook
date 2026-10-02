@@ -9,21 +9,22 @@ namespace Digital_Handbook_Portal.Models
         public int policyId { get; set; }
 
         [Required(ErrorMessage = "Policy Title is required")]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Summary is required")]
         [StringLength(500, ErrorMessage = "Summary must be no more than 500 characters")]
-        public string contentSummary { get; set; }
+        public string contentSummary { get; set; } = string.Empty;
 
         [StringLength(50, ErrorMessage = "Specific category must be no more than 50 characters")]
-        public string specificCategory { get; set; }  //eg: Nursing policies -> Patient care, HR policies -> Leave policies, etc
-        public string fileUrl { get; set; }
+        public string? specificCategory { get; set; }
 
-        //foreign key
+        [Display(Name = "Document URL")]
+        public string? fileUrl { get; set; }
+
+        [Required(ErrorMessage = "Please select a category")]
         [Display(Name = "Category")]
         public int categoryId { get; set; }
 
-        //linking to policy category table
         [ForeignKey("categoryId")]
         public virtual PolicyCategory? Category { get; set; }
     }

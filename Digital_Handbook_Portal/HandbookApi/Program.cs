@@ -1,5 +1,5 @@
 using Digital_Handbook_Portal.Models;
-using Digital_Handbook_Portal.Services;
+using HandbookApi.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace HandbookApi
@@ -14,7 +14,7 @@ namespace HandbookApi
                 ?? throw new InvalidOperationException("Connection string 'Digital_Handbook_PortalContext' not found.");
 
             builder.Services.AddDbContext<Digital_Handbook_PortalContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseNpgsql(connectionString));
 
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
@@ -23,7 +23,9 @@ namespace HandbookApi
                 });
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+
+            // Register Google Cloud Storage Service
+            builder.Services.AddSingleton<ICloudStorageService, CloudStorageService>();
 
             builder.Services.AddSwaggerGen();
 

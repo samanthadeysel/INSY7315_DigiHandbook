@@ -1,113 +1,119 @@
+using System.Net.Http.Headers;
 using Digital_Handbook_Portal.Models;
+using Digital_Handbook_Portal;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Handbook_Portal.Controllers
 {
     public class BragBooksController : Controller
     {
-        private readonly Digital_Handbook_PortalContext _context;
+        private readonly HttpClient _httpClient;
 
-        public BragBooksController(Digital_Handbook_PortalContext context)
+        public BragBooksController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient("HandbookApi");
         }
 
-        // READ ALL
+        // GET: BragBooks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.BragBook.OrderByDescending(b => b.datePosted).ToListAsync());
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<BragBook>>>("api/BragBook");
+            return View(response?.Data ?? new List<BragBook>());
         }
 
-        // READ DETAILS
-        public async Task<IActionResult> Details(int? id)
+        // GET: BragBooks/Details/5
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<BragBook>>($"api/BragBook/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var bragBook = await _context.BragBook.FirstOrDefaultAsync(m => m.bragId == id);
-            if (bragBook == null) return NotFound();
-
-            return View(bragBook);
+            return View(response.Data);
         }
 
-        // CREATE (GET)
+        // GET: BragBooks/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // CREATE (POST)
+        // POST: BragBooks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(BragBook bragBook)
+        public async Task<IActionResult> Create(BragBook bragBook, IFormFile? imageFile)
         {
-            if (ModelState.IsValid)
+            using var content = new MultipartFormDataContent();
+            content.Add(new StringContent(bragBook.content ?? string.Empty), nameof(bragBook.content));
+            content.Add(new StringContent(bragBook.senderType ?? string.Empty), nameof(bragBook.senderType));
+            content.Add(new StringContent(bragBook.recipientName ?? string.Empty), nameof(bragBook.recipientName));
+
+            if (imageFile != null && imageFile.Length > 0)
             {
-                bragBook.datePosted = DateTime.Now;
-                _context.Add(bragBook);
-                await _context.SaveChangesAsync();
+                var fileContent = new StreamContent(imageFile.OpenReadStream());
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(imageFile.ContentType);
+                content.Add(fileContent, "imageFile", imageFile.FileName);
+            }
+
+            var response = await _httpClient.PostAsync("api/BragBook", content);
+            if (response.IsSuccessStatusCode)
+            {
                 return RedirectToAction(nameof(Index));
             }
+
+            ModelState.AddModelError(string.Empty, "Failed to create brag post via API.");
             return View(bragBook);
         }
 
-        // UPDATE (GET)
-        public async Task<IActionResult> Edit(int? id)
+        // GET: BragBooks/Edit/5
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<BragBook>>($"api/BragBook/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var bragBook = await _context.BragBook.FindAsync(id);
-            if (bragBook == null) return NotFound();
-
-            return View(bragBook);
+            return View(response.Data);
         }
 
-        // UPDATE (POST)
+        // POST: BragBooks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, BragBook bragBook)
+        public async Task<IActionResult> Edit(int id, BragBook bragBook, IFormFile? imageFile)
         {
-            if (id != bragBook.bragId) return NotFound();
+            using var content = new MultipartFormDataContent();
+            content.Add(new StringContent(bragBook.content ?? string.Empty), nameof(bragBook.content));
+            content.Add(new StringContent(bragBook.senderType ?? string.Empty), nameof(bragBook.senderType));
+            content.Add(new StringContent(bragBook.recipientName ?? string.Empty), nameof(bragBook.recipientName));
 
-            if (ModelState.IsValid)
+            if (imageFile != null && imageFile.Length > 0)
             {
-                try
-                {
-                    _context.Update(bragBook);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.BragBook.Any(e => e.bragId == bragBook.bragId)) return NotFound();
-                    else throw;
-                }
+                var fileContent = new StreamContent(imageFile.OpenReadStream());
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(imageFile.ContentType);
+                content.Add(fileContent, "imageFile", imageFile.FileName);
+            }
+
+            var response = await _httpClient.PutAsync($"api/BragBook/{id}", content);
+            if (response.IsSuccessStatusCode)
+            {
                 return RedirectToAction(nameof(Index));
             }
+
+            ModelState.AddModelError(string.Empty, "Failed to update brag post via API.");
             return View(bragBook);
         }
 
-        // DELETE (GET)
-        public async Task<IActionResult> Delete(int? id)
+        // GET: BragBooks/Delete/5
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<BragBook>>($"api/BragBook/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var bragBook = await _context.BragBook.FirstOrDefaultAsync(m => m.bragId == id);
-            if (bragBook == null) return NotFound();
-
-            return View(bragBook);
+            return View(response.Data);
         }
 
-        // DELETE (POST)
+        // POST: BragBooks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var bragBook = await _context.BragBook.FindAsync(id);
-            if (bragBook != null)
-            {
-                _context.BragBook.Remove(bragBook);
-                await _context.SaveChangesAsync();
-            }
+            await _httpClient.DeleteAsync($"api/BragBook/{id}");
             return RedirectToAction(nameof(Index));
         }
     }

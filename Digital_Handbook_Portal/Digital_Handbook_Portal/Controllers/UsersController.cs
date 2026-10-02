@@ -1,149 +1,102 @@
-
 using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-public class UsersController : Controller
+namespace Digital_Handbook_Portal.Controllers
 {
-    private readonly Digital_Handbook_PortalContext _context;
-
-    public UsersController(Digital_Handbook_PortalContext context)
+    public class UsersController : Controller
     {
-        _context = context;
-    }
+        private readonly HttpClient _httpClient;
 
-    // GET: USERS
-    public async Task<IActionResult> Index()    
-    {
-        return View(await _context.User.ToListAsync());
-    }
-
-    // GET: USERS/Details/5
-    public async Task<IActionResult> Details(int? userid)
-    {
-        if (userid == null)
+        public UsersController(IHttpClientFactory httpClientFactory)
         {
-            return NotFound();
+            _httpClient = httpClientFactory.CreateClient("HandbookApi");
         }
 
-        var user = await _context.User
-            .FirstOrDefaultAsync(m => m.userId == userid);
-        if (user == null)
+        // GET: Users
+        public async Task<IActionResult> Index()
         {
-            return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<User>>>("api/Users");
+            return View(response?.Data ?? new List<User>());
         }
 
-        return View(user);
-    }
-
-    // GET: USERS/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: USERS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("userId,email,password")] User user)
-    {
-        if (ModelState.IsValid)
+        // GET: Users/Details/5
+        public async Task<IActionResult> Details(int id)
         {
-            _context.Add(user);
-            await _context.SaveChangesAsync();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<User>>($"api/Users/{id}");
+            if (response == null || !response.Success) return NotFound();
+
+            return View(response.Data);
+        }
+
+        // GET: Users/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Users/Create (Admin creates application user credentials)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/Users/admin-create", user);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var errorResult = await response.Content.ReadFromJsonAsync<ApiResponse<User>>();
+                ModelState.AddModelError(string.Empty, errorResult?.Message ?? "Failed to create user account.");
+            }
+            return View(user);
+        }
+
+        // GET: Users/Edit/5
+        public async Task<IActionResult> Edit(int id)
+        {
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<User>>($"api/Users/{id}");
+            if (response == null || !response.Success) return NotFound();
+
+            return View(response.Data);
+        }
+
+        // POST: Users/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, User user)
+        {
+            if (id != user.userId) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                var response = await _httpClient.PutAsJsonAsync($"api/Users/{id}", user);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError(string.Empty, "Failed to update user account.");
+            }
+            return View(user);
+        }
+
+        // GET: Users/Delete/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<User>>($"api/Users/{id}");
+            if (response == null || !response.Success) return NotFound();
+
+            return View(response.Data);
+        }
+
+        // POST: Users/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _httpClient.DeleteAsync($"api/Users/{id}");
             return RedirectToAction(nameof(Index));
         }
-        return View(user);
-    }
-
-    // GET: USERS/Edit/5
-    public async Task<IActionResult> Edit(int? userid)
-    {
-        if (userid == null)
-        {
-            return NotFound();
-        }
-
-        var user = await _context.User.FindAsync(userid);
-        if (user == null)
-        {
-            return NotFound();
-        }
-        return View(user);
-    }
-
-    // POST: USERS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? userid, [Bind("userId,email,password")] User user)
-    {
-        if (userid != user.userId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                _context.Update(user);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(user.userId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        return View(user);
-    }
-
-    // GET: USERS/Delete/5
-    public async Task<IActionResult> Delete(int? userid)
-    {
-        if (userid == null)
-        {
-            return NotFound();
-        }
-
-        var user = await _context.User
-            .FirstOrDefaultAsync(m => m.userId == userid);
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        return View(user);
-    }
-
-    // POST: USERS/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? userid)
-    {
-        var user = await _context.User.FindAsync(userid);
-        if (user != null)
-        {
-            _context.User.Remove(user);
-        }
-
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool UserExists(int? userid)
-    {
-        return _context.User.Any(e => e.userId == userid);
     }
 }

@@ -1,37 +1,31 @@
 using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Handbook_Portal.Controllers
 {
     public class PolicyCategoriesController : Controller
     {
-        private readonly Digital_Handbook_PortalContext _context;
+        private readonly HttpClient _httpClient;
 
-        public PolicyCategoriesController(Digital_Handbook_PortalContext context)
+        public PolicyCategoriesController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient("HandbookApi");
         }
 
         // READ ALL
         public async Task<IActionResult> Index()
         {
-            var categories = await _context.PolicyCategory.Include(c => c.Policies).ToListAsync();
-            return View(categories);
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<PolicyCategory>>>("api/PolicyCategories");
+            return View(response?.Data ?? new List<PolicyCategory>());
         }
 
         // READ DETAILS
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<PolicyCategory>>($"api/PolicyCategories/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var category = await _context.PolicyCategory
-                .Include(c => c.Policies)
-                .FirstOrDefaultAsync(m => m.categoryId == id);
-
-            if (category == null) return NotFound();
-
-            return View(category);
+            return View(response.Data);
         }
 
         // CREATE (GET)
@@ -47,22 +41,23 @@ namespace Digital_Handbook_Portal.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(policyCategory);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.PostAsJsonAsync("api/PolicyCategories", policyCategory);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError(string.Empty, "Failed to create policy category via API.");
             }
             return View(policyCategory);
         }
 
         // UPDATE (GET)
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<PolicyCategory>>($"api/PolicyCategories/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var category = await _context.PolicyCategory.FindAsync(id);
-            if (category == null) return NotFound();
-
-            return View(category);
+            return View(response.Data);
         }
 
         // UPDATE (POST)
@@ -74,33 +69,23 @@ namespace Digital_Handbook_Portal.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var response = await _httpClient.PutAsJsonAsync($"api/PolicyCategories/{id}", policyCategory);
+                if (response.IsSuccessStatusCode)
                 {
-                    _context.Update(policyCategory);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.PolicyCategory.Any(e => e.categoryId == policyCategory.categoryId)) return NotFound();
-                    else throw;
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "Failed to update policy category via API.");
             }
             return View(policyCategory);
         }
 
         // DELETE (GET)
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null) return NotFound();
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<PolicyCategory>>($"api/PolicyCategories/{id}");
+            if (response == null || !response.Success) return NotFound();
 
-            var category = await _context.PolicyCategory
-                .Include(c => c.Policies)
-                .FirstOrDefaultAsync(m => m.categoryId == id);
-
-            if (category == null) return NotFound();
-
-            return View(category);
+            return View(response.Data);
         }
 
         // DELETE (POST)
@@ -108,12 +93,7 @@ namespace Digital_Handbook_Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.PolicyCategory.FindAsync(id);
-            if (category != null)
-            {
-                _context.PolicyCategory.Remove(category);
-                await _context.SaveChangesAsync();
-            }
+            await _httpClient.DeleteAsync($"api/PolicyCategories/{id}");
             return RedirectToAction(nameof(Index));
         }
     }
