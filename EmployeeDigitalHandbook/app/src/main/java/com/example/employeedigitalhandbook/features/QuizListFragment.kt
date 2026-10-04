@@ -37,7 +37,7 @@ class QuizListFragment : Fragment() {
 
         setupRecyclerView()
         setupListeners()
-        setupBottomNavigation()
+        //setupBottomNavigation()
         fetchQuizzes()
     }
 
@@ -59,22 +59,22 @@ class QuizListFragment : Fragment() {
         }
     }
 
-    private fun setupBottomNavigation() {
-        binding.bottomNavigation.selectedItemId = R.id.nav_home
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    findNavController().navigate(R.id.action_quizListFragment_to_homePageFragment)
-                    true
-                }
-                R.id.nav_menu -> {
-                    findNavController().navigate(R.id.action_quizListFragment_to_settingsFragment)
-                    true
-                }
-                else -> false
-            }
-        }
-    }
+//    private fun setupBottomNavigation() {
+//        binding.bottomNavigation.selectedItemId = R.id.nav_home
+//        binding.bottomNavigation.setOnItemSelectedListener { item ->
+//            when (item.itemId) {
+//                R.id.nav_home -> {
+//                    findNavController().navigate(R.id.action_quizListFragment_to_homePageFragment)
+//                    true
+//                }
+//                R.id.nav_menu -> {
+//                    findNavController().navigate(R.id.action_quizListFragment_to_settingsFragment)
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
+//    }
 
     private fun fetchQuizzes() {
         lifecycleScope.launch {
