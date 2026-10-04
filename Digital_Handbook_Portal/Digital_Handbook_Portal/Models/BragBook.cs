@@ -21,8 +21,6 @@ namespace Digital_Handbook_Portal.Models
         [Display(Name = "Recipient Name")]
         public string recipientName { get; set; } = string.Empty;
 
-        [Display(Name = "Image URL")]
-        public string? imageUrl { get; set; }
 
         [ValidateNever]
         [Display(Name = "Date Posted")]

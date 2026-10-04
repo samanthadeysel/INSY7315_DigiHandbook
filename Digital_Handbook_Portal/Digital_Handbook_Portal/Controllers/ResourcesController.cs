@@ -53,6 +53,17 @@ namespace Digital_Handbook_Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Resource resource, IFormFile? uploadFile)
         {
+            //remove validation for ResourceUrl if a file is uploaded
+            if (uploadFile != null && uploadFile.Length > 0)
+            {
+                ModelState.Remove(nameof(resource.ResourceUrl));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(resource);
+            }
+
             using var content = new MultipartFormDataContent();
             content.Add(new StringContent(resource.Title ?? string.Empty), nameof(resource.Title));
             content.Add(new StringContent(resource.Category ?? string.Empty), nameof(resource.Category));
