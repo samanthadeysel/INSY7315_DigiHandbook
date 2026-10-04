@@ -20,63 +20,72 @@ namespace HandbookApi.Controllers
 
         // GET: api/BragBook
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<List<BragBook>>>> GetBragPosts()
+        public async Task<ActionResult<ApiResponse<List<BragBook>>>> GetBragBook()
         {
-            var posts = await _context.BragBook.OrderByDescending(b => b.datePosted).ToListAsync();
-            return Ok(new ApiResponse<List<BragBook>> { Success = true, Data = posts });
-        }
-
-        // GET: api/BragBook/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<BragBook>>> GetBragPost(int id)
-        {
-            var post = await _context.BragBook.FindAsync(id);
-            if (post == null)
+            try
             {
-                return NotFound(new ApiResponse<BragBook> { Success = false, Message = "Brag post not found." });
-            }
+                var bragPosts = await _context.BragBook
+                    .OrderByDescending(b => b.datePosted)
+                    .ToListAsync();
 
-            return Ok(new ApiResponse<BragBook> { Success = true, Data = post });
+                return Ok(new ApiResponse<List<BragBook>>
+                {
+                    Success = true,
+                    Message = "Brag book entries retrieved successfully",
+                    Data = bragPosts
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<List<BragBook>>
+                {
+                    Success = false,
+                    Message = $"Error retrieving entries: {ex.Message}",
+                    Data = null
+                });
+            }
         }
 
         // POST: api/BragBook
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<ApiResponse<BragBook>>> CreateBragPost([FromForm] BragBook post, IFormFile? imageFile)
+        public async Task<ActionResult<ApiResponse<BragBook>>> CreateBragPost([FromForm] BragBook post)
         {
             ModelState.Remove(nameof(BragBook.bragId));
             ModelState.Remove(nameof(BragBook.datePosted));
-            ModelState.Remove(nameof(BragBook.imageUrl));
 
             if (!ModelState.IsValid)
             {
-                var errors = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-                return BadRequest(new ApiResponse<BragBook> { Success = false, Message = $"Validation error: {errors}" });
+                var errors = string.Join("; ", ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage));
+
+                return BadRequest(new ApiResponse<BragBook>
+                {
+                    Success = false,
+                    Message = $"Validation error: {errors}"
+                });
             }
 
             try
             {
-                if (imageFile != null && imageFile.Length > 0)
-                {
-                    string uploadedUrl = await _storageService.UploadFileAsync(imageFile, "bragbook");
-                    post.imageUrl = uploadedUrl;
-                }
-
-                post.datePosted = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
-
                 var newEntity = new BragBook
                 {
                     content = post.content,
                     senderType = post.senderType,
                     recipientName = post.recipientName,
-                    imageUrl = post.imageUrl,
-                    datePosted = post.datePosted
+                    datePosted = DateTime.UtcNow
                 };
 
                 _context.BragBook.Add(newEntity);
                 await _context.SaveChangesAsync();
 
-                return Ok(new ApiResponse<BragBook> { Success = true, Message = "Brag post published successfully.", Data = newEntity });
+                return Ok(new ApiResponse<BragBook>
+                {
+                    Success = true,
+                    Message = "Brag post published successfully.",
+                    Data = newEntity
+                });
             }
             catch (Exception ex)
             {
@@ -92,7 +101,7 @@ namespace HandbookApi.Controllers
         // PUT: api/BragBook/5
         [HttpPut("{id}")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<ApiResponse<BragBook>>> UpdateBragPost(int id, [FromForm] BragBook post, IFormFile? imageFile)
+        public async Task<ActionResult<ApiResponse<BragBook>>> UpdateBragPost(int id, [FromForm] BragBook post)
         {
             var existingPost = await _context.BragBook.FindAsync(id);
             if (existingPost == null)
@@ -103,22 +112,6 @@ namespace HandbookApi.Controllers
             existingPost.content = post.content;
             existingPost.senderType = post.senderType;
             existingPost.recipientName = post.recipientName;
-
-            if (imageFile != null && imageFile.Length > 0)
-            {
-                if (!string.IsNullOrWhiteSpace(existingPost.imageUrl))
-                {
-                    try
-                    {
-                        await _storageService.DeleteFileAsync(existingPost.imageUrl);
-                    }
-                    catch {  
-                    }
-                }
-
-                string uploadedUrl = await _storageService.UploadFileAsync(imageFile, "bragbook");
-                existingPost.imageUrl = uploadedUrl;
-            }
 
             await _context.SaveChangesAsync();
             return Ok(new ApiResponse<BragBook> { Success = true, Message = "Brag post updated successfully.", Data = existingPost });
@@ -132,16 +125,6 @@ namespace HandbookApi.Controllers
             if (post == null)
             {
                 return NotFound(new ApiResponse<bool> { Success = false, Message = "Brag post not found.", Data = false });
-            }
-
-            if (!string.IsNullOrWhiteSpace(post.imageUrl))
-            {
-                try
-                {
-                    await _storageService.DeleteFileAsync(post.imageUrl);
-                }
-                catch { 
-                }
             }
 
             _context.BragBook.Remove(post);

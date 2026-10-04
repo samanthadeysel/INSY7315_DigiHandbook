@@ -11,32 +11,37 @@ namespace HandbookApi.Services
         public CloudStorageService(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _bucketName = configuration["GoogleCloudStorage:BucketName"]
+                ?? configuration["GCS:BucketName"]
                 ?? throw new InvalidOperationException("Bucket name not configured.");
 
-            // Check if the credential JSON content is passed via Environment Variable / App Settings
-            var jsonCredentials = configuration["digitalhandbook-37a30108df42"];
+            string secretMountPath = configuration["GoogleCloudStorage:SecretMountPath"] ?? "/app/Credentials/digitalhandbook-37a30108df42.json";
 
-            if (!string.IsNullOrWhiteSpace(jsonCredentials))
+            string relativePath = configuration["GoogleCloudStorage:CredentialFilePath"]
+                ?? "Credentials/digitalhandbook-37a30108df42.json";
+
+            string localCredentialPath = Path.Combine(environment.ContentRootPath, relativePath);
+
+            string activePath = File.Exists(secretMountPath)
+                ? secretMountPath
+                : (File.Exists(localCredentialPath) ? localCredentialPath : string.Empty);
+
+            if (!string.IsNullOrEmpty(activePath))
             {
-                var credential = GoogleCredential.FromJson(jsonCredentials);
+                var credential = GoogleCredential.FromFile(activePath);
                 _storageClient = StorageClient.Create(credential);
             }
             else
             {
-                // Local fallback using local file path
-                var relativePath = configuration["GoogleCloudStorage:CredentialFilePath"]
-                    ?? "Credentials/digitalhandbook-37a30108df42.json";
+                var jsonCredentials = configuration["GoogleCloudStorage:JsonCredentials"]
+                    ?? configuration["digitalhandbook-37a30108df42"];
 
-                var credentialPath = Path.Combine(environment.ContentRootPath, relativePath);
-
-                if (File.Exists(credentialPath))
+                if (!string.IsNullOrWhiteSpace(jsonCredentials))
                 {
-                    var credential = GoogleCredential.FromFile(credentialPath);
+                    var credential = GoogleCredential.FromJson(jsonCredentials);
                     _storageClient = StorageClient.Create(credential);
                 }
                 else
                 {
-                    // Fallback to default application credentials
                     _storageClient = StorageClient.Create();
                 }
             }
@@ -55,7 +60,7 @@ namespace HandbookApi.Services
                 var uploadedObject = await _storageClient.UploadObjectAsync(
                     bucket: _bucketName,
                     objectName: objectName,
-                    contentType: file.ContentType,
+                    contentType: string.IsNullOrWhiteSpace(file.ContentType) ? "application/octet-stream" : file.ContentType,
                     source: stream
                 );
 
@@ -67,10 +72,21 @@ namespace HandbookApi.Services
         {
             if (string.IsNullOrWhiteSpace(fileUrl)) return;
 
-            var uri = new Uri(fileUrl);
-            var objectName = uri.AbsolutePath.TrimStart('/').Replace($"{_bucketName}/", "");
+            try
+            {
+                var uri = new Uri(fileUrl);
+                var objectName = uri.AbsolutePath.TrimStart('/');
 
-            await _storageClient.DeleteObjectAsync(_bucketName, objectName);
+                if (objectName.StartsWith($"{_bucketName}/", StringComparison.OrdinalIgnoreCase))
+                {
+                    objectName = objectName.Substring(_bucketName.Length + 1);
+                }
+
+                await _storageClient.DeleteObjectAsync(_bucketName, objectName);
+            }
+            catch (Google.GoogleApiException ex) when (ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+            }
         }
     }
 }

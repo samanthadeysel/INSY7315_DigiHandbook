@@ -24,7 +24,6 @@ public class Digital_Handbook_PortalContext(DbContextOptions<Digital_Handbook_Po
             entity.Property(e => e.content).HasColumnName("content");
             entity.Property(e => e.senderType).HasColumnName("senderType");
             entity.Property(e => e.recipientName).HasColumnName("recipientName");
-            entity.Property(e => e.imageUrl).HasColumnName("imageUrl");
             entity.Property(e => e.datePosted).HasColumnName("datePosted");
         });
 
