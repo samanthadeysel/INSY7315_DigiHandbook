@@ -75,21 +75,21 @@ class CommunityFragment : Fragment() {
         })
 
         communityViewModel.loadEvents()
-
-        val bottomNavigation = view.findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.selectedItemId = R.id.nav_home
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    findNavController().navigate(R.id.action_communityFragment_to_homePageFragment)
-                    true
-                }
-                R.id.nav_menu -> {
-                    findNavController().navigate(R.id.action_communityFragment_to_settingsFragment)
-                    true
-                }
-                else -> false
-            }
-        }
+//
+//        val bottomNavigation = view.findViewById<BottomNavigationView>(R.id.bottomNavigation)
+//        bottomNavigation.selectedItemId = R.id.nav_home
+//        bottomNavigation.setOnItemSelectedListener { item ->
+//            when (item.itemId) {
+//                R.id.nav_home -> {
+//                    findNavController().navigate(R.id.action_communityFragment_to_homePageFragment)
+//                    true
+//                }
+//                R.id.nav_menu -> {
+//                    findNavController().navigate(R.id.action_communityFragment_to_settingsFragment)
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
     }
 }

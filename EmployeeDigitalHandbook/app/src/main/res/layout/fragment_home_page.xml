@@ -29,7 +29,7 @@
         android:layout_marginTop="115dp"
         android:background="@drawable/bg_white_rounded_top"
         android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -60,8 +60,8 @@
                     android:textSize="26sp"
                     android:textStyle="bold" />
 
-               <TextView
-                android:id="@+id/tvUserName"
+                <TextView
+                    android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/raleway_bold"
@@ -70,6 +70,20 @@
                     android:textSize="26sp"
                     android:textStyle="bold" />
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/btnMenu"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="20dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Open Navigation Menu"
+                android:padding="8dp"
+                android:src="@drawable/ic_menu"
+                app:layout_constraintBottom_toBottomOf="@id/greetingLinearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/greetingLinearLayout"
+                app:tint="@color/black" />
 
             <!-- Bento Navigation Cards Grid -->
             <GridLayout
@@ -330,26 +344,18 @@
                 android:layout_marginBottom="16dp"
                 android:textColor="#A0AEC0"
                 android:textSize="12sp"
-                tools:text="v1.0.0-beta.1"
                 app:layout_constraintBottom_toBottomOf="@id/doctorsBackgroundView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/doctorsRecyclerView" />
+                app:layout_constraintTop_toBottomOf="@id/doctorsRecyclerView"
+                tools:text="v1.0.0-beta.1" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Navigation Bar -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#2980b9"
-        app:itemIconTint="@color/white"
-        app:labelVisibilityMode="unlabeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
