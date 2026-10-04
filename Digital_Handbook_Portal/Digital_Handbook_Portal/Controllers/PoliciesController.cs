@@ -10,6 +10,17 @@ namespace Digital_Handbook_Portal.Controllers
         private readonly HttpClient _httpClient;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
+        // Hardcoded Policy Categories mapped to IDs
+        private static readonly List<SelectListItem> HardcodedCategories = new()
+        {
+            new SelectListItem { Value = "1", Text = "General & Administrative" },
+            new SelectListItem { Value = "2", Text = "Clinical & Patient Care" },
+            new SelectListItem { Value = "3", Text = "Human Resources" },
+            new SelectListItem { Value = "4", Text = "Health & Safety" },
+            new SelectListItem { Value = "5", Text = "IT & Data Security" },
+            new SelectListItem { Value = "6", Text = "Compliance & Ethics" }
+        };
+
         public PoliciesController(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClientFactory.CreateClient("HandbookApi");
@@ -25,7 +36,16 @@ namespace Digital_Handbook_Portal.Controllers
         // READ ALL
         public async Task<IActionResult> Index()
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<Policy>>>("api/Policies");
+            var httpResponse = await _httpClient.GetAsync("api/Policies");
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                var errorContent = await httpResponse.Content.ReadAsStringAsync();
+                ViewBag.ErrorMessage = $"API Request Failed: {errorContent}";
+                return View(new List<Policy>());
+            }
+
+            var response = await httpResponse.Content.ReadFromJsonAsync<ApiResponse<List<Policy>>>();
             return View(response?.Data ?? new List<Policy>());
         }
 
@@ -38,14 +58,14 @@ namespace Digital_Handbook_Portal.Controllers
             return View(response.Data);
         }
 
-        // CREATE (GET)
-        public async Task<IActionResult> Create()
+        // GET: Policies/Create
+        public IActionResult Create()
         {
-            await PopulateCategoryDropdownAsync();
+            ViewBag.Categories = HardcodedCategories;
             return View();
         }
 
-        // CREATE (POST)
+        // POST: Policies/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Policy policy, IFormFile? pdfFile)
@@ -54,7 +74,14 @@ namespace Digital_Handbook_Portal.Controllers
             content.Add(new StringContent(policy.Title ?? string.Empty), nameof(policy.Title));
             content.Add(new StringContent(policy.contentSummary ?? string.Empty), nameof(policy.contentSummary));
             content.Add(new StringContent(policy.specificCategory ?? string.Empty), nameof(policy.specificCategory));
-            content.Add(new StringContent(policy.categoryId.ToString()), nameof(policy.categoryId));
+
+            int selectedCategoryId = policy.categoryId > 0 ? policy.categoryId : 1;
+            content.Add(new StringContent(selectedCategoryId.ToString()), nameof(policy.categoryId));
+
+            if (!string.IsNullOrWhiteSpace(policy.fileUrl))
+            {
+                content.Add(new StringContent(policy.fileUrl), nameof(policy.fileUrl));
+            }
 
             if (pdfFile != null && pdfFile.Length > 0)
             {
@@ -69,8 +96,31 @@ namespace Digital_Handbook_Portal.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to create policy document via API.");
-            await PopulateCategoryDropdownAsync(policy.categoryId);
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            string errorMessage = errorDetails;
+
+            if (!string.IsNullOrWhiteSpace(errorDetails))
+            {
+                try
+                {
+                    var errorObj = System.Text.Json.JsonSerializer.Deserialize<ApiResponse<Policy>>(
+                        errorDetails,
+                        new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    if (!string.IsNullOrWhiteSpace(errorObj?.Message))
+                    {
+                        errorMessage = errorObj.Message;
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
+            ModelState.AddModelError(string.Empty, $"Failed to create policy: {errorMessage}");
+
+            ViewBag.Categories = HardcodedCategories;
             return View(policy);
         }
 
@@ -87,7 +137,7 @@ namespace Digital_Handbook_Portal.Controllers
         // UPDATE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Policy policy, IFormFile? pdfFile)
+        public async Task<IActionResult> Edit(int id, Policy policy, IFormFile? uploadFile)
         {
             using var content = new MultipartFormDataContent();
             content.Add(new StringContent(policy.Title ?? string.Empty), nameof(policy.Title));
@@ -95,11 +145,16 @@ namespace Digital_Handbook_Portal.Controllers
             content.Add(new StringContent(policy.specificCategory ?? string.Empty), nameof(policy.specificCategory));
             content.Add(new StringContent(policy.categoryId.ToString()), nameof(policy.categoryId));
 
-            if (pdfFile != null && pdfFile.Length > 0)
+            if (!string.IsNullOrWhiteSpace(policy.fileUrl))
             {
-                var fileContent = new StreamContent(pdfFile.OpenReadStream());
-                fileContent.Headers.ContentType = new MediaTypeHeaderValue(pdfFile.ContentType);
-                content.Add(fileContent, "pdfFile", pdfFile.FileName);
+                content.Add(new StringContent(policy.fileUrl), nameof(policy.fileUrl));
+            }
+
+            if (uploadFile != null && uploadFile.Length > 0)
+            {
+                var fileContent = new StreamContent(uploadFile.OpenReadStream());
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(uploadFile.ContentType);
+                content.Add(fileContent, "uploadFile", uploadFile.FileName);
             }
 
             var response = await _httpClient.PutAsync($"api/Policies/{id}", content);
@@ -108,7 +163,8 @@ namespace Digital_Handbook_Portal.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to update policy document via API.");
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            ModelState.AddModelError(string.Empty, $"Failed to update policy document via API: {errorDetails}");
             await PopulateCategoryDropdownAsync(policy.categoryId);
             return View(policy);
         }

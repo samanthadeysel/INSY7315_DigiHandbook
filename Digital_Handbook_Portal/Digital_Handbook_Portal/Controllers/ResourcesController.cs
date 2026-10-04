@@ -1,6 +1,6 @@
+using System.Net.Http.Headers;
 using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
 
 namespace Digital_Handbook_Portal.Controllers
 {
@@ -8,6 +8,7 @@ namespace Digital_Handbook_Portal.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
         public ResourcesController(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClientFactory.CreateClient("HandbookApi");
@@ -50,17 +51,36 @@ namespace Digital_Handbook_Portal.Controllers
         // POST: Resources/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Resource resource)
+        public async Task<IActionResult> Create(Resource resource, IFormFile? uploadFile)
         {
-            if (ModelState.IsValid)
+            using var content = new MultipartFormDataContent();
+            content.Add(new StringContent(resource.Title ?? string.Empty), nameof(resource.Title));
+            content.Add(new StringContent(resource.Category ?? string.Empty), nameof(resource.Category));
+            content.Add(new StringContent(resource.Description ?? string.Empty), nameof(resource.Description));
+            content.Add(new StringContent(resource.BreadcrumbPath ?? string.Empty), nameof(resource.BreadcrumbPath));
+
+            // Pass text URL if entered manually
+            if (!string.IsNullOrWhiteSpace(resource.ResourceUrl))
             {
-                var response = await _httpClient.PostAsJsonAsync("api/Resources", resource);
-                if (response.IsSuccessStatusCode)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-                ModelState.AddModelError(string.Empty, "Failed to create resource entry via API.");
+                content.Add(new StringContent(resource.ResourceUrl), nameof(resource.ResourceUrl));
             }
+
+            // Attach resource file if uploaded
+            if (uploadFile != null && uploadFile.Length > 0)
+            {
+                var fileContent = new StreamContent(uploadFile.OpenReadStream());
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(uploadFile.ContentType);
+                content.Add(fileContent, "uploadFile", uploadFile.FileName);
+            }
+
+            var response = await _httpClient.PostAsync("api/Resources", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            ModelState.AddModelError(string.Empty, $"Failed to create resource entry via API: {errorDetails}");
             return View(resource);
         }
 
@@ -76,19 +96,36 @@ namespace Digital_Handbook_Portal.Controllers
         // POST: Resources/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Resource resource)
+        public async Task<IActionResult> Edit(int id, Resource resource, IFormFile? uploadFile)
         {
             if (id != resource.Id) return NotFound();
 
-            if (ModelState.IsValid)
+            using var content = new MultipartFormDataContent();
+            content.Add(new StringContent(resource.Title ?? string.Empty), nameof(resource.Title));
+            content.Add(new StringContent(resource.Category ?? string.Empty), nameof(resource.Category));
+            content.Add(new StringContent(resource.Description ?? string.Empty), nameof(resource.Description));
+            content.Add(new StringContent(resource.BreadcrumbPath ?? string.Empty), nameof(resource.BreadcrumbPath));
+
+            if (!string.IsNullOrWhiteSpace(resource.ResourceUrl))
             {
-                var response = await _httpClient.PutAsJsonAsync($"api/Resources/{id}", resource);
-                if (response.IsSuccessStatusCode)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-                ModelState.AddModelError(string.Empty, "Failed to update resource entry via API.");
+                content.Add(new StringContent(resource.ResourceUrl), nameof(resource.ResourceUrl));
             }
+
+            if (uploadFile != null && uploadFile.Length > 0)
+            {
+                var fileContent = new StreamContent(uploadFile.OpenReadStream());
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(uploadFile.ContentType);
+                content.Add(fileContent, "uploadFile", uploadFile.FileName);
+            }
+
+            var response = await _httpClient.PutAsync($"api/Resources/{id}", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            ModelState.AddModelError(string.Empty, $"Failed to update resource entry via API: {errorDetails}");
             return View(resource);
         }
 

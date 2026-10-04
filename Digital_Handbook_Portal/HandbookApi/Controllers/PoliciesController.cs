@@ -22,12 +22,24 @@ namespace HandbookApi.Controllers
         [HttpGet]
         public async Task<ActionResult<ApiResponse<List<Policy>>>> GetPolicies()
         {
-            var policies = await _context.Policy
-                .Include(p => p.Category)
-                .OrderBy(p => p.Title)
-                .ToListAsync();
+            try
+            {
+                var policies = await _context.Policy
+                    .Include(p => p.Category)
+                    .OrderBy(p => p.Title)
+                    .ToListAsync();
 
-            return Ok(new ApiResponse<List<Policy>> { Success = true, Data = policies });
+                return Ok(new ApiResponse<List<Policy>> { Success = true, Data = policies });
+            }
+            catch (Exception ex)
+            {
+                // Expose exact exception (Table missing, Auth failed, SSL issue, etc.)
+                return StatusCode(500, new ApiResponse<List<Policy>>
+                {
+                    Success = false,
+                    Message = $"Cloud SQL / API Error: {ex.Message} | Inner: {ex.InnerException?.Message}"
+                });
+            }
         }
 
         // GET: api/Policies/5
@@ -63,23 +75,39 @@ namespace HandbookApi.Controllers
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<ApiResponse<Policy>>> CreatePolicy([FromForm] Policy policy, IFormFile? pdfFile)
         {
-            if (pdfFile != null && pdfFile.Length > 0)
+            ModelState.Remove(nameof(Policy.policyId));
+            ModelState.Remove(nameof(Policy.Category));
+
+            if (!ModelState.IsValid)
             {
-                try
+                var errors = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+                return BadRequest(new ApiResponse<Policy> { Success = false, Message = $"Validation Error: {errors}" });
+            }
+
+            try
+            {
+                if (pdfFile != null && pdfFile.Length > 0)
                 {
                     string uploadedUrl = await _storageService.UploadFileAsync(pdfFile, "policies");
                     policy.fileUrl = uploadedUrl;
                 }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, new ApiResponse<Policy> { Success = false, Message = $"GCS File Upload Failed: {ex.Message}" });
-                }
+
+                policy.policyId = 0;
+
+                _context.Policy.Add(policy);
+                await _context.SaveChangesAsync();
+
+                return Ok(new ApiResponse<Policy> { Success = true, Message = "Policy created successfully.", Data = policy });
             }
-
-            _context.Policy.Add(policy);
-            await _context.SaveChangesAsync();
-
-            return Ok(new ApiResponse<Policy> { Success = true, Message = "Policy document created successfully.", Data = policy });
+            catch (Exception ex)
+            {
+                string errorMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return StatusCode(500, new ApiResponse<Policy>
+                {
+                    Success = false,
+                    Message = $"Database/API Exception: {errorMessage}"
+                });
+            }
         }
 
         // PUT: api/Policies/5

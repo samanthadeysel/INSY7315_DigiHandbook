@@ -43,7 +43,7 @@ namespace Digital_Handbook_Portal.Controllers
                     HttpContext.Session.SetString("AdminName", result.Data.Name);
                     HttpContext.Session.SetString("AdminToken", result.Data.Token);
 
-                    return RedirectToAction("Index", "Users");
+                    return RedirectToAction("Index", "Home");
                 }
             }
 

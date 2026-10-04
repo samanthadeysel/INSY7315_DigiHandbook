@@ -24,8 +24,21 @@ namespace Digital_Handbook_Portal.Controllers
         // GET: Doctors
         public async Task<IActionResult> Index()
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<Doctor>>>("api/Doctors");
-            return View(response?.Data ?? new List<Doctor>());
+            try
+            {
+                var httpResponse = await _httpClient.GetAsync("api/Doctors");
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    return View(new List<Doctor>());
+                }
+
+                var response = await httpResponse.Content.ReadFromJsonAsync<ApiResponse<List<Doctor>>>();
+                return View(response?.Data ?? new List<Doctor>());
+            }
+            catch
+            {
+                return View(new List<Doctor>());
+            }
         }
 
         // GET: Doctors/Details/5
@@ -49,11 +62,18 @@ namespace Digital_Handbook_Portal.Controllers
         public async Task<IActionResult> Create(Doctor doctor, IFormFile? imageFile)
         {
             using var content = new MultipartFormDataContent();
+
+            // Match model properties
             content.Add(new StringContent(doctor.fName ?? string.Empty), nameof(doctor.fName));
             content.Add(new StringContent(doctor.lName ?? string.Empty), nameof(doctor.lName));
             content.Add(new StringContent(doctor.email ?? string.Empty), nameof(doctor.email));
             content.Add(new StringContent(doctor.phone ?? string.Empty), nameof(doctor.phone));
             content.Add(new StringContent(doctor.suiteNumber.ToString()), nameof(doctor.suiteNumber));
+
+            if (!string.IsNullOrWhiteSpace(doctor.doctorImg))
+            {
+                content.Add(new StringContent(doctor.doctorImg), nameof(doctor.doctorImg));
+            }
 
             if (imageFile != null && imageFile.Length > 0)
             {
@@ -68,7 +88,9 @@ namespace Digital_Handbook_Portal.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to create doctor entry via API.");
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            ModelState.AddModelError(string.Empty, $"Failed to create doctor record via API: {errorDetails}");
+
             return View(doctor);
         }
 
@@ -84,7 +106,7 @@ namespace Digital_Handbook_Portal.Controllers
         // POST: Doctors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Doctor doctor, IFormFile? imageFile)
+        public async Task<IActionResult> Edit(int id, Doctor doctor, IFormFile? uploadFile)
         {
             using var content = new MultipartFormDataContent();
             content.Add(new StringContent(doctor.fName ?? string.Empty), nameof(doctor.fName));
@@ -93,11 +115,16 @@ namespace Digital_Handbook_Portal.Controllers
             content.Add(new StringContent(doctor.phone ?? string.Empty), nameof(doctor.phone));
             content.Add(new StringContent(doctor.suiteNumber.ToString()), nameof(doctor.suiteNumber));
 
-            if (imageFile != null && imageFile.Length > 0)
+            if (!string.IsNullOrWhiteSpace(doctor.doctorImg))
             {
-                var fileContent = new StreamContent(imageFile.OpenReadStream());
-                fileContent.Headers.ContentType = new MediaTypeHeaderValue(imageFile.ContentType);
-                content.Add(fileContent, "imageFile", imageFile.FileName);
+                content.Add(new StringContent(doctor.doctorImg), nameof(doctor.doctorImg));
+            }
+
+            if (uploadFile != null && uploadFile.Length > 0)
+            {
+                var fileContent = new StreamContent(uploadFile.OpenReadStream());
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(uploadFile.ContentType);
+                content.Add(fileContent, "imageFile", uploadFile.FileName);
             }
 
             var response = await _httpClient.PutAsync($"api/Doctors/{id}", content);
@@ -106,7 +133,8 @@ namespace Digital_Handbook_Portal.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to update doctor entry via API.");
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            ModelState.AddModelError(string.Empty, $"Failed to update doctor entry via API: {errorDetails}");
             return View(doctor);
         }
 

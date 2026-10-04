@@ -1,4 +1,5 @@
 ﻿using Digital_Handbook_Portal.Models;
+using HandbookApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,13 +10,15 @@ namespace HandbookApi.Controllers
     public class ResourcesController : ControllerBase
     {
         private readonly Digital_Handbook_PortalContext _context;
+        private readonly ICloudStorageService _storageService;
 
-        public ResourcesController(Digital_Handbook_PortalContext context)
+        public ResourcesController(Digital_Handbook_PortalContext context, ICloudStorageService storageService)
         {
             _context = context;
+            _storageService = storageService;
         }
 
-        // GET: api/Resources OR api/Resources?query=mental
+        // GET: api/Resources
         [HttpGet]
         public async Task<ActionResult<ApiResponse<List<Resource>>>> GetResources([FromQuery] string? query)
         {
@@ -48,12 +51,31 @@ namespace HandbookApi.Controllers
 
         // POST: api/Resources
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<Resource>>> CreateResource([FromBody] Resource resource)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ApiResponse<Resource>>> CreateResource([FromForm] Resource resource, IFormFile? uploadFile)
         {
+            ModelState.Remove(nameof(Resource.Id));
+
+            if (uploadFile != null && uploadFile.Length > 0)
+            {
+                try
+                {
+                    string uploadedUrl = await _storageService.UploadFileAsync(uploadFile, "resources");
+                    resource.ResourceUrl = uploadedUrl;
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, new ApiResponse<Resource> { Success = false, Message = $"File Upload Failed: {ex.Message}" });
+                }
+            }
+
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ApiResponse<Resource> { Success = false, Message = "Invalid resource payload." });
+                var errors = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+                return BadRequest(new ApiResponse<Resource> { Success = false, Message = $"Validation Error: {errors}" });
             }
+
+            resource.Id = 0;
 
             _context.Resource.Add(resource);
             await _context.SaveChangesAsync();
@@ -63,7 +85,8 @@ namespace HandbookApi.Controllers
 
         // PUT: api/Resources/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResponse<Resource>>> UpdateResource(int id, [FromBody] Resource resource)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ApiResponse<Resource>>> UpdateResource(int id, [FromForm] Resource resource, IFormFile? uploadFile)
         {
             if (id != resource.Id)
             {
@@ -79,8 +102,22 @@ namespace HandbookApi.Controllers
             existingResource.Title = resource.Title;
             existingResource.Category = resource.Category;
             existingResource.Description = resource.Description;
-            existingResource.ResourceUrl = resource.ResourceUrl;
             existingResource.BreadcrumbPath = resource.BreadcrumbPath;
+
+            if (uploadFile != null && uploadFile.Length > 0)
+            {
+                if (!string.IsNullOrWhiteSpace(existingResource.ResourceUrl))
+                {
+                    await _storageService.DeleteFileAsync(existingResource.ResourceUrl);
+                }
+
+                string uploadedUrl = await _storageService.UploadFileAsync(uploadFile, "resources");
+                existingResource.ResourceUrl = uploadedUrl;
+            }
+            else if (!string.IsNullOrWhiteSpace(resource.ResourceUrl))
+            {
+                existingResource.ResourceUrl = resource.ResourceUrl;
+            }
 
             await _context.SaveChangesAsync();
 
@@ -95,6 +132,11 @@ namespace HandbookApi.Controllers
             if (resource == null)
             {
                 return NotFound(new ApiResponse<bool> { Success = false, Message = "Resource not found.", Data = false });
+            }
+
+            if (!string.IsNullOrWhiteSpace(resource.ResourceUrl))
+            {
+                await _storageService.DeleteFileAsync(resource.ResourceUrl);
             }
 
             _context.Resource.Remove(resource);

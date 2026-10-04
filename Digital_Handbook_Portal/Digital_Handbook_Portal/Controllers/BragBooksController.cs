@@ -24,8 +24,24 @@ namespace Digital_Handbook_Portal.Controllers
         // GET: BragBooks
         public async Task<IActionResult> Index()
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<BragBook>>>("api/BragBook");
-            return View(response?.Data ?? new List<BragBook>());
+            try
+            {
+                var httpResponse = await _httpClient.GetAsync("api/BragBook");
+
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    ViewBag.ErrorMessage = $"API Error: {httpResponse.StatusCode}";
+                    return View(new List<BragBook>());
+                }
+
+                var response = await httpResponse.Content.ReadFromJsonAsync<ApiResponse<List<BragBook>>>();
+                return View(response?.Data ?? new List<BragBook>());
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"Unable to connect to backend service: {ex.Message}";
+                return View(new List<BragBook>());
+            }
         }
 
         // GET: BragBooks/Details/5
@@ -66,7 +82,8 @@ namespace Digital_Handbook_Portal.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to create brag post via API.");
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            ModelState.AddModelError(string.Empty, $"Failed to create brag post via API ({response.StatusCode}): {errorDetails}");
             return View(bragBook);
         }
 
