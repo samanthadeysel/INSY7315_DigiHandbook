@@ -49,14 +49,14 @@
 
         <TextView
             android:id="@+id/txtEventDate"
-            android:layout_width="294dp"
-            android:layout_height="18dp"
+            android:layout_width="185dp"
+            android:layout_height="19dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/raleway"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.637"
+            app:layout_constraintHorizontal_bias="0.247"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtEventTitle"
             tools:text="Day, 00 Month" />
@@ -92,8 +92,8 @@
 
         <TextView
             android:id="@+id/txtEventLocationTitle"
-            android:layout_width="81dp"
-            android:layout_height="21dp"
+            android:layout_width="68dp"
+            android:layout_height="22dp"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/raleway"
             android:textColor="@color/white"
@@ -116,10 +116,10 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.728"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtEventDate"
-            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintVertical_bias="0.0"
             tools:text="Location Here" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

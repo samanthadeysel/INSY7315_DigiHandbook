@@ -8,10 +8,18 @@ namespace Digital_Handbook_Portal.Controllers
     public class PoliciesController : Controller
     {
         private readonly HttpClient _httpClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PoliciesController(IHttpClientFactory httpClientFactory)
+        public PoliciesController(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClientFactory.CreateClient("HandbookApi");
+            _httpContextAccessor = httpContextAccessor;
+
+            var token = _httpContextAccessor.HttpContext?.Session.GetString("AdminToken");
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
         }
 
         // READ ALL

@@ -135,5 +135,55 @@ namespace HandbookApi.Controllers
 
             return Ok(new ApiResponse<bool> { Success = true, Message = "Quiz deleted successfully.", Data = true });
         }
+
+        //quiz submission endpoint 'stuff'
+        public class QuizSubmissionRequest
+        {
+            public int QuizId { get; set; }
+            public string? ScoreFraction { get; set; }
+            public int Percentage { get; set; }
+            public bool Passed { get; set; }
+            public double CpdPointsEarned { get; set; }
+            public int? UserId { get; set; }
+        }
+
+        // POST: api/Quizzes/submit
+        [HttpPost("submit")]
+        public async Task<ActionResult<ApiResponse<object>>> SubmitQuizResult([FromBody] QuizSubmissionRequest submission)
+        {
+            if (submission == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Invalid submission payload."
+                });
+            }
+
+            var quiz = await _context.Quiz.FindAsync(submission.QuizId);
+            if (quiz == null)
+            {
+                return NotFound(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Quiz not found."
+                });
+            }
+
+            //returns the quiz result and earned CPD points
+            return Ok(new ApiResponse<object>
+            {
+                Success = true,
+                Message = $"Quiz result recorded. Earned {submission.CpdPointsEarned} CPD points.",
+                Data = new
+                {
+                    quizId = submission.QuizId,
+                    passed = submission.Passed,
+                    cpdPointsEarned = submission.CpdPointsEarned,
+                    userId = submission.UserId,
+                    submittedAt = DateTime.UtcNow
+                }
+            });
+        }
     }
 }

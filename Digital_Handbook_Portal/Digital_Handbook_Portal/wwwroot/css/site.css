@@ -362,3 +362,195 @@
     font-weight: 600;
     color: var(--text-muted);
 }
+
+/* ==========================================================================
+   PMB Eye Hospital - Top Banner & Header Navigation
+   ========================================================================== */
+body {
+    background-color: #81C241;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.top-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 36px;
+    background-color: #81C241;
+    color: #ffffff;
+}
+
+.hospital-identity {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+    .hospital-identity .hospital-logo {
+        height: 42px;
+        max-width: none;
+        width: auto;
+        margin-bottom: 0;
+        filter: none;
+    }
+
+.portal-tag-divider {
+    width: 2px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.portal-badge-text {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.admin-profile-badge {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+    .admin-profile-badge span {
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+.logout-link {
+    color: #ffffff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.9;
+}
+
+    .logout-link:hover {
+        opacity: 1;
+        text-decoration: underline;
+    }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 40px 20px;
+}
+
+/* ==========================================================================
+   PMB Eye Hospital - Desktop Portal Layout & Banner Styles
+   ========================================================================== */
+
+/* Overall page background is soft light-grey/white */
+body.portal-body {
+    background-color: #F8FAFC;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Green Header Bar: given sufficient height so the card overlaps cleanly */
+.top-banner {
+    background-color: #81C241;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px 48px 90px 48px; /* Extra bottom padding creates the green backdrop behind the card top */
+}
+
+.hospital-identity {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+    /* Specific size for header logo */
+    .hospital-identity .hospital-logo {
+        height: 38px;
+        width: auto;
+        object-fit: contain;
+    }
+
+.portal-tag-divider {
+    width: 1.5px;
+    height: 22px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.portal-badge-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+/* Right-side user controls */
+.admin-profile-badge {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.95rem;
+}
+
+    .admin-profile-badge .admin-pill {
+        background-color: rgba(255, 255, 255, 0.22);
+        padding: 6px 14px;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: #FFFFFF;
+    }
+
+.logout-link {
+    color: #FFFFFF;
+    font-size: 1.15rem;
+    opacity: 0.9;
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+    .logout-link:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+/* Portal Content Area: shifts up to overlap the green banner */
+.portal-content-wrapper {
+    flex: 1;
+    max-width: 1180px;
+    width: 92%;
+    margin: -60px auto 30px auto; /* Negative top margin pulls the card into the green header */
+    position: relative;
+    z-index: 2;
+}
+
+/* The floating white card wrapping @RenderBody() */
+.main-portal-card {
+    background-color: #FFFFFF;
+    border-radius: 24px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+    padding: 36px 44px;
+    min-height: 520px;
+}
+
+/* Footer styling */
+.portal-footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.85rem;
+    color: #94A3B8;
+    background: transparent;
+}

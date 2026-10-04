@@ -76,11 +76,20 @@ class ResourcesFrontFragment : Fragment() {
     private fun fetchResources() {
         lifecycleScope.launch {
             try {
-                // Updated to use ApiClient.apiService
                 val response = ApiClient.apiService.getResources()
                 if (response.isSuccessful && response.body() != null) {
-                    originalList = response.body()!!
-                    resourceAdapter.updateData(originalList)
+                    val apiResponse = response.body()!!
+
+                    if (apiResponse.success && apiResponse.data != null) {
+                        originalList = apiResponse.data
+                        resourceAdapter.updateData(originalList)
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            apiResponse.message ?: "Failed to load resources",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 } else {
                     Toast.makeText(requireContext(), "Failed to load resources", Toast.LENGTH_SHORT).show()
                 }

@@ -8,10 +8,25 @@ namespace Digital_Handbook_Portal
 
             builder.Services.AddControllersWithViews();
 
+            //sessions
+            builder.Services.AddDistributedMemoryCache();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(2);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             builder.Services.AddHttpClient("HandbookApi", client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7123/");
+                //link to API
+                client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]
+        ?? "https://localhost:7000/");
             });
+
+            //allows us to add session token to outbound requests to the API
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
@@ -24,12 +39,15 @@ namespace Digital_Handbook_Portal
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            //sessions
+            app.UseSession();
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=Account}/{action=Login}/{id?}")
                 .WithStaticAssets();
 
             app.Run();

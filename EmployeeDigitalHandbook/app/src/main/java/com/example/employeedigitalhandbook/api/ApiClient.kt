@@ -7,8 +7,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
     // 10.0.2.2 for emulator
-    private const val BASE_URL = "http://10.0.2.2:5000/"
+//    private const val BASE_URL = "http://10.0.2.2:5000/"
 
+    //connecting android app to API
+    private const val BASE_URL = "https://handbook-api-770247469632.europe-west3.run.app/"
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }

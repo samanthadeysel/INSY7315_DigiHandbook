@@ -1,15 +1,24 @@
 using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
 
 namespace Digital_Handbook_Portal.Controllers
 {
     public class UsersController : Controller
     {
         private readonly HttpClient _httpClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UsersController(IHttpClientFactory httpClientFactory)
+        public UsersController(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClientFactory.CreateClient("HandbookApi");
+            _httpContextAccessor = httpContextAccessor;
+
+            var token = _httpContextAccessor.HttpContext?.Session.GetString("AdminToken");
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
         }
 
         // GET: Users

@@ -5,7 +5,7 @@ plugins {
 android {
     namespace = "com.example.employeedigitalhandbook"
     compileSdk {
-        version = release(36) {
+        version = release(37) {
             minorApiLevel = 1
         }
     }
@@ -15,12 +15,13 @@ android {
         minSdk = 24
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "v1.0.0-beta.1" //app version - to be changed on each new APK iteration
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
+        buildConfig = true //makes sure that the build config class is auto generated
         viewBinding = true
     }
 

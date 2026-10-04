@@ -7,6 +7,7 @@ import com.example.employeedigitalhandbook.data.Policy
 import com.example.employeedigitalhandbook.data.Quiz
 import com.example.employeedigitalhandbook.data.QuizSubmission
 import com.example.employeedigitalhandbook.data.Resource
+import com.example.employeedigitalhandbook.api.ApiResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -14,12 +15,21 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ApiService {
-    @POST("api/authapi/login")
+
+    //corrected routes for login, community and quizzes
+
+//    @POST("api/authapi/login")
+//    suspend fun login(@Body request: ApiLoginRequest): Response<ApiLoginResponse>
+
+
+    @POST("api/Auth/login")
     suspend fun login(@Body request: ApiLoginRequest): Response<ApiLoginResponse>
 
     // --- COMMUNITY EVENTS ---
-    @GET("api/CommunityEvents")
-    suspend fun getCommunityEvents(): Response<List<CommunityEvent>>
+//    @GET("api/CommunityEvents")
+//    suspend fun getCommunityEvents(): Response<List<CommunityEvent>>
+    @GET("api/Community")
+    suspend fun getCommunityEvents(): Response<ApiResponse<List<CommunityEvent>>>
 
     // --- DOCTORS ---
     @GET("api/Doctors")
@@ -36,7 +46,10 @@ interface ApiService {
     suspend fun createBragPost(@Body post: BragBook): Response<BragBook>
 
     // --- QUIZZES ---
-    @GET("api/Quizs")
+//    @GET("api/Quizs")
+//    suspend fun getQuizzes(): Response<List<Quiz>>
+
+    @GET("api/Quizzes")
     suspend fun getQuizzes(): Response<List<Quiz>>
 
     @GET("api/Quizs/{id}")
@@ -47,10 +60,10 @@ interface ApiService {
 
     // --- RESOURCE ---
     @GET("api/resources")
-    suspend fun getResources(): Response<List<Resource>>
+    suspend fun getResources(): Response<ApiResponse<List<Resource>>>
 
     @GET("api/resources/{id}")
-    suspend fun getResourceById(@Path("id") id: Int): Response<Resource>
+    suspend fun getResourceById(@Path("id") id: Int): Response<ApiResponse<Resource>>
 
     // --- POLICY ---
     @GET("api/policies")

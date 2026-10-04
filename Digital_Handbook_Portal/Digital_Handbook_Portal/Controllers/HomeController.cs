@@ -15,8 +15,8 @@ namespace Digital_Handbook_Portal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var policiesTask = GetEntityCountAsync<Policy>("api/Policy");
-            var quizzesTask = GetEntityCountAsync<Quiz>("api/Quiz");
+            var policiesTask = GetEntityCountAsync<Policy>("api/Policies"); //plural because end points are plural
+            var quizzesTask = GetEntityCountAsync<Quiz>("api/Quizzes");
             var doctorsTask = GetEntityCountAsync<Doctor>("api/Doctors");
             var eventsTask = GetEntityCountAsync<Community>("api/Community");
 

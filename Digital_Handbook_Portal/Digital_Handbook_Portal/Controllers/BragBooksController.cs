@@ -8,10 +8,17 @@ namespace Digital_Handbook_Portal.Controllers
     public class BragBooksController : Controller
     {
         private readonly HttpClient _httpClient;
-
-        public BragBooksController(IHttpClientFactory httpClientFactory)
+         private readonly IHttpContextAccessor _httpContextAccessor;
+        public BragBooksController(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClientFactory.CreateClient("HandbookApi");
+            _httpContextAccessor = httpContextAccessor;
+
+            var token = _httpContextAccessor.HttpContext?.Session.GetString("AdminToken");
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
         }
 
         // GET: BragBooks
