@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.employeedigitalhandbook.api.ApiClient
 import com.example.employeedigitalhandbook.api.ApiClient.apiService
 import com.example.employeedigitalhandbook.data.CommunityEvent
 import com.example.employeedigitalhandbook.repositories.EventResult
@@ -25,7 +24,8 @@ class CommunityViewModel : ViewModel() {
                     val apiResponse = response.body()!!
 
                     if (apiResponse.success && apiResponse.data != null) {
-                        _eventsState.value = EventResult.Success(apiResponse.data)
+                        originalEventList = apiResponse.data
+                        _eventsState.value = EventResult.Success(originalEventList)
                     } else {
                         _eventsState.value = EventResult.Error(apiResponse.message ?: "Failed to load events")
                     }

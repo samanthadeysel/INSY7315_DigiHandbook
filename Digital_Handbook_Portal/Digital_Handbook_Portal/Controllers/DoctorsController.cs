@@ -63,7 +63,6 @@ namespace Digital_Handbook_Portal.Controllers
         {
             using var content = new MultipartFormDataContent();
 
-            // Match model properties
             content.Add(new StringContent(doctor.fName ?? string.Empty), nameof(doctor.fName));
             content.Add(new StringContent(doctor.lName ?? string.Empty), nameof(doctor.lName));
             content.Add(new StringContent(doctor.email ?? string.Empty), nameof(doctor.email));
@@ -77,19 +76,31 @@ namespace Digital_Handbook_Portal.Controllers
 
             if (imageFile != null && imageFile.Length > 0)
             {
-                var fileContent = new StreamContent(imageFile.OpenReadStream());
+                using var stream = imageFile.OpenReadStream();
+                var fileContent = new StreamContent(stream);
                 fileContent.Headers.ContentType = new MediaTypeHeaderValue(imageFile.ContentType);
                 content.Add(fileContent, "imageFile", imageFile.FileName);
-            }
 
-            var response = await _httpClient.PostAsync("api/Doctors", content);
-            if (response.IsSuccessStatusCode)
+                var response = await _httpClient.PostAsync("api/Doctors", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var errorDetails = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError(string.Empty, $"Failed to create doctor record via API: {errorDetails}");
+            }
+            else
             {
-                return RedirectToAction(nameof(Index));
-            }
+                var response = await _httpClient.PostAsync("api/Doctors", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
 
-            var errorDetails = await response.Content.ReadAsStringAsync();
-            ModelState.AddModelError(string.Empty, $"Failed to create doctor record via API: {errorDetails}");
+                var errorDetails = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError(string.Empty, $"Failed to create doctor record via API: {errorDetails}");
+            }
 
             return View(doctor);
         }
@@ -106,9 +117,11 @@ namespace Digital_Handbook_Portal.Controllers
         // POST: Doctors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Doctor doctor, IFormFile? uploadFile)
+        public async Task<IActionResult> Edit(int id, Doctor doctor, IFormFile? imageFile)
         {
             using var content = new MultipartFormDataContent();
+
+            content.Add(new StringContent(doctor.doctorId.ToString()), nameof(doctor.doctorId));
             content.Add(new StringContent(doctor.fName ?? string.Empty), nameof(doctor.fName));
             content.Add(new StringContent(doctor.lName ?? string.Empty), nameof(doctor.lName));
             content.Add(new StringContent(doctor.email ?? string.Empty), nameof(doctor.email));
@@ -120,21 +133,34 @@ namespace Digital_Handbook_Portal.Controllers
                 content.Add(new StringContent(doctor.doctorImg), nameof(doctor.doctorImg));
             }
 
-            if (uploadFile != null && uploadFile.Length > 0)
+            if (imageFile != null && imageFile.Length > 0)
             {
-                var fileContent = new StreamContent(uploadFile.OpenReadStream());
-                fileContent.Headers.ContentType = new MediaTypeHeaderValue(uploadFile.ContentType);
-                content.Add(fileContent, "imageFile", uploadFile.FileName);
+                using var stream = imageFile.OpenReadStream();
+                var fileContent = new StreamContent(stream);
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(imageFile.ContentType);
+                content.Add(fileContent, "imageFile", imageFile.FileName);
+
+                var response = await _httpClient.PutAsync($"api/Doctors/{id}", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var errorDetails = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError(string.Empty, $"Failed to update doctor entry via API: {errorDetails}");
+            }
+            else
+            {
+                var response = await _httpClient.PutAsync($"api/Doctors/{id}", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var errorDetails = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError(string.Empty, $"Failed to update doctor entry via API: {errorDetails}");
             }
 
-            var response = await _httpClient.PutAsync($"api/Doctors/{id}", content);
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
-            var errorDetails = await response.Content.ReadAsStringAsync();
-            ModelState.AddModelError(string.Empty, $"Failed to update doctor entry via API: {errorDetails}");
             return View(doctor);
         }
 

@@ -20,8 +20,9 @@ class DoctorViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = ApiClient.apiService.getDoctorById(doctorId)
-                if (response.isSuccessful && response.body() != null) {
-                    _doctorDetailsState.value = DoctorResult.Success(response.body()!!)
+                val body = response.body()
+                if (response.isSuccessful && body != null && body.data != null) {
+                    _doctorDetailsState.value = DoctorResult.Success(body.data)
                 } else {
                     _doctorDetailsState.value = DoctorResult.Error("Failed to fetch doctor details: ${response.code()}")
                 }
@@ -35,8 +36,9 @@ class DoctorViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = ApiClient.apiService.getDoctors()
-                if (response.isSuccessful && response.body() != null) {
-                    _doctorsListState.value = DoctorResult.ListSuccess(response.body()!!)
+                val body = response.body()
+                if (response.isSuccessful && body != null && body.data != null) {
+                    _doctorsListState.value = DoctorResult.ListSuccess(body.data)
                 } else {
                     _doctorsListState.value = DoctorResult.Error("Failed to fetch doctors: ${response.code()}")
                 }

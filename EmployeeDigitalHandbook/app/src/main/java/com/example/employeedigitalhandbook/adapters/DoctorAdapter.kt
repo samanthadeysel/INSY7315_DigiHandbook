@@ -6,17 +6,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.employeedigitalhandbook.R
 import com.example.employeedigitalhandbook.data.Doctor
 
 class DoctorAdapter(
-    private var doctors: List<Doctor>,
-    private val onItemClick: (Doctor) -> Unit
+    private val doctors: List<Doctor>,
+    private val onDoctorClick: (Doctor) -> Unit
 ) : RecyclerView.Adapter<DoctorAdapter.DoctorViewHolder>() {
 
     class DoctorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val doctorImageView: ImageView = itemView.findViewById(R.id.doctorImageView)
-        val doctorNameTextView: TextView = itemView.findViewById(R.id.doctorNameTextView)
+        val doctorImage: ImageView = itemView.findViewById(R.id.doctorImageView)
+        val doctorName: TextView = itemView.findViewById(R.id.doctorNameTextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoctorViewHolder {
@@ -28,17 +29,18 @@ class DoctorAdapter(
     override fun onBindViewHolder(holder: DoctorViewHolder, position: Int) {
         val doctor = doctors[position]
 
-        holder.doctorNameTextView.text = doctor.fullNameWithTitle
+        holder.doctorName.text = doctor.fullNameWithTitle
 
-        holder.itemView.setOnClickListener {
-            onItemClick(doctor)
+        if (!doctor.doctorImg.isNullOrBlank()) {
+            Glide.with(holder.itemView.context)
+                .load(doctor.doctorImg)
+                .into(holder.doctorImage)
+        } else {
+            holder.doctorImage.setImageResource(R.drawable.placeholder_doctor)
         }
+
+        holder.itemView.setOnClickListener { onDoctorClick(doctor) }
     }
 
     override fun getItemCount(): Int = doctors.size
-
-    fun updateData(newDoctors: List<Doctor>) {
-        doctors = newDoctors
-        notifyDataSetChanged()
-    }
 }

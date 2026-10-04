@@ -18,8 +18,10 @@ class BragBookViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = ApiClient.apiService.getBragPosts()
-                if (response.isSuccessful && response.body() != null) {
-                    _bragBookState.value = BragBookResult.Success(response.body()!!)
+                val body = response.body()
+
+                if (response.isSuccessful && body != null && body.data != null) {
+                    _bragBookState.value = BragBookResult.Success(body.data)
                 } else {
                     _bragBookState.value = BragBookResult.Error("Failed to retrieve notes: ${response.code()}")
                 }

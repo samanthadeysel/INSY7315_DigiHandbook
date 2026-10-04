@@ -17,8 +17,9 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = ApiClient.apiService.getDoctors()
-                if (response.isSuccessful && response.body() != null) {
-                    _doctorsState.value = DoctorResult.ListSuccess(response.body()!!)
+                val body = response.body()
+                if (response.isSuccessful && body != null && body.data != null) {
+                    _doctorsState.value = DoctorResult.ListSuccess(body.data)
                 } else {
                     _doctorsState.value = DoctorResult.Error("Failed to fetch doctors: ${response.code()}")
                 }
