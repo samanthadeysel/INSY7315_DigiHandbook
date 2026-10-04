@@ -48,8 +48,14 @@
                                 <span asp-validation-for="suiteNumber" class="text-danger small"></span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="doctorImg" class="form-label fw-semibold"></label>
-                                <input asp-for="doctorImg" class="form-control" placeholder="https://... or /images/dr_photo.jpg" />
+                                <label class="form-label fw-semibold">Doctor Image</label>
+
+                                <!-- OPTION 1: Local File Selector (Uploads to Cloud Storage via API) -->
+                                <input type="file" name="uploadFile" class="form-control mb-2" accept="image/*" />
+
+                                <!-- OPTION 2: Manual URL Entry (Direct Link or Web Address) -->
+                                <input asp-for="doctorImg" class="form-control" placeholder="Or enter URL: https://... or /images/dr_photo.jpg" />
+
                                 <span asp-validation-for="doctorImg" class="text-danger small"></span>
                             </div>
                         </div>

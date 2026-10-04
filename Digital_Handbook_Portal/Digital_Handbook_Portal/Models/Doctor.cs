@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Digital_Handbook_Portal.Models
 {
@@ -34,6 +35,8 @@ namespace Digital_Handbook_Portal.Models
         [Range(1, 9999, ErrorMessage = "Suite number must be a positive integer")]
         [Display(Name = "Suite Number")]
         public int suiteNumber { get; set; }
+
+        [NotMapped]
 
         [Display(Name = "Doctor Name")]
         public string FullName => $"Dr. {fName} {lName}";

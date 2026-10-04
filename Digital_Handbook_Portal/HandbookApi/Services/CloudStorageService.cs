@@ -13,20 +13,32 @@ namespace HandbookApi.Services
             _bucketName = configuration["GoogleCloudStorage:BucketName"]
                 ?? throw new InvalidOperationException("Bucket name not configured.");
 
-            var relativePath = configuration["GoogleCloudStorage:CredentialFilePath"]
-                ?? "Credentials/digitalhandbook-37a30108df42.json";
+            // Check if the credential JSON content is passed via Environment Variable / App Settings
+            var jsonCredentials = configuration["digitalhandbook-37a30108df42"];
 
-            var credentialPath = Path.Combine(environment.ContentRootPath, relativePath);
-
-            // checks for json file locally - if not found, uses Cloud Runs credentials
-            if (File.Exists(credentialPath))
+            if (!string.IsNullOrWhiteSpace(jsonCredentials))
             {
-                var credential = GoogleCredential.FromFile(credentialPath);
+                var credential = GoogleCredential.FromJson(jsonCredentials);
                 _storageClient = StorageClient.Create(credential);
             }
             else
             {
-                _storageClient = StorageClient.Create();
+                // Local fallback using local file path
+                var relativePath = configuration["GoogleCloudStorage:CredentialFilePath"]
+                    ?? "Credentials/digitalhandbook-37a30108df42.json";
+
+                var credentialPath = Path.Combine(environment.ContentRootPath, relativePath);
+
+                if (File.Exists(credentialPath))
+                {
+                    var credential = GoogleCredential.FromFile(credentialPath);
+                    _storageClient = StorageClient.Create(credential);
+                }
+                else
+                {
+                    // Fallback to default application credentials
+                    _storageClient = StorageClient.Create();
+                }
             }
         }
 

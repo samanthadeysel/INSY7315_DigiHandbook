@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace Digital_Handbook_Portal.Models
 {
@@ -23,6 +24,7 @@ namespace Digital_Handbook_Portal.Models
         [Display(Name = "Image URL")]
         public string? imageUrl { get; set; }
 
+        [ValidateNever]
         [Display(Name = "Date Posted")]
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy, HH:mm}", ApplyFormatInEditMode = false)]
         public DateTime datePosted { get; set; } = DateTime.UtcNow;
