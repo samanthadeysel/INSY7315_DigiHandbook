@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Text.Json;
 using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,15 +11,9 @@ namespace Digital_Handbook_Portal.Controllers
         private readonly HttpClient _httpClient;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        // Hardcoded Policy Categories mapped to IDs
-        private static readonly List<SelectListItem> HardcodedCategories = new()
+        private static readonly JsonSerializerOptions JsonOptions = new()
         {
-            new SelectListItem { Value = "1", Text = "General & Administrative" },
-            new SelectListItem { Value = "2", Text = "Clinical & Patient Care" },
-            new SelectListItem { Value = "3", Text = "Human Resources" },
-            new SelectListItem { Value = "4", Text = "Health & Safety" },
-            new SelectListItem { Value = "5", Text = "IT & Data Security" },
-            new SelectListItem { Value = "6", Text = "Compliance & Ethics" }
+            PropertyNameCaseInsensitive = true
         };
 
         public PoliciesController(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
@@ -41,27 +36,42 @@ namespace Digital_Handbook_Portal.Controllers
             if (!httpResponse.IsSuccessStatusCode)
             {
                 var errorContent = await httpResponse.Content.ReadAsStringAsync();
-                ViewBag.ErrorMessage = $"API Request Failed: {errorContent}";
+                ViewBag.ErrorMessage = $"API Request Failed ({(int)httpResponse.StatusCode}): {errorContent}";
                 return View(new List<Policy>());
             }
 
-            var response = await httpResponse.Content.ReadFromJsonAsync<ApiResponse<List<Policy>>>();
-            return View(response?.Data ?? new List<Policy>());
+            var content = await httpResponse.Content.ReadAsStringAsync();
+
+            try
+            {
+                var response = JsonSerializer.Deserialize<ApiResponse<List<Policy>>>(content, JsonOptions);
+                return View(response?.Data ?? new List<Policy>());
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"Parsing Error: {ex.Message}";
+                return View(new List<Policy>());
+            }
         }
 
         // READ DETAILS
         public async Task<IActionResult> Details(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Policy>>($"api/Policies/{id}");
-            if (response == null || !response.Success) return NotFound();
+            var httpResponse = await _httpClient.GetAsync($"api/Policies/{id}");
+            if (!httpResponse.IsSuccessStatusCode) return NotFound();
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonSerializer.Deserialize<ApiResponse<Policy>>(content, JsonOptions);
+
+            if (response == null || !response.Success || response.Data == null) return NotFound();
 
             return View(response.Data);
         }
 
         // GET: Policies/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = HardcodedCategories;
+            await PopulateCategoryDropdownAsync();
             return View();
         }
 
@@ -74,9 +84,7 @@ namespace Digital_Handbook_Portal.Controllers
             content.Add(new StringContent(policy.Title ?? string.Empty), nameof(policy.Title));
             content.Add(new StringContent(policy.contentSummary ?? string.Empty), nameof(policy.contentSummary));
             content.Add(new StringContent(policy.specificCategory ?? string.Empty), nameof(policy.specificCategory));
-
-            int selectedCategoryId = policy.categoryId > 0 ? policy.categoryId : 1;
-            content.Add(new StringContent(selectedCategoryId.ToString()), nameof(policy.categoryId));
+            content.Add(new StringContent(policy.categoryId.ToString()), nameof(policy.categoryId));
 
             if (!string.IsNullOrWhiteSpace(policy.fileUrl))
             {
@@ -103,10 +111,7 @@ namespace Digital_Handbook_Portal.Controllers
             {
                 try
                 {
-                    var errorObj = System.Text.Json.JsonSerializer.Deserialize<ApiResponse<Policy>>(
-                        errorDetails,
-                        new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
+                    var errorObj = JsonSerializer.Deserialize<ApiResponse<Policy>>(errorDetails, JsonOptions);
                     if (!string.IsNullOrWhiteSpace(errorObj?.Message))
                     {
                         errorMessage = errorObj.Message;
@@ -114,32 +119,38 @@ namespace Digital_Handbook_Portal.Controllers
                 }
                 catch
                 {
-
+                    // Fallback to raw string error
                 }
             }
 
             ModelState.AddModelError(string.Empty, $"Failed to create policy: {errorMessage}");
 
-            ViewBag.Categories = HardcodedCategories;
+            await PopulateCategoryDropdownAsync(policy.categoryId);
             return View(policy);
         }
 
         // UPDATE (GET)
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Policy>>($"api/Policies/{id}");
-            if (response == null || !response.Success) return NotFound();
+            var httpResponse = await _httpClient.GetAsync($"api/Policies/{id}");
+            if (!httpResponse.IsSuccessStatusCode) return NotFound();
 
-            await PopulateCategoryDropdownAsync(response.Data?.categoryId);
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonSerializer.Deserialize<ApiResponse<Policy>>(content, JsonOptions);
+
+            if (response == null || !response.Success || response.Data == null) return NotFound();
+
+            await PopulateCategoryDropdownAsync(response.Data.categoryId);
             return View(response.Data);
         }
 
-        // UPDATE (POST)
+        // POST: Policies/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Policy policy, IFormFile? uploadFile)
         {
             using var content = new MultipartFormDataContent();
+            content.Add(new StringContent(policy.policyId.ToString()), nameof(policy.policyId));
             content.Add(new StringContent(policy.Title ?? string.Empty), nameof(policy.Title));
             content.Add(new StringContent(policy.contentSummary ?? string.Empty), nameof(policy.contentSummary));
             content.Add(new StringContent(policy.specificCategory ?? string.Empty), nameof(policy.specificCategory));
@@ -154,7 +165,7 @@ namespace Digital_Handbook_Portal.Controllers
             {
                 var fileContent = new StreamContent(uploadFile.OpenReadStream());
                 fileContent.Headers.ContentType = new MediaTypeHeaderValue(uploadFile.ContentType);
-                content.Add(fileContent, "uploadFile", uploadFile.FileName);
+                content.Add(fileContent, "pdfFile", uploadFile.FileName);
             }
 
             var response = await _httpClient.PutAsync($"api/Policies/{id}", content);
@@ -172,8 +183,13 @@ namespace Digital_Handbook_Portal.Controllers
         // DELETE (GET)
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Policy>>($"api/Policies/{id}");
-            if (response == null || !response.Success) return NotFound();
+            var httpResponse = await _httpClient.GetAsync($"api/Policies/{id}");
+            if (!httpResponse.IsSuccessStatusCode) return NotFound();
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonSerializer.Deserialize<ApiResponse<Policy>>(content, JsonOptions);
+
+            if (response == null || !response.Success || response.Data == null) return NotFound();
 
             return View(response.Data);
         }
@@ -189,9 +205,24 @@ namespace Digital_Handbook_Portal.Controllers
 
         private async Task PopulateCategoryDropdownAsync(int? selectedCategoryId = null)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<PolicyCategory>>>("api/PolicyCategories");
-            var categories = response?.Data ?? new List<PolicyCategory>();
-            ViewBag.Categories = new SelectList(categories, "categoryId", "categoryName", selectedCategoryId);
+            try
+            {
+                var httpResponse = await _httpClient.GetAsync("api/PolicyCategories");
+                if (httpResponse.IsSuccessStatusCode)
+                {
+                    var content = await httpResponse.Content.ReadAsStringAsync();
+                    var response = JsonSerializer.Deserialize<ApiResponse<List<PolicyCategory>>>(content, JsonOptions);
+                    var categories = response?.Data ?? new List<PolicyCategory>();
+                    ViewBag.Categories = new SelectList(categories, "categoryId", "categoryName", selectedCategoryId);
+                    return;
+                }
+            }
+            catch
+            {
+                // Fallback on error
+            }
+
+            ViewBag.Categories = new SelectList(Enumerable.Empty<PolicyCategory>(), "categoryId", "categoryName");
         }
     }
 }

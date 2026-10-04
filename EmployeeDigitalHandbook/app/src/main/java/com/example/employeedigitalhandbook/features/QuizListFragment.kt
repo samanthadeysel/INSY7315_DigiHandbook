@@ -80,10 +80,12 @@ class QuizListFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.getQuizzes()
-                if (response.isSuccessful && response.body() != null) {
-                    quizAdapter.updateQuizzes(response.body()!!)
+                val apiResponse = response.body()
+
+                if (response.isSuccessful && apiResponse != null && apiResponse.data != null) {
+                    quizAdapter.updateQuizzes(apiResponse.data)
                 } else {
-                    Toast.makeText(requireContext(), "Failed to load quizzes", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), apiResponse?.message ?: "Failed to load quizzes", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()

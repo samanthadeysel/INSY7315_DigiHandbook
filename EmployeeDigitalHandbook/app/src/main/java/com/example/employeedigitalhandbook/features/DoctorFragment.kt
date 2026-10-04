@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.employeedigitalhandbook.R
 import com.example.employeedigitalhandbook.adapters.PolicyAdapter
 import com.example.employeedigitalhandbook.data.Doctor
@@ -138,5 +139,12 @@ class DoctorFragment : Fragment() {
 
         currentPhone = doctor.phone
         currentEmail = doctor.email
+
+        // Load doctor image using Glide
+        Glide.with(this)
+            .load(doctor.doctorImg)
+            .placeholder(R.drawable.placeholder_doctor)
+            .error(R.drawable.placeholder_doctor)
+            .into(imgDoctorProfile)
     }
 }
