@@ -80,8 +80,10 @@ class BragBookFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.getBragPosts()
-                if (response.isSuccessful && response.body() != null) {
-                    bragAdapter.updateData(response.body()!!)
+                val body = response.body()
+
+                if (response.isSuccessful && body != null && body.data != null) {
+                    bragAdapter.updateData(body.data)
                 } else {
                     Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show()
                 }

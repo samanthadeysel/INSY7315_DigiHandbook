@@ -13,11 +13,11 @@ class EventAdapter(
     private val onItemClick: (CommunityEvent) -> Unit
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
-    class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val txtEventTitle: TextView = itemView.findViewById(R.id.txtEventTitle)
-        val txtEventDate: TextView = itemView.findViewById(R.id.txtEventDate)
-        val txtEventTime: TextView = itemView.findViewById(R.id.txtEventTime)
-        val txtEventLocation: TextView = itemView.findViewById(R.id.txtEventLocation)
+    inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val title: TextView = itemView.findViewById(R.id.txtEventTitle)
+        val date: TextView = itemView.findViewById(R.id.txtEventDate)
+        val time: TextView = itemView.findViewById(R.id.txtEventTime)
+        val location: TextView = itemView.findViewById(R.id.txtEventLocation)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -28,15 +28,12 @@ class EventAdapter(
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
+        holder.title.text = event.title
+        holder.date.text = event.date
+        holder.time.text = event.time
+        holder.location.text = event.location
 
-        holder.txtEventTitle.text = event.title
-        holder.txtEventDate.text = event.date
-        holder.txtEventTime.text = event.time
-        holder.txtEventLocation.text = event.location
-
-        holder.itemView.setOnClickListener {
-            onItemClick(event)
-        }
+        holder.itemView.setOnClickListener { onItemClick(event) }
     }
 
     override fun getItemCount(): Int = events.size

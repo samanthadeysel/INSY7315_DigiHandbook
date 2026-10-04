@@ -77,8 +77,10 @@ class PoliciesFrontFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.getPolicies()
-                if (response.isSuccessful && response.body() != null) {
-                    originalPoliciesList = response.body()!!
+                val body = response.body()
+
+                if (response.isSuccessful && body != null && body.data != null) {
+                    originalPoliciesList = body.data
                     policyAdapter.updateData(originalPoliciesList)
                 } else {
                     Toast.makeText(requireContext(), "Failed to load policies", Toast.LENGTH_SHORT).show()

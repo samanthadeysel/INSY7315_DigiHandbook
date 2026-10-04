@@ -104,16 +104,16 @@ class PoliciesBackFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.getPolicyById(id)
-                if (response.isSuccessful && response.body() != null) {
-                    val policy = response.body()!!
+                val body = response.body()
+
+                if (response.isSuccessful && body != null && body.data != null) {
+                    val policy = body.data
 
                     binding.pageTitleTextView.text = policy.category
                     binding.breadcrumbTextView.text = policy.breadcrumbPath
-                        ?: "../${policy.category}/${policy.title}"
 
                     val rawPdfUrl = policy.pdfUrl
                     if (!rawPdfUrl.isNullOrEmpty()) {
-                        // Render PDF via Google Drive/Docs viewer inside WebView
                         val encodedUrl = URLEncoder.encode(rawPdfUrl, "UTF-8")
                         val webViewUrl = "https://docs.google.com/gview?embedded=true&url=$encodedUrl"
                         binding.pdfWebView.loadUrl(webViewUrl)

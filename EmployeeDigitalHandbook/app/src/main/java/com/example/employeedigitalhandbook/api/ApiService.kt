@@ -32,18 +32,19 @@ interface ApiService {
     suspend fun getCommunityEvents(): Response<ApiResponse<List<CommunityEvent>>>
 
     // --- DOCTORS ---
+    // Corrected in ApiService.kt
     @GET("api/Doctors")
-    suspend fun getDoctors(): Response<List<Doctor>>
+    suspend fun getDoctors(): Response<ApiResponse<List<Doctor>>>
 
     @GET("api/Doctors/{id}")
-    suspend fun getDoctorById(@Path("id") id: Int): Response<Doctor>
+    suspend fun getDoctorById(@Path("id") id: Int): Response<ApiResponse<Doctor>>
 
     // --- BRAG BOOK ---
     @GET("api/bragbook")
-    suspend fun getBragPosts(): Response<List<BragBook>>
+    suspend fun getBragPosts(): Response<ApiResponse<List<BragBook>>>
 
     @POST("api/bragbook")
-    suspend fun createBragPost(@Body post: BragBook): Response<BragBook>
+    suspend fun createBragPost(@Body post: BragBook): Response<ApiResponse<BragBook>>
 
     // --- QUIZZES ---
 //    @GET("api/Quizs")
@@ -67,8 +68,8 @@ interface ApiService {
 
     // --- POLICY ---
     @GET("api/policies")
-    suspend fun getPolicies(): Response<List<Policy>>
+    suspend fun getPolicies(): Response<ApiResponse<List<Policy>>>
 
     @GET("api/policies/{id}")
-    suspend fun getPolicyById(@Path("id") id: Int): Response<Policy>
+    suspend fun getPolicyById(@Path("id") id: Int): Response<ApiResponse<Policy>>
 }
