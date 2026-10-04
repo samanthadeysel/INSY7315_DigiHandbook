@@ -8,18 +8,22 @@
     <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
         <div>
             <h2 class="fw-bold text-dark mb-1">Create New CPD Quiz</h2>
-            <p class="text-muted small mb-0">Set up the assessment details and scoring thresholds for mobile app users.</p>
+            <p class="text-muted small mb-0">Set up quiz details, questions, and multiple choice options for staff.</p>
         </div>
         <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
             <i class="fa-solid fa-arrow-left me-1"></i> Back to Quizzes
         </a>
     </div>
 
-    <div class="card shadow-sm border-0 col-lg-8">
-        <div class="card-body p-4">
-            <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <form asp-action="Create" method="post" id="quizForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
+        <!-- 1. Quiz Metadata Card -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-circle-info text-primary me-2"></i>General Quiz Information</h5>
+            </div>
+            <div class="card-body p-4">
                 <div class="form-group mb-3">
                     <label asp-for="title" class="control-label fw-semibold">Quiz Title</label>
                     <input asp-for="title" class="form-control" placeholder="e.g., Aseptic Technique & Eye Drop Administration" />
@@ -27,46 +31,248 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6 form-group mb-3">
+                    <div class="col-md-4 form-group mb-3">
                         <label asp-for="passingScore" class="control-label fw-semibold">Passing Score (%)</label>
                         <input asp-for="passingScore" type="number" min="1" max="100" class="form-control" value="80" />
                         <span asp-validation-for="passingScore" class="text-danger small"></span>
                     </div>
 
-                    <div class="col-md-6 form-group mb-3">
+                    <div class="col-md-4 form-group mb-3">
                         <label asp-for="estimateTime" class="control-label fw-semibold">Estimated Duration</label>
                         <input asp-for="estimateTime" class="form-control" placeholder="e.g., 3 mins" value="3 mins" />
                         <span asp-validation-for="estimateTime" class="text-danger small"></span>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6 form-group mb-3">
-                        <label asp-for="totalQuestions" class="control-label fw-semibold">Target Total Questions</label>
-                        <input asp-for="totalQuestions" type="number" min="1" class="form-control" placeholder="e.g., 5" />
-                        <span asp-validation-for="totalQuestions" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-md-6 form-group mb-4">
+                    <div class="col-md-4 form-group mb-3">
                         <label asp-for="score" class="control-label fw-semibold">CPD Points Awarded</label>
                         <input asp-for="score" type="number" min="1" class="form-control" value="1" />
                         <span asp-validation-for="score" class="text-danger small"></span>
                     </div>
                 </div>
-
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary" style="background-color: #2690CF; border-color: #2690CF;">
-                        <i class="fa-solid fa-check me-1"></i> Save and Add Questions
-                    </button>
-                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
+
+        <!-- 2. Questions & Options Container -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold text-dark mb-0"><i class="fa-solid fa-list-ol text-success me-2"></i>Quiz Questions</h4>
+            <button type="button" class="btn btn-outline-primary btn-sm shadow-sm" id="btnAddQuestion">
+                <i class="fa-solid fa-plus me-1"></i> Add Question
+            </button>
+        </div>
+
+        <div id="questionsContainer">
+            <!-- Initial Question Card (Index 0) -->
+            <div class="card shadow-sm border-0 mb-4 question-card" data-question-index="0">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center py-2">
+                    <span class="fw-bold text-secondary question-number-label">Question 1</span>
+                    <button type="button" class="btn btn-outline-danger btn-sm border-0 btn-remove-question" title="Delete Question">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+                <div class="card-body p-4">
+                    <div class="form-group mb-3">
+                        <label class="control-label fw-semibold small text-muted text-uppercase">Question Prompt</label>
+                        <input type="text" name="questions[0].questionText" class="form-control" placeholder="Enter the question text..." required />
+                    </div>
+
+                    <div class="mb-2 d-flex justify-content-between align-items-center">
+                        <label class="control-label fw-semibold small text-muted text-uppercase mb-0">Answers / Options (Mark the correct answer)</label>
+                        <button type="button" class="btn btn-outline-secondary btn-sm py-0 px-2 btn-add-option">
+                            <i class="fa-solid fa-plus small"></i> Add Option
+                        </button>
+                    </div>
+
+                    <div class="options-container ps-2 border-start border-3 border-primary">
+                        <!-- Option 0 -->
+                        <div class="input-group mb-2 option-row" data-option-index="0">
+                            <div class="input-group-text bg-white">
+                                <input class="form-check-input mt-0 is-correct-radio" type="radio" name="questions[0].correctOptionRadio" value="0" checked title="Mark as correct answer" />
+                                <input type="hidden" name="questions[0].options[0].isCorrect" value="true" class="is-correct-hidden" />
+                            </div>
+                            <input type="text" name="questions[0].options[0].optionText" class="form-control" placeholder="Option text..." required />
+                            <button type="button" class="btn btn-outline-danger btn-remove-option"><i class="fa-solid fa-times"></i></button>
+                        </div>
+
+                        <!-- Option 1 -->
+                        <div class="input-group mb-2 option-row" data-option-index="1">
+                            <div class="input-group-text bg-white">
+                                <input class="form-check-input mt-0 is-correct-radio" type="radio" name="questions[0].correctOptionRadio" value="1" title="Mark as correct answer" />
+                                <input type="hidden" name="questions[0].options[1].isCorrect" value="false" class="is-correct-hidden" />
+                            </div>
+                            <input type="text" name="questions[0].options[1].optionText" class="form-control" placeholder="Option text..." required />
+                            <button type="button" class="btn btn-outline-danger btn-remove-option"><i class="fa-solid fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4 mb-5">
+            <button type="submit" class="btn btn-primary px-4" style="background-color: #2690CF; border-color: #2690CF;">
+                <i class="fa-solid fa-check me-1"></i> Save Complete Quiz
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const container = document.getElementById("questionsContainer");
+            const btnAddQuestion = document.getElementById("btnAddQuestion");
+
+            function reindexAll() {
+                const questionCards = container.querySelectorAll(".question-card");
+                questionCards.forEach((qCard, qIdx) => {
+                    qCard.setAttribute("data-question-index", qIdx);
+                    qCard.querySelector(".question-number-label").innerText = `Question ${qIdx + 1}`;
+
+                    const qInput = qCard.querySelector("input[name*='.questionText']");
+                    if (qInput) qInput.name = `questions[${qIdx}].questionText`;
+
+                    const optionRows = qCard.querySelectorAll(".option-row");
+                    optionRows.forEach((optRow, optIdx) => {
+                        optRow.setAttribute("data-option-index", optIdx);
+
+                        const radio = optRow.querySelector(".is-correct-radio");
+                        radio.name = `questions[${qIdx}].correctOptionRadio`;
+                        radio.value = optIdx;
+
+                        const hiddenCorrect = optRow.querySelector(".is-correct-hidden");
+                        hiddenCorrect.name = `questions[${qIdx}].options[${optIdx}].isCorrect`;
+
+                        const textInput = optRow.querySelector("input[type='text']");
+                        textInput.name = `questions[${qIdx}].options[${optIdx}].optionText`;
+                    });
+                });
+            }
+
+            container.addEventListener("change", function (e) {
+                if (e.target && e.target.classList.contains("is-correct-radio")) {
+                    const qCard = e.target.closest(".question-card");
+                    const selectedIdx = e.target.value;
+                    const optionRows = qCard.querySelectorAll(".option-row");
+
+                    optionRows.forEach((row, idx) => {
+                        const hidden = row.querySelector(".is-correct-hidden");
+                        hidden.value = (idx.toString() === selectedIdx) ? "true" : "false";
+                    });
+                }
+            });
+
+            //add new Question
+            btnAddQuestion.addEventListener("click", function () {
+                const qIdx = container.querySelectorAll(".question-card").length;
+                const newCardHtml = `
+                    <div class="card shadow-sm border-0 mb-4 question-card" data-question-index="${qIdx}">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center py-2">
+                            <span class="fw-bold text-secondary question-number-label">Question ${qIdx + 1}</span>
+                            <button type="button" class="btn btn-outline-danger btn-sm border-0 btn-remove-question" title="Delete Question">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="form-group mb-3">
+                                <label class="control-label fw-semibold small text-muted text-uppercase">Question Prompt</label>
+                                <input type="text" name="questions[${qIdx}].questionText" class="form-control" placeholder="Enter the question text..." required />
+                            </div>
+
+                            <div class="mb-2 d-flex justify-content-between align-items-center">
+                                <label class="control-label fw-semibold small text-muted text-uppercase mb-0">Answers / Options (Mark the correct answer)</label>
+                                <button type="button" class="btn btn-outline-secondary btn-sm py-0 px-2 btn-add-option">
+                                    <i class="fa-solid fa-plus small"></i> Add Option
+                                </button>
+                            </div>
+
+                            <div class="options-container ps-2 border-start border-3 border-primary">
+                                <div class="input-group mb-2 option-row" data-option-index="0">
+                                    <div class="input-group-text bg-white">
+                                        <input class="form-check-input mt-0 is-correct-radio" type="radio" name="questions[${qIdx}].correctOptionRadio" value="0" checked />
+                                        <input type="hidden" name="questions[${qIdx}].options[0].isCorrect" value="true" class="is-correct-hidden" />
+                                    </div>
+                                    <input type="text" name="questions[${qIdx}].options[0].optionText" class="form-control" placeholder="Option text..." required />
+                                    <button type="button" class="btn btn-outline-danger btn-remove-option"><i class="fa-solid fa-times"></i></button>
+                                </div>
+                                <div class="input-group mb-2 option-row" data-option-index="1">
+                                    <div class="input-group-text bg-white">
+                                        <input class="form-check-input mt-0 is-correct-radio" type="radio" name="questions[${qIdx}].correctOptionRadio" value="1" />
+                                        <input type="hidden" name="questions[${qIdx}].options[1].isCorrect" value="false" class="is-correct-hidden" />
+                                    </div>
+                                    <input type="text" name="questions[${qIdx}].options[1].optionText" class="form-control" placeholder="Option text..." required />
+                                    <button type="button" class="btn btn-outline-danger btn-remove-option"><i class="fa-solid fa-times"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+
+                container.insertAdjacentHTML("beforeend", newCardHtml);
+                reindexAll();
+            });
+
+            //buttons for remove question, add option, remove option
+            container.addEventListener("click", function (e) {
+                // Remove Question
+                const btnRemoveQ = e.target.closest(".btn-remove-question");
+                if (btnRemoveQ) {
+                    const cards = container.querySelectorAll(".question-card");
+                    if (cards.length > 1) {
+                        btnRemoveQ.closest(".question-card").remove();
+                        reindexAll();
+                    } else {
+                        alert("A quiz must have at least one question.");
+                    }
+                    return;
+                }
+
+                //add option
+                const btnAddOpt = e.target.closest(".btn-add-option");
+                if (btnAddOpt) {
+                    const qCard = btnAddOpt.closest(".question-card");
+                    const optContainer = qCard.querySelector(".options-container");
+                    const qIdx = qCard.getAttribute("data-question-index");
+                    const optIdx = optContainer.querySelectorAll(".option-row").length;
+
+                    const optionHtml = `
+                        <div class="input-group mb-2 option-row" data-option-index="${optIdx}">
+                            <div class="input-group-text bg-white">
+                                <input class="form-check-input mt-0 is-correct-radio" type="radio" name="questions[${qIdx}].correctOptionRadio" value="${optIdx}" />
+                                <input type="hidden" name="questions[${qIdx}].options[${optIdx}].isCorrect" value="false" class="is-correct-hidden" />
+                            </div>
+                            <input type="text" name="questions[${qIdx}].options[${optIdx}].optionText" class="form-control" placeholder="Option text..." required />
+                            <button type="button" class="btn btn-outline-danger btn-remove-option"><i class="fa-solid fa-times"></i></button>
+                        </div>`;
+
+                    optContainer.insertAdjacentHTML("beforeend", optionHtml);
+                    reindexAll();
+                    return;
+                }
+
+                //remove option
+                const btnRemoveOpt = e.target.closest(".btn-remove-option");
+                if (btnRemoveOpt) {
+                    const optContainer = btnRemoveOpt.closest(".options-container");
+                    const optRows = optContainer.querySelectorAll(".option-row");
+                    if (optRows.length > 2) {
+                        btnRemoveOpt.closest(".option-row").remove();
+                        //checks to see if any radio is checked, if not, check the first one
+                        const remainingRadios = optContainer.querySelectorAll(".is-correct-radio");
+                        const hasChecked = Array.from(remainingRadios).some(r => r.checked);
+                        if (!hasChecked && remainingRadios.length > 0) {
+                            remainingRadios[0].checked = true;
+                        }
+                        reindexAll();
+
+                        remainingRadios[0].dispatchEvent(new Event("change", { bubbles: true }));
+                    } else {
+                        alert("Each question must contain at least 2 options.");
+                    }
+                }
+            });
+        });
+    </script>
 }

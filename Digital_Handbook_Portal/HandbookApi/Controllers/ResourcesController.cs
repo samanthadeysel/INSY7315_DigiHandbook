@@ -10,12 +10,14 @@ namespace HandbookApi.Controllers
     public class ResourcesController : ControllerBase
     {
         private readonly Digital_Handbook_PortalContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICloudStorageService _storageService;
 
-        public ResourcesController(Digital_Handbook_PortalContext context, ICloudStorageService storageService)
+        public ResourcesController(Digital_Handbook_PortalContext context, ICloudStorageService storageService, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _storageService = storageService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: api/Resources
@@ -51,8 +53,8 @@ namespace HandbookApi.Controllers
 
         // POST: api/Resources
         [HttpPost]
-        [Consumes("multipart/form-data")]
-        public async Task<ActionResult<ApiResponse<Resource>>> CreateResource([FromForm] Resource resource, IFormFile? uploadFile)
+        //[Consumes("multipart/form-data")]
+        public async Task<IActionResult> CreateResource(Resource resource, IFormFile? uploadFile)
         {
             ModelState.Remove(nameof(Resource.Id));
 
