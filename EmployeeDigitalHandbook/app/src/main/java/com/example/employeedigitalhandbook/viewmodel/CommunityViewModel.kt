@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.employeedigitalhandbook.api.ApiClient
+import com.example.employeedigitalhandbook.api.ApiClient.apiService
 import com.example.employeedigitalhandbook.data.CommunityEvent
 import com.example.employeedigitalhandbook.repositories.EventResult
 import kotlinx.coroutines.launch
@@ -19,12 +20,17 @@ class CommunityViewModel : ViewModel() {
     fun loadEvents() {
         viewModelScope.launch {
             try {
-                val response = ApiClient.apiService.getCommunityEvents()
+                val response = apiService.getCommunityEvents()
                 if (response.isSuccessful && response.body() != null) {
-                    originalEventList = response.body()!!
-                    _eventsState.value = EventResult.Success(originalEventList)
+                    val apiResponse = response.body()!!
+
+                    if (apiResponse.success && apiResponse.data != null) {
+                        _eventsState.value = EventResult.Success(apiResponse.data)
+                    } else {
+                        _eventsState.value = EventResult.Error(apiResponse.message ?: "Failed to load events")
+                    }
                 } else {
-                    _eventsState.value = EventResult.Error("Failed to fetch events: ${response.code()}")
+                    _eventsState.value = EventResult.Error("Server error: ${response.code()}")
                 }
             } catch (e: Exception) {
                 _eventsState.value = EventResult.Error("Network error: ${e.localizedMessage}")

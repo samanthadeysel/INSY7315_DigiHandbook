@@ -42,7 +42,7 @@ class QuizTakeFragment : Fragment() {
 
         val quizId = arguments?.getInt("quizId") ?: 0
 
-        binding.backArrowImageView.setOnClickListener {
+        binding.btnCloseQuiz.setOnClickListener {
             findNavController().navigateUp()
         }
 
@@ -77,8 +77,9 @@ class QuizTakeFragment : Fragment() {
         selectedOption = null
         binding.btnNextQuestion.isEnabled = false
 
-        binding.pageTitleTextView.text = quiz.title
-        binding.txtQuestionProgress.text = "Question ${currentQuestionIndex + 1} of ${quiz.questions.size}"
+        binding.txtQuizHeaderTitle.text = quiz.title
+        binding.txtQuestionCounter.text = "Question ${currentQuestionIndex + 1} of ${quiz.questions.size}"
+
         binding.txtQuestionText.text = question.questionText
 
         val adapter = QuizOptionAdapter(question.options) { option ->

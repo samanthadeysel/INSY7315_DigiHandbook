@@ -38,7 +38,17 @@ class HomePageFragment : Fragment() {
 
         val tvGreetingPrefix = view.findViewById<TextView>(R.id.tvGreetingPrefix)
         val tvUserName = view.findViewById<TextView>(R.id.tvUserName)
+        val txtAppVersion = view.findViewById<TextView>(R.id.txtAppVersion)
 
+        //app version
+        val currentVersion = try {
+            val pInfo = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
+            pInfo.versionName ?: "v1.0.0-beta.1"
+        } catch (e: Exception) {
+            "v1.0.0-beta.1"
+        }
+
+        txtAppVersion.text = "Version $currentVersion"
         tvGreetingPrefix.text = getGreetingPrefix()
 
         val loggedInUser = arguments?.getString("USER_NAME")
@@ -59,7 +69,7 @@ class HomePageFragment : Fragment() {
             findNavController().navigate(R.id.action_homePageFragment_to_communityFragment)
         }
         view.findViewById<CardView>(R.id.cardCPD).setOnClickListener {
-            findNavController().navigate(R.id.action_homePageFragment_to_comingSoonFragment)
+            findNavController().navigate(R.id.action_homePageFragment_to_resourcesFrontFragment)
         }
 
         val doctorsRecyclerView = view.findViewById<RecyclerView>(R.id.doctorsRecyclerView)
@@ -67,7 +77,7 @@ class HomePageFragment : Fragment() {
 
         homeViewModel.doctorsState.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is DoctorResult.Success -> {
+                is DoctorResult.ListSuccess -> {
                     doctorsRecyclerView.adapter = DoctorAdapter(result.doctors) { doctor ->
                         val nameDisplay = doctor.fullNameWithTitle.ifBlank { "Dr. ${doctor.fName} ${doctor.lName}" }
                         Toast.makeText(
@@ -80,6 +90,7 @@ class HomePageFragment : Fragment() {
                 is DoctorResult.Error -> {
                     Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
                 }
+                else -> Unit //makes the 'when' extension exhaustive
             }
         }
 

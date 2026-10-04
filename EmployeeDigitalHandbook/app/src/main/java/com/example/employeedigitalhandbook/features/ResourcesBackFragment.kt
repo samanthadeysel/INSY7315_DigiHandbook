@@ -102,30 +102,55 @@ class ResourcesBackFragment : Fragment() {
 
         lifecycleScope.launch {
             try {
-                // Updated to use ApiClient.apiService
                 val response = ApiClient.apiService.getResourceById(id)
+
                 if (response.isSuccessful && response.body() != null) {
-                    val resource = response.body()!!
+                    val apiResponse = response.body()!!
 
-                    binding.pageTitleTextView.text = resource.title
-                    binding.breadcrumbTextView.text = resource.breadcrumbPath
-                        ?: "../${resource.category}/${resource.title}"
+                    if (apiResponse.success && apiResponse.data != null) {
+                        val resource = apiResponse.data //unpack data
 
-                    val targetUrl = resource.resourceUrl
+                        _binding?.let { b ->
+                            b.pageTitleTextView.text = resource.title
+                            b.breadcrumbTextView.text = resource.breadcrumbPath
+                                ?: "../${resource.category}/${resource.title}"
 
-                    if (!targetUrl.isNullOrEmpty()) {
-                        binding.resourceWebView.loadUrl(targetUrl)
+                            val targetUrl = resource.resourceUrl
+
+                            if (!targetUrl.isNullOrEmpty()) {
+                                val urlToLoad = if (targetUrl.endsWith(".pdf", ignoreCase = true) || targetUrl.contains(".pdf?")) {
+                                    val encodedUrl = java.net.URLEncoder.encode(targetUrl, "UTF-8")
+                                    "https://docs.google.com/gview?embedded=true&url=$encodedUrl"
+                                } else {
+                                    targetUrl
+                                }
+
+                                b.resourceProgressBar.visibility = View.GONE
+                                b.resourceWebView.loadUrl(urlToLoad)
+                            } else {
+                                b.resourceProgressBar.visibility = View.GONE
+                                context?.let { ctx ->
+                                    Toast.makeText(ctx, "No URL configured", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
                     } else {
-                        binding.resourceProgressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "No URL configured", Toast.LENGTH_SHORT).show()
+                        _binding?.let { b -> b.resourceProgressBar.visibility = View.GONE }
+                        context?.let { ctx ->
+                            Toast.makeText(ctx, apiResponse.message ?: "Failed to load details", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 } else {
-                    binding.resourceProgressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Failed to load details", Toast.LENGTH_SHORT).show()
+                    _binding?.let { b -> b.resourceProgressBar.visibility = View.GONE }
+                    context?.let { ctx ->
+                        Toast.makeText(ctx, "Failed to load details", Toast.LENGTH_SHORT).show()
+                    }
                 }
             } catch (e: Exception) {
-                binding.resourceProgressBar.visibility = View.GONE
-                Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                _binding?.let { b -> b.resourceProgressBar.visibility = View.GONE }
+                context?.let { ctx ->
+                    Toast.makeText(ctx, "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

@@ -10,16 +10,24 @@ namespace HandbookApi.Services
 
         public CloudStorageService(IConfiguration configuration, IWebHostEnvironment environment)
         {
-            _bucketName = configuration["GoogleCloudStorage:BucketName"] 
+            _bucketName = configuration["GoogleCloudStorage:BucketName"]
                 ?? throw new InvalidOperationException("Bucket name not configured.");
-            
-            var relativePath = configuration["GoogleCloudStorage:CredentialFilePath"] 
+
+            var relativePath = configuration["GoogleCloudStorage:CredentialFilePath"]
                 ?? "Credentials/digitalhandbook-37a30108df42.json";
-            
+
             var credentialPath = Path.Combine(environment.ContentRootPath, relativePath);
 
-            var credential = GoogleCredential.FromFile(credentialPath);
-            _storageClient = StorageClient.Create(credential);
+            // checks for json file locally - if not found, uses Cloud Runs credentials
+            if (File.Exists(credentialPath))
+            {
+                var credential = GoogleCredential.FromFile(credentialPath);
+                _storageClient = StorageClient.Create(credential);
+            }
+            else
+            {
+                _storageClient = StorageClient.Create();
+            }
         }
 
         public async Task<string> UploadFileAsync(IFormFile file, string folderName)

@@ -20,33 +20,9 @@ class QuizOptionAdapter(
     private var selectedPosition = RecyclerView.NO_POSITION
 
     inner class OptionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val cardOption: MaterialCardView = itemView.findViewById(R.id.cardOption)
-        private val imgRadioCheck: ImageView = itemView.findViewById(R.id.imgRadioCheck)
-        private val txtOptionText: TextView = itemView.findViewById(R.id.txtOptionText)
-
-        fun bind(option: QuizOption, position: Int) {
-            txtOptionText.text = option.optionText
-
-            val isSelected = position == selectedPosition
-
-            if (isSelected) {
-                cardOption.strokeColor = ContextCompat.getColor(itemView.context, R.color.teal_700)
-                imgRadioCheck.setColorFilter(ContextCompat.getColor(itemView.context, R.color.teal_700))
-            } else {
-                cardOption.strokeColor = Color.parseColor("#CBD5E1")
-                imgRadioCheck.setColorFilter(Color.parseColor("#94A3B8"))
-            }
-
-            itemView.setOnClickListener {
-                val previousSelected = selectedPosition
-                selectedPosition = bindingAdapterPosition
-
-                notifyItemChanged(previousSelected)
-                notifyItemChanged(selectedPosition)
-
-                onOptionClick(option)
-            }
-        }
+        val cardOption: MaterialCardView = itemView.findViewById(R.id.cardOption)
+        val imgRadioCheck: ImageView = itemView.findViewById(R.id.imgRadioCheck)
+        val txtOptionText: TextView = itemView.findViewById(R.id.txtOptionText)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OptionViewHolder {
@@ -56,7 +32,34 @@ class QuizOptionAdapter(
     }
 
     override fun onBindViewHolder(holder: OptionViewHolder, position: Int) {
-        holder.bind(optionList[position], position)
+        val option = optionList[position]
+        holder.txtOptionText.text = option.optionText
+
+        val isSelected = (position == selectedPosition)
+
+        if (isSelected) {
+            holder.cardOption.strokeColor = Color.parseColor("#2690CF")
+            holder.imgRadioCheck.setColorFilter(Color.parseColor("#2690CF"))
+        } else {
+            holder.cardOption.strokeColor = Color.parseColor("#CBD5E1")
+            holder.imgRadioCheck.setColorFilter(Color.parseColor("#94A3B8"))
+        }
+
+        // Tap listener executes only on user interaction
+        holder.itemView.setOnClickListener {
+            val currentPosition = holder.bindingAdapterPosition
+            if (currentPosition == RecyclerView.NO_POSITION) return@setOnClickListener
+
+            val previousSelected = selectedPosition
+            selectedPosition = currentPosition
+
+            if (previousSelected != RecyclerView.NO_POSITION) {
+                notifyItemChanged(previousSelected)
+            }
+            notifyItemChanged(selectedPosition)
+
+            onOptionClick(option)
+        }
     }
 
     override fun getItemCount(): Int = optionList.size
