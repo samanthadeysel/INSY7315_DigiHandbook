@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -12,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.employeedigitalhandbook.MainActivity
 import com.example.employeedigitalhandbook.R
 import com.example.employeedigitalhandbook.adapters.DoctorAdapter
 import com.example.employeedigitalhandbook.data.Doctor
@@ -39,6 +42,7 @@ class HomePageFragment : Fragment() {
         val tvGreetingPrefix = view.findViewById<TextView>(R.id.tvGreetingPrefix)
         val tvUserName = view.findViewById<TextView>(R.id.tvUserName)
         val txtAppVersion = view.findViewById<TextView>(R.id.txtAppVersion)
+        val btnMenu = view.findViewById<ImageView>(R.id.btnMenu)
 
         //app version
         val currentVersion = try {
@@ -72,6 +76,11 @@ class HomePageFragment : Fragment() {
             findNavController().navigate(R.id.action_homePageFragment_to_resourcesFrontFragment)
         }
 
+        //menu button
+        view.findViewById<View>(R.id.btnMenu).setOnClickListener {
+            (activity as? MainActivity)?.openMenu()
+        }
+
         val doctorsRecyclerView = view.findViewById<RecyclerView>(R.id.doctorsRecyclerView)
         doctorsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
@@ -96,18 +105,18 @@ class HomePageFragment : Fragment() {
         homeViewModel.loadDoctors()
 
         // bottom nav
-        val bottomNavigation = view.findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.selectedItemId = R.id.nav_home
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> true
-                R.id.nav_menu -> {
-                    findNavController().navigate(R.id.action_homePageFragment_to_settingsFragment)
-                    true
-                }
-                else -> false
-            }
-        }
+//        val bottomNavigation = view.findViewById<BottomNavigationView>(R.id.bottomNavigation)
+//        bottomNavigation.selectedItemId = R.id.nav_home
+//        bottomNavigation.setOnItemSelectedListener { item ->
+//            when (item.itemId) {
+//                R.id.nav_home -> true
+//                R.id.nav_menu -> {
+//                    findNavController().navigate(R.id.action_homePageFragment_to_settingsFragment)
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
     }
 
     //greeting

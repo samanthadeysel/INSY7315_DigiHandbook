@@ -21,7 +21,6 @@ import com.example.employeedigitalhandbook.adapters.PolicyAdapter
 import com.example.employeedigitalhandbook.data.Doctor
 import com.example.employeedigitalhandbook.repositories.DoctorResult
 import com.example.employeedigitalhandbook.viewmodel.DoctorViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 
 class DoctorFragment : Fragment() {
@@ -113,21 +112,21 @@ class DoctorFragment : Fragment() {
         val doctorId = arguments?.getInt("doctorId") ?: 1
         doctorViewModel.loadDoctorDetails(doctorId)
 
-        val bottomNavigation = view.findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.selectedItemId = R.id.nav_home
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    findNavController().navigate(R.id.homePageFragment)
-                    true
-                }
-                R.id.nav_menu -> {
-                    findNavController().navigate(R.id.settingsFragment)
-                    true
-                }
-                else -> false
-            }
-        }
+//        val bottomNavigation = view.findViewById<BottomNavigationView>(R.id.bottomNavigation)
+//        bottomNavigation.selectedItemId = R.id.nav_home
+//        bottomNavigation.setOnItemSelectedListener { item ->
+//            when (item.itemId) {
+//                R.id.nav_home -> {
+//                    findNavController().navigate(R.id.homePageFragment)
+//                    true
+//                }
+//                R.id.nav_menu -> {
+//                    findNavController().navigate(R.id.settingsFragment)
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
     }
 
     private fun bindDoctorDetails(doctor: Doctor) {
