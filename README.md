@@ -3,8 +3,12 @@ A centralized digital platform designed for PMB Eye Hospital staff to access hos
 
 ### Video Demonstration
 Watch the system walkthrough, mobile app demonstration, and architecture breakdown:
+**Link: ->** https://youtu.be/S20jrU2Z2rQ?si=phSekfi24oBhqF-s
 
-> **Link: ->**
+### Links to platforms
+**Admin Portal Link: ->** https://pmbeye-handbook.cloud.run/
+**API Link: ->** https://handbook-api-770247469632.europe-west3.run.app
+**App Distribution Link: ->** https://appdistribution.firebase.dev/i/3fcb8e311dd0df55
 
 ### Ctrl Alt Elite Team Contributions
 | Team Member | Primary Roles & Focus Areas | Key Deliverables & Responsibilities |
