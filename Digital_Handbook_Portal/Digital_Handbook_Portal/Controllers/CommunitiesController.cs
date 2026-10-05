@@ -7,7 +7,7 @@ namespace Digital_Handbook_Portal.Controllers
     public class CommunitiesController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly IHttpContextAccessor _httpContextAccessor;     
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public CommunitiesController(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClientFactory.CreateClient("HandbookApi");

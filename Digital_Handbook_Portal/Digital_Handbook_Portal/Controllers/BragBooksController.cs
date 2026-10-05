@@ -8,7 +8,7 @@ namespace Digital_Handbook_Portal.Controllers
     public class BragBooksController : Controller
     {
         private readonly HttpClient _httpClient;
-         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public BragBooksController(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClientFactory.CreateClient("HandbookApi");

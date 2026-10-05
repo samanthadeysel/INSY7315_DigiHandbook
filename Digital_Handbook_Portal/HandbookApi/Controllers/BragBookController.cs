@@ -55,7 +55,7 @@ namespace HandbookApi.Controllers
 
             try
             {
-               
+
                 post.datePosted = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
 
                 var newEntity = new BragBook
@@ -97,7 +97,7 @@ namespace HandbookApi.Controllers
             existingPost.senderType = post.senderType;
             existingPost.recipientName = post.recipientName;
 
-           
+
             await _context.SaveChangesAsync();
             return Ok(new ApiResponse<BragBook> { Success = true, Message = "Brag post updated successfully.", Data = existingPost });
         }
