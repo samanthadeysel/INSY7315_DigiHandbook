@@ -83,12 +83,10 @@ class MainActivity : AppCompatActivity() {
 
         setupDrawerMenu()
 
-        //commenting this out TEMPORARILY for testing purposes
-
-//        window.setFlags(
-//            WindowManager.LayoutParams.FLAG_SECURE,
-//            WindowManager.LayoutParams.FLAG_SECURE
-//        )
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
     }
 
     private fun setupDrawerMenu () {findViewById<TextView>(R.id.menuQuiz).setOnClickListener { //[cite: 13]

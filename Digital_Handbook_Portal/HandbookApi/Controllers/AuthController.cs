@@ -49,7 +49,6 @@ namespace HandbookApi.Controllers
                 });
             }
 
-            // Verify using BCrypt or fallback to plain text for legacy records
             bool isValidPassword = user.password.StartsWith("$2a$")
                 ? BCrypt.Net.BCrypt.Verify(request.Password, user.password)
                 : user.password == request.Password;
