@@ -59,7 +59,7 @@
                 android:fontFamily="@font/raleway"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                tools:text="12 Oct 2026" />
+                tools:text="2026-10-12" />
 
             <TextView
                 android:layout_width="wrap_content"

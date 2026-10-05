@@ -72,6 +72,7 @@ namespace Digital_Handbook_Portal.Controllers
         public async Task<IActionResult> Create()
         {
             await PopulateCategoryDropdownAsync();
+            await PopulateDoctorsDropdownAsync();
             return View();
         }
 
@@ -85,6 +86,12 @@ namespace Digital_Handbook_Portal.Controllers
             content.Add(new StringContent(policy.contentSummary ?? string.Empty), nameof(policy.contentSummary));
             content.Add(new StringContent(policy.specificCategory ?? string.Empty), nameof(policy.specificCategory));
             content.Add(new StringContent(policy.categoryId.ToString()), nameof(policy.categoryId));
+
+            // Include optional DoctorId if selected
+            if (policy.doctorId.HasValue)
+            {
+                content.Add(new StringContent(policy.doctorId.Value.ToString()), nameof(policy.doctorId));
+            }
 
             if (!string.IsNullOrWhiteSpace(policy.fileUrl))
             {
@@ -119,13 +126,14 @@ namespace Digital_Handbook_Portal.Controllers
                 }
                 catch
                 {
-                    // Fallback to raw string error
+                    // Fallback to raw string
                 }
             }
 
             ModelState.AddModelError(string.Empty, $"Failed to create policy: {errorMessage}");
 
             await PopulateCategoryDropdownAsync(policy.categoryId);
+            await PopulateDoctorsDropdownAsync(policy.doctorId);
             return View(policy);
         }
 
@@ -141,6 +149,7 @@ namespace Digital_Handbook_Portal.Controllers
             if (response == null || !response.Success || response.Data == null) return NotFound();
 
             await PopulateCategoryDropdownAsync(response.Data.categoryId);
+            await PopulateDoctorsDropdownAsync(response.Data.doctorId);
             return View(response.Data);
         }
 
@@ -156,6 +165,17 @@ namespace Digital_Handbook_Portal.Controllers
             content.Add(new StringContent(policy.specificCategory ?? string.Empty), nameof(policy.specificCategory));
             content.Add(new StringContent(policy.categoryId.ToString()), nameof(policy.categoryId));
 
+            // Include optional DoctorId if selected
+            if (policy.doctorId.HasValue)
+            {
+                content.Add(new StringContent(policy.doctorId.Value.ToString()), nameof(policy.doctorId));
+            }
+            else
+            {
+                // Send empty string or 0 depending on backend API nullable configuration
+                content.Add(new StringContent(string.Empty), nameof(policy.doctorId));
+            }
+
             if (!string.IsNullOrWhiteSpace(policy.fileUrl))
             {
                 content.Add(new StringContent(policy.fileUrl), nameof(policy.fileUrl));
@@ -165,7 +185,7 @@ namespace Digital_Handbook_Portal.Controllers
             {
                 var fileContent = new StreamContent(uploadFile.OpenReadStream());
                 fileContent.Headers.ContentType = new MediaTypeHeaderValue(uploadFile.ContentType);
-                content.Add(fileContent, "pdfFile", uploadFile.FileName);
+                content.Add(fileContent, "uploadFile", uploadFile.FileName);
             }
 
             var response = await _httpClient.PutAsync($"api/Policies/{id}", content);
@@ -177,6 +197,7 @@ namespace Digital_Handbook_Portal.Controllers
             var errorDetails = await response.Content.ReadAsStringAsync();
             ModelState.AddModelError(string.Empty, $"Failed to update policy document via API: {errorDetails}");
             await PopulateCategoryDropdownAsync(policy.categoryId);
+            await PopulateDoctorsDropdownAsync(policy.doctorId);
             return View(policy);
         }
 
@@ -223,6 +244,29 @@ namespace Digital_Handbook_Portal.Controllers
             }
 
             ViewBag.Categories = new SelectList(Enumerable.Empty<PolicyCategory>(), "categoryId", "categoryName");
+        }
+
+        private async Task PopulateDoctorsDropdownAsync(int? selectedDoctorId = null)
+        {
+            try
+            {
+                var httpResponse = await _httpClient.GetAsync("api/Doctors");
+                if (httpResponse.IsSuccessStatusCode)
+                {
+                    var content = await httpResponse.Content.ReadAsStringAsync();
+                    var response = JsonSerializer.Deserialize<ApiResponse<List<Doctor>>>(content, JsonOptions);
+                    var doctors = response?.Data ?? new List<Doctor>();
+
+                    ViewBag.Doctors = new SelectList(doctors, "doctorId", "FullName", selectedDoctorId);
+                    return;
+                }
+            }
+            catch
+            {
+                // Fallback on error
+            }
+
+            ViewBag.Doctors = new SelectList(Enumerable.Empty<Doctor>(), "doctorId", "FullName");
         }
     }
 }

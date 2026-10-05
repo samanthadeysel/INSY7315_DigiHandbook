@@ -22,7 +22,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label asp-for="categoryId" class="form-label fw-semibold">Category</label>
                                 <select asp-for="categoryId" asp-items="ViewBag.Categories" class="form-select">
                                     <option value="">-- Select Policy Category --</option>
@@ -30,11 +30,19 @@
                                 <span asp-validation-for="categoryId" class="text-danger small"></span>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label asp-for="specificCategory" class="form-label fw-semibold">Specific Category (Optional)</label>
                                 <input asp-for="specificCategory" class="form-control" placeholder="e.g. Emergency Care" />
                                 <span asp-validation-for="specificCategory" class="text-danger small"></span>
                             </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="doctorId" class="form-label fw-semibold">Linked Doctor (Optional)</label>
+                            <select asp-for="doctorId" asp-items="ViewBag.Doctors" class="form-select">
+                                <option value="">-- None (General Policy) --</option>
+                            </select>
+                            <span asp-validation-for="doctorId" class="text-danger small"></span>
                         </div>
 
                         <div class="mb-3">

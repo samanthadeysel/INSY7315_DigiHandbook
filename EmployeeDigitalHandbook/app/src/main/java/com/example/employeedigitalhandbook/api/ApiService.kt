@@ -45,6 +45,10 @@ interface ApiService {
     @GET("api/Quizzes/{id}")
     suspend fun getQuizById(@Path("id") id: Int): Response<ApiResponse<Quiz>>
 
+    // Unwrapped fallback
+    @GET("api/Quizzes/{id}")
+    suspend fun getRawQuizById(@Path("id") id: Int): Response<Quiz>
+
     @POST("api/quizzes/submit")
     suspend fun submitQuizResult(@Body submission: QuizSubmission): Response<ApiResponse<QuizSubmission>>
 
