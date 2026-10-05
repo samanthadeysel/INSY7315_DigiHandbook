@@ -103,23 +103,23 @@
             tools:itemCount="3"
             tools:listitem="@layout/item_brag_card" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fabAddBrag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:backgroundTint="#2690CF"
-            android:contentDescription="Post Compliment"
-            android:fontFamily="@font/raleway_bold"
-            android:text="Add Note"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:elevation="6dp"
-            app:icon="@android:drawable/ic_input_add"
-            app:iconTint="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+<!--        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
+<!--            android:id="@+id/fabAddBrag"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_marginBottom="20dp"-->
+<!--            android:backgroundTint="#2690CF"-->
+<!--            android:contentDescription="Post Compliment"-->
+<!--            android:fontFamily="@font/raleway_bold"-->
+<!--            android:text="Add Note"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="@color/white"-->
+<!--            app:elevation="6dp"-->
+<!--            app:icon="@android:drawable/ic_input_add"-->
+<!--            app:iconTint="@color/white"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
