@@ -53,7 +53,7 @@ interface ApiService {
     @GET("api/Quizzes")
     suspend fun getQuizzes(): Response<ApiResponse<List<Quiz>>>
 
-    @GET("api/Quizs/{id}")
+    @GET("api/Quizzes/{id}")
     suspend fun getQuizById(@Path("id") id: Int): Response<ApiResponse<Quiz>>
 
     // Unwrapped fallback

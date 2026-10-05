@@ -63,37 +63,21 @@ class QuizTakeFragment : Fragment() {
                     currentQuiz = body.data
                     displayQuestion()
                 } else {
-                    val rawResponse = ApiClient.apiService.getRawQuizById(quizId)
-                    if (rawResponse.isSuccessful && rawResponse.body() != null) {
-                        currentQuiz = rawResponse.body()
-                        displayQuestion()
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            body?.message ?: "Failed to load quiz details (HTTP ${response.code()})",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    Toast.makeText(
+                        requireContext(),
+                        body?.message ?: "Failed to load quiz details (HTTP ${response.code()})",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } catch (e: Exception) {
-                try {
-                    val rawResponse = ApiClient.apiService.getRawQuizById(quizId)
-                    if (rawResponse.isSuccessful && rawResponse.body() != null) {
-                        currentQuiz = rawResponse.body()
-                        displayQuestion()
-                    } else {
-                        Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
-                    }
-                } catch (fallbackEx: Exception) {
-                    Toast.makeText(requireContext(), "Error loading quiz: ${fallbackEx.localizedMessage}", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(requireContext(), "Error loading quiz: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun displayQuestion() {
         val quiz = currentQuiz ?: return
-        val questions = quiz.questions ?: emptyList()
+        val questions = quiz.questions
 
         if (questions.isEmpty()) {
             Toast.makeText(requireContext(), "This quiz has no questions available.", Toast.LENGTH_SHORT).show()
@@ -108,7 +92,7 @@ class QuizTakeFragment : Fragment() {
         binding.txtQuestionCounter.text = "Question ${currentQuestionIndex + 1} of ${questions.size}"
         binding.txtQuestionText.text = question.questionText
 
-        val adapter = QuizOptionAdapter(question.options ?: emptyList()) { option ->
+        val adapter = QuizOptionAdapter(question.options) { option ->
             selectedOption = option
             binding.btnNextQuestion.isEnabled = true
         }
