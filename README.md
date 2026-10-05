@@ -6,10 +6,12 @@ Watch the system walkthrough, mobile app demonstration, and architecture breakdo
 
 > **Link: ->**
 
-### Ctrl Alt Elite Team
-* Nia Thandolwethu Cele
-* Samantha Abigail Deysel
-* Sizwe Thandaza Majola 
+### Ctrl Alt Elite Team Contributions
+| Team Member | Primary Roles & Focus Areas | Key Deliverables & Responsibilities |
+| :--- | :--- | :--- |
+| **Nia Thandolwethu Cele** | Frontend Engineering (Mobile & Web), DevOps & Cloud Architecture | • **Android Mobile App:** Developed the full native Android client in Kotlin (UI screens, navigation, state handling, and API integration for policies, quizzes, and the Brag Book).<br><br>• **MVC Management Portal:** Built the entire ASP.NET Core MVC web portal frontend and admin dashboard views.<br><br>• **DevOps & Cloud:** Authored multi-stage Dockerfiles (`Dockerfile`, `Dockerfile.portal`), configured Google Cloud Build pipelines, and deployed both services to Google Cloud Run.<br><br>• **System Integration:** Managed multi-region networking, Cloud SQL PostgreSQL socket proxies, Google Cloud Storage integration, and resolved cross-service production routing issues. |
+| **Samantha Abigail Deysel** | Backend API Architecture & Database Engineering | • **Backend Web API:** Developed the centralized ASP.NET Core Web API from the ground up (controllers, services, business logic, and DTOs).<br><br>• **Database & ORM:** Designed Entity Framework Core schemas, managed database migrations, and implemented data access layers for PostgreSQL / Cloud SQL.<br><br>• **Authentication & Endpoints:** Built and tested core API endpoints for authentication (`/api/Auth`), policy management, quiz evaluation, and peer recognition feeds. |
+| **Sizwe Thandaza Majola** | Team Member | • Project contributor. |
 ---
 
 ## 1. System Architecture
