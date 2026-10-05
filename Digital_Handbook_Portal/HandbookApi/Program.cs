@@ -25,7 +25,8 @@ namespace HandbookApi
 
             builder.Services.AddEndpointsApiExplorer();
 
-            // Register Google Cloud Storage Service
+            builder.Services.AddHttpContextAccessor();
+
             builder.Services.AddScoped<ICloudStorageService, CloudStorageService>();
 
             builder.Services.AddSwaggerGen();
@@ -54,9 +55,9 @@ namespace HandbookApi
 
             app.MapControllers();
 
-            app.Run();
-
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+            app.Run();
         }
     }
 }

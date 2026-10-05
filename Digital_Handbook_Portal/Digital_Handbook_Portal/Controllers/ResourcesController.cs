@@ -13,7 +13,13 @@ namespace Digital_Handbook_Portal.Controllers
         {
             _httpClient = httpClientFactory.CreateClient("HandbookApi");
             _httpContextAccessor = httpContextAccessor;
+        }
 
+        /// <summary>
+        /// </summary>
+        private void ApplyAuthHeader()
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = null; // Clear previous state
             var token = _httpContextAccessor.HttpContext?.Session.GetString("AdminToken");
             if (!string.IsNullOrWhiteSpace(token))
             {
@@ -22,24 +28,44 @@ namespace Digital_Handbook_Portal.Controllers
         }
 
         // GET: Resources
-        public async Task<IActionResult> Index(string? query)
+        public async Task<IActionResult> Index()
         {
-            string requestUri = string.IsNullOrWhiteSpace(query)
-                ? "api/Resources"
-                : $"api/Resources?query={Uri.EscapeDataString(query)}";
+            try
+            {
+                ApplyAuthHeader();
+                var httpResponse = await _httpClient.GetAsync("api/Resources");
 
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<Resource>>>(requestUri);
-            ViewData["CurrentFilter"] = query;
-            return View(response?.Data ?? new List<Resource>());
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    ViewBag.ErrorMessage = $"API Error: {httpResponse.StatusCode}";
+                    return View(new List<Resource>());
+                }
+
+                var response = await httpResponse.Content.ReadFromJsonAsync<ApiResponse<List<Resource>>>();
+                return View(response?.Data ?? new List<Resource>());
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"Unable to connect to backend service: {ex.Message}";
+                return View(new List<Resource>());
+            }
         }
 
         // GET: Resources/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Resource>>($"api/Resources/{id}");
-            if (response == null || !response.Success) return NotFound();
+            try
+            {
+                ApplyAuthHeader();
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<Resource>>($"api/Resources/{id}");
+                if (response == null || !response.Success) return NotFound();
 
-            return View(response.Data);
+                return View(response.Data);
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         // GET: Resources/Create
@@ -53,7 +79,7 @@ namespace Digital_Handbook_Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Resource resource, IFormFile? uploadFile)
         {
-            //remove validation for ResourceUrl if a file is uploaded
+            // Remove validation for ResourceUrl if a file is uploaded
             if (uploadFile != null && uploadFile.Length > 0)
             {
                 ModelState.Remove(nameof(resource.ResourceUrl));
@@ -70,13 +96,11 @@ namespace Digital_Handbook_Portal.Controllers
             content.Add(new StringContent(resource.Description ?? string.Empty), nameof(resource.Description));
             content.Add(new StringContent(resource.BreadcrumbPath ?? string.Empty), nameof(resource.BreadcrumbPath));
 
-            // Pass text URL if entered manually
             if (!string.IsNullOrWhiteSpace(resource.ResourceUrl))
             {
                 content.Add(new StringContent(resource.ResourceUrl), nameof(resource.ResourceUrl));
             }
 
-            // Attach resource file if uploaded
             if (uploadFile != null && uploadFile.Length > 0)
             {
                 var fileContent = new StreamContent(uploadFile.OpenReadStream());
@@ -84,6 +108,7 @@ namespace Digital_Handbook_Portal.Controllers
                 content.Add(fileContent, "uploadFile", uploadFile.FileName);
             }
 
+            ApplyAuthHeader();
             var response = await _httpClient.PostAsync("api/Resources", content);
             if (response.IsSuccessStatusCode)
             {
@@ -98,10 +123,18 @@ namespace Digital_Handbook_Portal.Controllers
         // GET: Resources/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Resource>>($"api/Resources/{id}");
-            if (response == null || !response.Success) return NotFound();
+            try
+            {
+                ApplyAuthHeader();
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<Resource>>($"api/Resources/{id}");
+                if (response == null || !response.Success) return NotFound();
 
-            return View(response.Data);
+                return View(response.Data);
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         // POST: Resources/Edit/5
@@ -129,6 +162,7 @@ namespace Digital_Handbook_Portal.Controllers
                 content.Add(fileContent, "uploadFile", uploadFile.FileName);
             }
 
+            ApplyAuthHeader();
             var response = await _httpClient.PutAsync($"api/Resources/{id}", content);
             if (response.IsSuccessStatusCode)
             {
@@ -143,10 +177,18 @@ namespace Digital_Handbook_Portal.Controllers
         // GET: Resources/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<Resource>>($"api/Resources/{id}");
-            if (response == null || !response.Success) return NotFound();
+            try
+            {
+                ApplyAuthHeader();
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<Resource>>($"api/Resources/{id}");
+                if (response == null || !response.Success) return NotFound();
 
-            return View(response.Data);
+                return View(response.Data);
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         // POST: Resources/Delete/5
@@ -154,6 +196,7 @@ namespace Digital_Handbook_Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ApplyAuthHeader();
             await _httpClient.DeleteAsync($"api/Resources/{id}");
             return RedirectToAction(nameof(Index));
         }
