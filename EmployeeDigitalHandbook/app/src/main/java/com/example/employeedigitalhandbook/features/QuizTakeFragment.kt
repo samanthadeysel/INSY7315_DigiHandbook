@@ -57,8 +57,10 @@ class QuizTakeFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.getQuizById(quizId)
-                if (response.isSuccessful && response.body() != null) {
-                    currentQuiz = response.body()
+                val apiResponse = response.body()
+
+                if (response.isSuccessful && apiResponse != null && apiResponse.data != null) {
+                    currentQuiz = apiResponse.data
                     displayQuestion()
                 } else {
                     Toast.makeText(requireContext(), "Failed to load quiz details", Toast.LENGTH_SHORT).show()

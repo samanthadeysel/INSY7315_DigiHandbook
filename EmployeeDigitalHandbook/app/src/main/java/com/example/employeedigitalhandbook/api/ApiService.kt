@@ -51,13 +51,13 @@ interface ApiService {
 //    suspend fun getQuizzes(): Response<List<Quiz>>
 
     @GET("api/Quizzes")
-    suspend fun getQuizzes(): Response<List<Quiz>>
+    suspend fun getQuizzes(): Response<ApiResponse<List<Quiz>>>
 
     @GET("api/Quizs/{id}")
-    suspend fun getQuizById(@Path("id") id: Int): Response<Quiz>
+    suspend fun getQuizById(@Path("id") id: Int): Response<ApiResponse<Quiz>>
 
     @POST("api/quizzes/submit")
-    suspend fun submitQuizResult(@Body submission: QuizSubmission): Response<QuizSubmission>
+    suspend fun submitQuizResult(@Body submission: QuizSubmission): Response<ApiResponse<QuizSubmission>>
 
     // --- RESOURCE ---
     @GET("api/resources")

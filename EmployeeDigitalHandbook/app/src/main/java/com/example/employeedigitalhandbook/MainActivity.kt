@@ -96,17 +96,18 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.quizListFragment)
     }
 
-        findViewById<TextView>(R.id.menuCpdInfo).setOnClickListener { //[cite: 13]
+        findViewById<TextView>(R.id.menuCpdInfo).setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.END)
-            // Navigate to CPD info if destination exists in your nav_graph
+            navController.navigate(R.id.resourcesFrontFragment)
+            //ignore the name - goes to resources
         }
 
-        findViewById<TextView>(R.id.menuSettings).setOnClickListener { //[cite: 13]
+        findViewById<TextView>(R.id.menuPolicies).setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.END)
-            navController.navigate(R.id.settingsFragment)
+            navController.navigate(R.id.policiesFrontFragment)
         }
 
-        findViewById<TextView>(R.id.menuLogOut).setOnClickListener { //[cite: 13]
+        findViewById<TextView>(R.id.menuLogOut).setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.END)
             // Clear session/tokens and return to login:
             navController.navigate(R.id.loginFragment)

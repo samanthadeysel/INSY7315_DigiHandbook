@@ -42,11 +42,10 @@ namespace HandbookApi.Controllers
         // POST: api/BragBook
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<ApiResponse<BragBook>>> CreateBragPost([FromForm] BragBook post, IFormFile? imageFile)
+        public async Task<ActionResult<ApiResponse<BragBook>>> CreateBragPost([FromForm] BragBook post)
         {
             ModelState.Remove(nameof(BragBook.bragId));
             ModelState.Remove(nameof(BragBook.datePosted));
-            ModelState.Remove(nameof(BragBook.imageUrl));
 
             if (!ModelState.IsValid)
             {
@@ -56,12 +55,7 @@ namespace HandbookApi.Controllers
 
             try
             {
-                if (imageFile != null && imageFile.Length > 0)
-                {
-                    string uploadedUrl = await _storageService.UploadFileAsync(imageFile, "bragbook");
-                    post.imageUrl = uploadedUrl;
-                }
-
+               
                 post.datePosted = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
 
                 var newEntity = new BragBook
@@ -69,7 +63,6 @@ namespace HandbookApi.Controllers
                     content = post.content,
                     senderType = post.senderType,
                     recipientName = post.recipientName,
-                    imageUrl = post.imageUrl,
                     datePosted = post.datePosted
                 };
 
@@ -92,7 +85,7 @@ namespace HandbookApi.Controllers
         // PUT: api/BragBook/5
         [HttpPut("{id}")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<ApiResponse<BragBook>>> UpdateBragPost(int id, [FromForm] BragBook post, IFormFile? imageFile)
+        public async Task<ActionResult<ApiResponse<BragBook>>> UpdateBragPost(int id, [FromForm] BragBook post)
         {
             var existingPost = await _context.BragBook.FindAsync(id);
             if (existingPost == null)
@@ -104,22 +97,7 @@ namespace HandbookApi.Controllers
             existingPost.senderType = post.senderType;
             existingPost.recipientName = post.recipientName;
 
-            if (imageFile != null && imageFile.Length > 0)
-            {
-                if (!string.IsNullOrWhiteSpace(existingPost.imageUrl))
-                {
-                    try
-                    {
-                        await _storageService.DeleteFileAsync(existingPost.imageUrl);
-                    }
-                    catch {  
-                    }
-                }
-
-                string uploadedUrl = await _storageService.UploadFileAsync(imageFile, "bragbook");
-                existingPost.imageUrl = uploadedUrl;
-            }
-
+           
             await _context.SaveChangesAsync();
             return Ok(new ApiResponse<BragBook> { Success = true, Message = "Brag post updated successfully.", Data = existingPost });
         }
@@ -132,16 +110,6 @@ namespace HandbookApi.Controllers
             if (post == null)
             {
                 return NotFound(new ApiResponse<bool> { Success = false, Message = "Brag post not found.", Data = false });
-            }
-
-            if (!string.IsNullOrWhiteSpace(post.imageUrl))
-            {
-                try
-                {
-                    await _storageService.DeleteFileAsync(post.imageUrl);
-                }
-                catch { 
-                }
             }
 
             _context.BragBook.Remove(post);

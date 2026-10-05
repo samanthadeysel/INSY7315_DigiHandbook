@@ -1,5 +1,6 @@
 package com.example.employeedigitalhandbook.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,6 +10,12 @@ import com.example.employeedigitalhandbook.databinding.ItemBragCardBinding
 class BragBookAdapter(
     private var posts: List<BragBook>
 ) : RecyclerView.Adapter<BragBookAdapter.BragViewHolder>() {
+
+    private val cardColors = listOf(
+        "#2690CF",
+        "#8BC34A",
+        "#F57C00"
+    )
 
     class BragViewHolder(val binding: ItemBragCardBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -34,6 +41,9 @@ class BragBookAdapter(
         } else {
             "- ${post.senderType}"
         }
+
+        val colorHex = cardColors[position % cardColors.size]
+        holder.binding.cardPostIt.setCardBackgroundColor(Color.parseColor(colorHex))
     }
 
     override fun getItemCount(): Int = posts.size
