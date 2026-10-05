@@ -17,15 +17,14 @@ namespace HandbookApi.Controllers
 
         // GET: api/Quizzes
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<List<Quiz>>>> GetQuizzes()
+        public async Task<IActionResult> GetQuizzes()
         {
             var quizzes = await _context.Quiz
                 .Include(q => q.questions)
-                .ThenInclude(q => q.options)
-                .OrderByDescending(q => q.createdAt)
+                    .ThenInclude(q => q.options)
                 .ToListAsync();
 
-            return Ok(new ApiResponse<List<Quiz>> { Success = true, Data = quizzes });
+            return Ok(new { data = quizzes });
         }
 
         // GET: api/Quizzes/5

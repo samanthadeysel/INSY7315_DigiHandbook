@@ -93,18 +93,22 @@ class QuizTakeFragment : Fragment() {
 
     private fun displayQuestion() {
         val quiz = currentQuiz ?: return
-        if (quiz.questions.isEmpty()) return
+        val questions = quiz.questions ?: emptyList()
 
-        val question = quiz.questions[currentQuestionIndex]
+        if (questions.isEmpty()) {
+            Toast.makeText(requireContext(), "This quiz has no questions available.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val question = questions.getOrNull(currentQuestionIndex) ?: return
         selectedOption = null
         binding.btnNextQuestion.isEnabled = false
 
         binding.txtQuizHeaderTitle.text = quiz.title
-        binding.txtQuestionCounter.text = "Question ${currentQuestionIndex + 1} of ${quiz.questions.size}"
-
+        binding.txtQuestionCounter.text = "Question ${currentQuestionIndex + 1} of ${questions.size}"
         binding.txtQuestionText.text = question.questionText
 
-        val adapter = QuizOptionAdapter(question.options) { option ->
+        val adapter = QuizOptionAdapter(question.options ?: emptyList()) { option ->
             selectedOption = option
             binding.btnNextQuestion.isEnabled = true
         }
@@ -114,7 +118,7 @@ class QuizTakeFragment : Fragment() {
             this.adapter = adapter
         }
 
-        binding.btnNextQuestion.text = if (currentQuestionIndex == quiz.questions.size - 1) {
+        binding.btnNextQuestion.text = if (currentQuestionIndex == questions.size - 1) {
             "Submit Assessment"
         } else {
             "Next Question"

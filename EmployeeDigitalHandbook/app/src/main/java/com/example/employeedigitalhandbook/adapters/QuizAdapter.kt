@@ -21,10 +21,15 @@ class QuizAdapter(
 
         fun bind(quiz: Quiz) {
             txtQuizTitle.text = quiz.title
-            txtTopics.text = quiz.topic
-            txtTime.text = "est. ${quiz.estimatedMinutes} min"
 
-            // Formats double (e.g. 10.0 -> "10 pts" or 10.5 -> "10.5 pts")
+            txtTopics.text = "${quiz.questions.size} Questions"
+
+            txtTime.text = if (quiz.estimatedMinutes.lowercase().contains("min")) {
+                "est. ${quiz.estimatedMinutes}"
+            } else {
+                "est. ${quiz.estimatedMinutes} min"
+            }
+
             val formattedPoints = if (quiz.points % 1.0 == 0.0) {
                 "${quiz.points.toInt()} pts"
             } else {

@@ -3,47 +3,47 @@ package com.example.employeedigitalhandbook.data
 import com.google.gson.annotations.SerializedName
 
 data class QuizOption(
-    @SerializedName("optionId")
-    val optionId: Int,
+    @SerializedName("optionId", alternate = ["OptionId"])
+    val optionId: Int = 0,
 
-    @SerializedName("optionText")
-    val optionText: String,
+    @SerializedName("optionText", alternate = ["OptionText"])
+    val optionText: String = "",
 
-    @SerializedName("isCorrect")
+    @SerializedName("isCorrect", alternate = ["IsCorrect"])
     val isCorrect: Boolean = false
 )
 
 data class QuizQuestion(
-    @SerializedName("questionId")
-    val questionId: Int,
+    @SerializedName("questionId", alternate = ["QuestionId"])
+    val questionId: Int = 0,
 
-    @SerializedName("questionText")
-    val questionText: String,
+    @SerializedName("questionText", alternate = ["QuestionText"])
+    val questionText: String = "",
 
-    @SerializedName("options")
-    val options: List<QuizOption>
+    @SerializedName("quizId", alternate = ["QuizId"])
+    val quizId: Int = 0,
+
+    @SerializedName("options", alternate = ["Options"])
+    val options: List<QuizOption> = emptyList()
 )
 
 data class Quiz(
-    @SerializedName("quizId")
-    val quizId: Int,
+    @SerializedName("quizId", alternate = ["QuizId"])
+    val quizId: Int = 0,
 
-    @SerializedName("title")
-    val title: String,
+    @SerializedName("title", alternate = ["Title"])
+    val title: String = "",
 
-    @SerializedName("topic")
-    val topic: String,
+    @SerializedName("score", alternate = ["Score"])
+    val points: Double = 0.0,
 
-    @SerializedName("estimatedMinutes")
-    val estimatedMinutes: Int,
-
-    @SerializedName("points")
-    val points: Double,
-
-    @SerializedName("passPercentage")
+    @SerializedName("passingScore", alternate = ["PassingScore"])
     val passPercentage: Int = 80,
 
-    @SerializedName("questions")
+    @SerializedName("estimateTime", alternate = ["EstimateTime"])
+    val estimatedMinutes: String = "",
+
+    @SerializedName("questions", alternate = ["Questions"])
     val questions: List<QuizQuestion> = emptyList()
 )
 
