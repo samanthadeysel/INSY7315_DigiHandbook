@@ -1,5 +1,6 @@
 package com.example.employeedigitalhandbook.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.employeedigitalhandbook.R
 import com.example.employeedigitalhandbook.data.CommunityEvent
+import com.google.android.material.card.MaterialCardView
 
 class EventAdapter(
     private var events: List<CommunityEvent>,
@@ -14,6 +16,7 @@ class EventAdapter(
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val card: MaterialCardView = itemView.findViewById(R.id.cardEvent)
         val title: TextView = itemView.findViewById(R.id.txtEventTitle)
         val date: TextView = itemView.findViewById(R.id.txtEventDate)
         val time: TextView = itemView.findViewById(R.id.txtEventTime)
@@ -32,6 +35,14 @@ class EventAdapter(
         holder.date.text = event.date
         holder.time.text = event.time
         holder.location.text = event.location
+
+        //colour changing
+        val colorHex = when (position % 3) {
+            0 -> "#2690CF"
+            1 -> "#8BC34A"
+            else -> "#F57C00"
+        }
+        holder.card.setCardBackgroundColor(Color.parseColor(colorHex))
 
         holder.itemView.setOnClickListener { onItemClick(event) }
     }

@@ -20,17 +20,10 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-
-        <!-- Policy Title -->
-
-        <!-- Policy Short Summary -->
-
         <TextView
             android:id="@+id/txtPolicyTitle"
-            android:layout_width="385dp"
-            android:layout_height="33dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="92dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:fontFamily="@font/raleway_bold"
             android:textColor="@color/black"
@@ -47,14 +40,15 @@
             android:id="@+id/txtPolicySummary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:ellipsize="end"
             android:fontFamily="@font/raleway"
-            android:maxLines="2"
+            android:maxLines="3"
             android:textColor="#64748B"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtPolicyTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="Immediate clinical actions, reporting steps, and occupational health triage procedures." />
 
 
