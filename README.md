@@ -1,6 +1,10 @@
 # PMB Eye Hospital - Employee Digital Handbook
 A centralized digital platform designed for PMB Eye Hospital staff to access hospital policies, complete training quizzes, view peer recognition via the Brag Book, and review institutional resources from both mobile and desktop environments.
 
+### Live Endpoints
+* **Web Management Portal**: https://pmbeye-handbook.cloud.run
+* **Backend API**: https://handbook-api-770247469632.europe-west3.run.app
+
 ### Video Demonstration
 Watch the system walkthrough, mobile app demonstration, and architecture breakdown:
 
@@ -28,12 +32,13 @@ The solution uses a decoupled architecture which spans across mobile(Android App
 
 All backend components are containerized and hosted on **Google Cloud Platform (GCP)** in the `europe-west3` region:
 
-| Component | Platform | Details |
-| :--- | :--- | :--- |
-| **API Runtime** | Google Cloud Run | Serverless, autoscaling containerized deployment running `.NET 10`. |
-| **Database** | Google Cloud SQL | Managed PostgreSQL instance connected via Cloud SQL Auth Proxy / Unix socket. |
-| **Object Storage** | Google Cloud Storage | Secure bucket storage for policy documents and media assets. |
-| **Container Registry** | Google Artifact Registry / GCR | Versioned Docker images built and tagged for Cloud Run revisions. |
+| Component | Platform | Region / Host | Details |
+| :--- | :--- | :--- | :--- |
+| **Web Portal** | Google Cloud Run | `europe-west1` | ASP.NET Core MVC management portal served via custom URL (`pmbeye-handbook.cloud.run`). |
+| **Backend API** | Google Cloud Run | `europe-west3` | Serverless, autoscaling REST API built on `.NET 10`. |
+| **Database** | Google Cloud SQL | `africa-south1` | Managed PostgreSQL instance (`digital-handbook-db`) connected via Cloud SQL Auth Proxy Unix sockets. |
+| **Object Storage** | Google Cloud Storage | Multi-Region | Secure cloud bucket (`digihandbook-bucket`) storing policy documents and media. |
+| **Container Registry** | Artifact Registry / GCR | GCP Central | Versioned Docker images built and tagged for zero-downtime service revisions. |
 
 ---
 
@@ -44,15 +49,16 @@ The project integrates automated building, testing, container packaging, and dep
 * **Source Control**: GitHub repository with feature branches and protected integration branches.
 * **Continuous Integration (GitHub Actions)**:
   * Triggers on pull requests and pushes to `main`.
-  * Restores dependencies and compiles the MVC portal, Android APK and Web API.
+  * Restores dependencies, linting, and compiles the MVC portal, Android APK and Web API.
 
 * **Continuous Deployment & Containerization (Docker + Cloud Build)**:
-  * Multi-stage Dockerfile compiles and packages the API into a container image.
+  * Multi-stage Docker files compiles and packages the API and Dashboard into container images.
   * Google Cloud Build automatically handles image builds directly from source code.
-  * Google Cloud Run deploys new container revisions with zero downtime, smoothly routing live traffic to the latest build.
+  * Google Cloud Run deploys new container revisions for both the API and Web Portal with zero downtime, smoothly routing live traffic to the latest build.
 * **Configuration & Security**: 
   * Sensitive data (database connection strings, JWT keys, and storage bucket names) are kept out of source code.
-  * Production secrets are managed securely via Cloud Run environment variables and service account credentials.
+  * Production secrets and inter-service endpoints are managed securely via Cloud Run environment variables and service account credentials.
+  * Secure PostgreSQL communication is maintained using Cloud SQL Auth Proxy Unix domain sockets
 
 ---
 
@@ -63,5 +69,6 @@ The project integrates automated building, testing, container packaging, and dep
 │   ├── Digital_Handbook_Portal/ # ASP.NET Core MVC Web Application - Admin Portal
 │   └── HandbookApi/             # ASP.NET Core Web API (Controllers, Models, Services) - API
 ├── EmployeeDigitalHandbook/     # Android Application (Kotlin, Gradle) - Staff-facing mobile app
-├── Dockerfile                  # Container build definition
-└── README.md
+├── Dockerfile                  # Container build definition for API
+├── Dockerfile.portal            # Container build definition for Web Portal
+└── README.md                   # Project documentation
