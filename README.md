@@ -57,6 +57,7 @@ The project integrates automated building, testing, container packaging, and dep
 ---
 
 ## 4. Repository Structure
+```plaintext
 ├── .github/workflows/          # contains all the github actions
 ├── Digital_Handbook_Portal/
 │   ├── Digital_Handbook_Portal/ # ASP.NET Core MVC Web Application - Admin Portal
