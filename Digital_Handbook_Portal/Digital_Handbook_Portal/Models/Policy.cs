@@ -27,5 +27,10 @@ namespace Digital_Handbook_Portal.Models
 
         [ForeignKey("categoryId")]
         public virtual PolicyCategory? Category { get; set; }
+
+        //for doctor link
+        [Display(Name ="Linked Doctor (Optional)")]
+        public int? doctorId { get; set; }
+        public Doctor? Doctor { get; set; }
     }
 }

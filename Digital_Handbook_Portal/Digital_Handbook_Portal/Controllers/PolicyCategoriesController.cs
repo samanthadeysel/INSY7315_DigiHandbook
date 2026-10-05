@@ -1,13 +1,20 @@
 using Digital_Handbook_Portal.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace Digital_Handbook_Portal.Controllers
 {
     public class PolicyCategoriesController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly IHttpContextAccessor _httpContextAccessor; 
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        private static readonly JsonSerializerOptions JsonOptions = new()
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
         public PolicyCategoriesController(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClientFactory.CreateClient("HandbookApi");
@@ -23,15 +30,27 @@ namespace Digital_Handbook_Portal.Controllers
         // READ ALL
         public async Task<IActionResult> Index()
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<PolicyCategory>>>("api/PolicyCategories");
+            var httpResponse = await _httpClient.GetAsync("api/PolicyCategories");
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                return View(new List<PolicyCategory>());
+            }
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonSerializer.Deserialize<ApiResponse<List<PolicyCategory>>>(content, JsonOptions);
             return View(response?.Data ?? new List<PolicyCategory>());
         }
 
         // READ DETAILS
         public async Task<IActionResult> Details(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<PolicyCategory>>($"api/PolicyCategories/{id}");
-            if (response == null || !response.Success) return NotFound();
+            var httpResponse = await _httpClient.GetAsync($"api/PolicyCategories/{id}");
+            if (!httpResponse.IsSuccessStatusCode) return NotFound();
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonSerializer.Deserialize<ApiResponse<PolicyCategory>>(content, JsonOptions);
+
+            if (response == null || !response.Success || response.Data == null) return NotFound();
 
             return View(response.Data);
         }
@@ -62,8 +81,13 @@ namespace Digital_Handbook_Portal.Controllers
         // UPDATE (GET)
         public async Task<IActionResult> Edit(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<PolicyCategory>>($"api/PolicyCategories/{id}");
-            if (response == null || !response.Success) return NotFound();
+            var httpResponse = await _httpClient.GetAsync($"api/PolicyCategories/{id}");
+            if (!httpResponse.IsSuccessStatusCode) return NotFound();
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonSerializer.Deserialize<ApiResponse<PolicyCategory>>(content, JsonOptions);
+
+            if (response == null || !response.Success || response.Data == null) return NotFound();
 
             return View(response.Data);
         }
@@ -90,8 +114,13 @@ namespace Digital_Handbook_Portal.Controllers
         // DELETE (GET)
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<PolicyCategory>>($"api/PolicyCategories/{id}");
-            if (response == null || !response.Success) return NotFound();
+            var httpResponse = await _httpClient.GetAsync($"api/PolicyCategories/{id}");
+            if (!httpResponse.IsSuccessStatusCode) return NotFound();
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            var response = JsonSerializer.Deserialize<ApiResponse<PolicyCategory>>(content, JsonOptions);
+
+            if (response == null || !response.Success || response.Data == null) return NotFound();
 
             return View(response.Data);
         }

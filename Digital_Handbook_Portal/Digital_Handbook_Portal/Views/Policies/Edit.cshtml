@@ -12,7 +12,7 @@
                     <h4 class="card-title fw-bold mb-0">Edit Policy</h4>
                 </div>
                 <div class="card-body p-4">
-                    <form asp-action="Edit">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
                         <input type="hidden" asp-for="policyId" />
 
@@ -24,17 +24,25 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="categoryId" class="form-label fw-semibold"></label>
-                                <select asp-for="categoryId" class="form-select" asp-items="ViewBag.categoryId">
+                                <label asp-for="categoryId" class="form-label fw-semibold">Category</label>
+                                <select asp-for="categoryId" class="form-select" asp-items="ViewBag.Categories">
                                     <option value="">-- Select Category --</option>
                                 </select>
                                 <span asp-validation-for="categoryId" class="text-danger small"></span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="specificCategory" class="form-label fw-semibold"></label>
+                                <label asp-for="specificCategory" class="form-label fw-semibold">Specific Category (Optional)</label>
                                 <input asp-for="specificCategory" class="form-control" />
                                 <span asp-validation-for="specificCategory" class="text-danger small"></span>
                             </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="doctorId" class="form-label fw-semibold">Linked Doctor (Optional)</label>
+                            <select asp-for="doctorId" class="form-select" asp-items="ViewBag.Doctors">
+                                <option value="">-- None (General Policy) --</option>
+                            </select>
+                            <span asp-validation-for="doctorId" class="text-danger small"></span>
                         </div>
 
                         <div class="mb-3">
@@ -44,8 +52,12 @@
                         </div>
 
                         <div class="mb-4">
-                            <label asp-for="fileUrl" class="form-label fw-semibold"></label>
-                            <input asp-for="fileUrl" class="form-control" />
+                            <label class="form-label fw-semibold">Document File / URL</label>
+
+                            <input type="file" name="uploadFile" class="form-control mb-2" accept=".pdf,.doc,.docx" />
+
+                            <input asp-for="fileUrl" class="form-control" placeholder="Or enter URL: https://... or /policies/file.pdf" />
+
                             <span asp-validation-for="fileUrl" class="text-danger small"></span>
                         </div>
 

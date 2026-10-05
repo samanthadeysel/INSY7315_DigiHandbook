@@ -26,7 +26,7 @@ class PolicyAdapter(
 
     override fun onBindViewHolder(holder: PolicyViewHolder, position: Int) {
         val policy = policiesList[position]
-        holder.txtPolicyTitle.text = policy.title
+        holder.txtPolicyTitle.text = policy.title ?: "Untitled Policy"
         holder.txtPolicySummary.text = policy.summary ?: ""
 
         holder.itemView.setOnClickListener {

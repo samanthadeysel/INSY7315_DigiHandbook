@@ -57,16 +57,36 @@ class QuizTakeFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.getQuizById(quizId)
-                val apiResponse = response.body()
+                val body = response.body()
 
-                if (response.isSuccessful && apiResponse != null && apiResponse.data != null) {
-                    currentQuiz = apiResponse.data
+                if (response.isSuccessful && body?.data != null) {
+                    currentQuiz = body.data
                     displayQuestion()
                 } else {
-                    Toast.makeText(requireContext(), apiResponse?.message ?: "Failed to load quiz details", Toast.LENGTH_SHORT).show()
+                    val rawResponse = ApiClient.apiService.getRawQuizById(quizId)
+                    if (rawResponse.isSuccessful && rawResponse.body() != null) {
+                        currentQuiz = rawResponse.body()
+                        displayQuestion()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            body?.message ?: "Failed to load quiz details (HTTP ${response.code()})",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                try {
+                    val rawResponse = ApiClient.apiService.getRawQuizById(quizId)
+                    if (rawResponse.isSuccessful && rawResponse.body() != null) {
+                        currentQuiz = rawResponse.body()
+                        displayQuestion()
+                    } else {
+                        Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (fallbackEx: Exception) {
+                    Toast.makeText(requireContext(), "Error loading quiz: ${fallbackEx.localizedMessage}", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
