@@ -31,7 +31,7 @@ jobs:
         env:
           ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
           Jwt__Key: ${{ secrets.JWT_SECRET_KEY }}
-        run: dotnet publish HandbookApi.csproj --configuration Release --output ./publish/api
+        run: dotnet publish HandbookApi.csproj --configuration Release --output ./publish/api /p:ErrorOnDuplicatePublishOutputFiles=false
       
       - name: Compile and Publish Admin Dashboard
         run: dotnet publish Digital_Handbook_Portal/Digital_Handbook_Portal/Digital_Handbook_Portal.csproj --configuration Release --output ./publish/dashboard
