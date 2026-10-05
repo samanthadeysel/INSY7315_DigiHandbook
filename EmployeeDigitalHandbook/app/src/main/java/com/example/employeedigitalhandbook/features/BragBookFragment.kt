@@ -54,9 +54,9 @@ class BragBookFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.fabAddBrag.setOnClickListener {
-            findNavController().navigate(R.id.action_bragBookFragment_to_createBragFragment)
-        }
+//        binding.fabAddBrag.setOnClickListener {
+//            findNavController().navigate(R.id.action_bragBookFragment_to_createBragFragment)
+//        }
     }
 
 //    private fun setupBottomNavigation() {
