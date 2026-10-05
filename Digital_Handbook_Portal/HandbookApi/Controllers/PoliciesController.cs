@@ -25,19 +25,34 @@ namespace HandbookApi.Controllers
             try
             {
                 var policies = await _context.Policy
+                    .AsNoTracking()
                     .Include(p => p.Category)
                     .OrderBy(p => p.Title)
+                    .Select(p => new Policy
+                    {
+                        policyId = p.policyId,
+                        Title = p.Title,
+                        contentSummary = p.contentSummary,
+                        specificCategory = p.specificCategory,
+                        fileUrl = p.fileUrl,
+                        categoryId = p.categoryId,
+                        Category = p.Category == null ? null : new PolicyCategory
+                        {
+                            categoryId = p.Category.categoryId,
+                            categoryName = p.Category.categoryName,
+                            subCategory = p.Category.subCategory
+                        }
+                    })
                     .ToListAsync();
 
                 return Ok(new ApiResponse<List<Policy>> { Success = true, Data = policies });
             }
             catch (Exception ex)
             {
-                // Expose exact exception (Table missing, Auth failed, SSL issue, etc.)
                 return StatusCode(500, new ApiResponse<List<Policy>>
                 {
                     Success = false,
-                    Message = $"Cloud SQL / API Error: {ex.Message} | Inner: {ex.InnerException?.Message}"
+                    Message = $"API Internal Error: {ex.Message} | Inner: {ex.InnerException?.Message}"
                 });
             }
         }
@@ -47,12 +62,13 @@ namespace HandbookApi.Controllers
         public async Task<ActionResult<ApiResponse<Policy>>> GetPolicy(int id)
         {
             var policy = await _context.Policy
+                .AsNoTracking()
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(p => p.policyId == id);
 
             if (policy == null)
             {
-                return NotFound(new ApiResponse<Policy> { Success = false, Message = "Policy document not found." });
+                return NotFound(new ApiResponse<Policy> { Success = false, Message = "Policy not found." });
             }
 
             return Ok(new ApiResponse<Policy> { Success = true, Data = policy });
@@ -73,7 +89,7 @@ namespace HandbookApi.Controllers
         // POST: api/Policies
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<ApiResponse<Policy>>> CreatePolicy([FromForm] Policy policy, IFormFile? pdfFile)
+        public async Task<ActionResult<ApiResponse<Policy>>> CreatePolicy([FromForm] Policy policy, [FromForm] IFormFile? pdfFile)
         {
             ModelState.Remove(nameof(Policy.policyId));
             ModelState.Remove(nameof(Policy.Category));
@@ -113,7 +129,7 @@ namespace HandbookApi.Controllers
         // PUT: api/Policies/5
         [HttpPut("{id}")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<ApiResponse<Policy>>> UpdatePolicy(int id, [FromForm] Policy policy, IFormFile? pdfFile)
+        public async Task<ActionResult<ApiResponse<Policy>>> UpdatePolicy(int id, [FromForm] Policy policy, [FromForm] IFormFile? pdfFile)
         {
             var existingPolicy = await _context.Policy.FindAsync(id);
             if (existingPolicy == null)
@@ -159,6 +175,7 @@ namespace HandbookApi.Controllers
                 }
                 catch
                 {
+                    // Continue deletion if file was already missing in cloud storage
                 }
             }
 

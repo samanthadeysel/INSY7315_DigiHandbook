@@ -20,23 +20,30 @@ namespace HandbookApi.Controllers
 
         // GET: api/BragBook
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<List<BragBook>>>> GetBragPosts()
+        public async Task<ActionResult<ApiResponse<List<BragBook>>>> GetBragBook()
         {
-            var posts = await _context.BragBook.OrderByDescending(b => b.datePosted).ToListAsync();
-            return Ok(new ApiResponse<List<BragBook>> { Success = true, Data = posts });
-        }
-
-        // GET: api/BragBook/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<BragBook>>> GetBragPost(int id)
-        {
-            var post = await _context.BragBook.FindAsync(id);
-            if (post == null)
+            try
             {
-                return NotFound(new ApiResponse<BragBook> { Success = false, Message = "Brag post not found." });
-            }
+                var bragPosts = await _context.BragBook
+                    .OrderByDescending(b => b.datePosted)
+                    .ToListAsync();
 
-            return Ok(new ApiResponse<BragBook> { Success = true, Data = post });
+                return Ok(new ApiResponse<List<BragBook>>
+                {
+                    Success = true,
+                    Message = "Brag book entries retrieved successfully",
+                    Data = bragPosts
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<List<BragBook>>
+                {
+                    Success = false,
+                    Message = $"Error retrieving entries: {ex.Message}",
+                    Data = null
+                });
+            }
         }
 
         // POST: api/BragBook
@@ -49,27 +56,36 @@ namespace HandbookApi.Controllers
 
             if (!ModelState.IsValid)
             {
-                var errors = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-                return BadRequest(new ApiResponse<BragBook> { Success = false, Message = $"Validation error: {errors}" });
+                var errors = string.Join("; ", ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage));
+
+                return BadRequest(new ApiResponse<BragBook>
+                {
+                    Success = false,
+                    Message = $"Validation error: {errors}"
+                });
             }
 
             try
             {
-               
-                post.datePosted = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
-
                 var newEntity = new BragBook
                 {
                     content = post.content,
                     senderType = post.senderType,
                     recipientName = post.recipientName,
-                    datePosted = post.datePosted
+                    datePosted = DateTime.UtcNow
                 };
 
                 _context.BragBook.Add(newEntity);
                 await _context.SaveChangesAsync();
 
-                return Ok(new ApiResponse<BragBook> { Success = true, Message = "Brag post published successfully.", Data = newEntity });
+                return Ok(new ApiResponse<BragBook>
+                {
+                    Success = true,
+                    Message = "Brag post published successfully.",
+                    Data = newEntity
+                });
             }
             catch (Exception ex)
             {
@@ -97,7 +113,6 @@ namespace HandbookApi.Controllers
             existingPost.senderType = post.senderType;
             existingPost.recipientName = post.recipientName;
 
-           
             await _context.SaveChangesAsync();
             return Ok(new ApiResponse<BragBook> { Success = true, Message = "Brag post updated successfully.", Data = existingPost });
         }

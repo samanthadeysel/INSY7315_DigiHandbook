@@ -85,7 +85,7 @@ class QuizListFragment : Fragment() {
                 if (response.isSuccessful && apiResponse != null && apiResponse.data != null) {
                     quizAdapter.updateQuizzes(apiResponse.data)
                 } else {
-                    Toast.makeText(requireContext(), "Failed to load quizzes", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), apiResponse?.message ?: "Failed to load quizzes", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()

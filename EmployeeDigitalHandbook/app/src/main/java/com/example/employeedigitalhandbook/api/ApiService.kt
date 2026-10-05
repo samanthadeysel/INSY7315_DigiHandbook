@@ -16,23 +16,15 @@ import retrofit2.http.Path
 
 interface ApiService {
 
-    //corrected routes for login, community and quizzes
-
-//    @POST("api/authapi/login")
-//    suspend fun login(@Body request: ApiLoginRequest): Response<ApiLoginResponse>
-
-
+    // --- AUTH ---
     @POST("api/Auth/login")
     suspend fun login(@Body request: ApiLoginRequest): Response<ApiLoginResponse>
 
     // --- COMMUNITY EVENTS ---
-//    @GET("api/CommunityEvents")
-//    suspend fun getCommunityEvents(): Response<List<CommunityEvent>>
     @GET("api/Community")
     suspend fun getCommunityEvents(): Response<ApiResponse<List<CommunityEvent>>>
 
     // --- DOCTORS ---
-    // Corrected in ApiService.kt
     @GET("api/Doctors")
     suspend fun getDoctors(): Response<ApiResponse<List<Doctor>>>
 
@@ -46,14 +38,11 @@ interface ApiService {
     @POST("api/bragbook")
     suspend fun createBragPost(@Body post: BragBook): Response<ApiResponse<BragBook>>
 
-    // --- QUIZZES ---
-//    @GET("api/Quizs")
-//    suspend fun getQuizzes(): Response<List<Quiz>>
-
+    // --- QUIZZES (UPDATED TO ApiResponse) ---
     @GET("api/Quizzes")
     suspend fun getQuizzes(): Response<ApiResponse<List<Quiz>>>
 
-    @GET("api/Quizs/{id}")
+    @GET("api/Quizzes/{id}")
     suspend fun getQuizById(@Path("id") id: Int): Response<ApiResponse<Quiz>>
 
     @POST("api/quizzes/submit")

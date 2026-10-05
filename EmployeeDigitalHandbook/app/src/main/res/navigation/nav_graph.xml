@@ -27,6 +27,10 @@
         tools:layout="@layout/fragment_home_page">
 
         <action
+            android:id="@+id/action_homePageFragment_to_doctorFragment"
+            app:destination="@id/doctorFragment" />
+
+        <action
             android:id="@+id/action_homePageFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
 
@@ -155,10 +159,16 @@
         android:label="Coming Soon" />
 
     <!-- Doctor Destination -->
+    <!-- Doctor Destination -->
     <fragment
         android:id="@+id/doctorFragment"
         android:name="com.example.employeedigitalhandbook.features.DoctorFragment"
         android:label="Doctor">
+
+        <argument
+            android:name="doctorId"
+            android:defaultValue="0"
+            app:argType="integer" />
 
         <action
             android:id="@+id/action_doctorFragment_to_homePageFragment"

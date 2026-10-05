@@ -63,7 +63,7 @@ class QuizTakeFragment : Fragment() {
                     currentQuiz = apiResponse.data
                     displayQuestion()
                 } else {
-                    Toast.makeText(requireContext(), "Failed to load quiz details", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), apiResponse?.message ?: "Failed to load quiz details", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
@@ -119,7 +119,7 @@ class QuizTakeFragment : Fragment() {
     private fun navigateToResults() {
         val quiz = currentQuiz ?: return
         val totalQuestions = quiz.questions.size
-        val percentage = ((correctAnswersCount.toDouble() / totalQuestions) * 100).toInt()
+        val percentage = if (totalQuestions > 0) ((correctAnswersCount.toDouble() / totalQuestions) * 100).toInt() else 0
         val passed = percentage >= quiz.passPercentage
 
         val bundle = bundleOf(

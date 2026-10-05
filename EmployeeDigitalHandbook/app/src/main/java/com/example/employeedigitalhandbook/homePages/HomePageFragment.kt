@@ -88,18 +88,17 @@ class HomePageFragment : Fragment() {
             when (result) {
                 is DoctorResult.ListSuccess -> {
                     doctorsRecyclerView.adapter = DoctorAdapter(result.doctors) { doctor ->
-                        val nameDisplay = doctor.fullNameWithTitle.ifBlank { "Dr. ${doctor.fName} ${doctor.lName}" }
-                        Toast.makeText(
-                            requireContext(),
-                            "$nameDisplay - Suite ${doctor.suiteNumber}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        val bundle = androidx.core.os.bundleOf("doctorId" to doctor.doctorId)
+                        findNavController().navigate(
+                            R.id.action_homePageFragment_to_doctorFragment,
+                            bundle
+                        )
                     }
                 }
                 is DoctorResult.Error -> {
                     Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
                 }
-                else -> Unit //makes the 'when' extension exhaustive
+                else -> Unit
             }
         }
 
