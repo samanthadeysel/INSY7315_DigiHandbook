@@ -25,6 +25,9 @@ public class Digital_Handbook_PortalContext(DbContextOptions<Digital_Handbook_Po
             entity.Property(e => e.senderType).HasColumnName("senderType");
             entity.Property(e => e.recipientName).HasColumnName("recipientName");
             entity.Property(e => e.datePosted).HasColumnName("datePosted");
+
+            //remove imageUrl
+            entity.Ignore("imageUrl");
         });
 
         modelBuilder.Entity<Digital_Handbook_Portal.Models.Doctor>(entity =>

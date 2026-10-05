@@ -31,12 +31,12 @@ class EventAdapter(
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
-        holder.title.text = event.title
-        holder.date.text = event.date
-        holder.time.text = event.time
-        holder.location.text = event.location
+        holder.title.text = if (event.title.isNotBlank()) event.title else "Untitled Event"
 
-        //colour changing
+        holder.date.text = event.formattedDate
+        holder.time.text = event.formattedTime
+        holder.location.text = if (event.location.isNotBlank()) event.location else "N/A"
+
         val colorHex = when (position % 3) {
             0 -> "#2690CF"
             1 -> "#8BC34A"

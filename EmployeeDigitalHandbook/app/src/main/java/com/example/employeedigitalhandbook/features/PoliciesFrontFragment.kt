@@ -92,13 +92,15 @@ class PoliciesFrontFragment : Fragment() {
     }
 
     private fun filterPolicies(query: String) {
-        val filtered = if (query.isEmpty()) {
+        val cleanQuery = query.trim()
+        val filtered = if (cleanQuery.isEmpty()) {
             originalPoliciesList
         } else {
-            originalPoliciesList.filter {
-                it.title.contains(query, ignoreCase = true) ||
-                        it.category.contains(query, ignoreCase = true) ||
-                        (it.summary?.contains(query, ignoreCase = true) == true)
+            originalPoliciesList.filter { policy ->
+                (policy.title?.contains(cleanQuery, ignoreCase = true) == true) ||
+                        (policy.summary?.contains(cleanQuery, ignoreCase = true) == true) ||
+                        (policy.category.contains(cleanQuery, ignoreCase = true)) ||
+                        (policy.specificCategory?.contains(cleanQuery, ignoreCase = true) == true)
             }
         }
         policyAdapter.updateData(filtered)
