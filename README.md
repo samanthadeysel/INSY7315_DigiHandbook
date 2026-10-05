@@ -44,7 +44,7 @@ The project integrates automated building, testing, container packaging, and dep
 * **Source Control**: GitHub repository with feature branches and protected integration branches.
 * **Continuous Integration (GitHub Actions)**:
   * Triggers on pull requests and pushes to `main`.
-  * Restores dependencies and compiles both the MVC portal and Web API.
+  * Restores dependencies and compiles the MVC portal, Android APK and Web API.
 
 * **Continuous Deployment & Containerization (Docker + Cloud Build)**:
   * Multi-stage Dockerfile compiles and packages the API into a container image.
