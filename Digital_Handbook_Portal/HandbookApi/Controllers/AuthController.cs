@@ -11,7 +11,6 @@ namespace HandbookApi.Controllers
     {
         private readonly Digital_Handbook_PortalContext _context;
 
-        // Hardcoded admin store
         private readonly List<(string Email, string Password, string Name, int Id)> _admins = new()
         {
             ("admin1@pmbeye.co.za", "Admin123!", "Tracy", 1),
@@ -66,7 +65,7 @@ namespace HandbookApi.Controllers
             {
                 UserId = user.userId,
                 Email = user.email,
-                Name = user.email,
+                FullName = user.email.Split('@')[0],
                 Token = "app-user-jwt-token-" + Guid.NewGuid()
             };
 
@@ -108,7 +107,7 @@ namespace HandbookApi.Controllers
             {
                 UserId = admin.Id,
                 Email = admin.Email,
-                Name = admin.Name,
+                FullName = admin.Name,
                 Token = "admin-session-token-" + Guid.NewGuid()
             };
 

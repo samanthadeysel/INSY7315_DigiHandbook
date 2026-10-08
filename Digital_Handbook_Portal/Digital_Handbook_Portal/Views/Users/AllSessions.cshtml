@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Digital_Handbook_Portal.Models.UserSession>
+
+@{
+    ViewData["Title"] = "All User Sessions";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📱 All User Activity & Navigation Sessions</h2>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>User Email</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Total Duration</th>
+                            <th>Screens Visited</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var session in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@(string.IsNullOrEmpty(session.Email) ? session.FullName : session.Email)</strong>
+                                    </td>
+                                    <td>@session.StartTime.ToLocalTime().ToString("g")</td>
+                                    <td>@session.EndTime.ToLocalTime().ToString("g")</td>
+                                    <td>
+                                        <span class="badge bg-info text-dark">
+                                            @TimeSpan.FromSeconds(session.TotalDurationSeconds).ToString(@"hh\:mm\:ss")
+                                        </span>
+                                    </td>
+                                    <td>@(session.Visits?.Count ?? 0) screens</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-sm btn-outline-primary me-1" type="button" data-bs-toggle="collapse" data-bs-target="#session-@session.SessionId">
+                                            Quick Journey
+                                        </button>
+
+                                        <a asp-controller="Users" asp-action="Sessions" asp-route-id="@session.userId" class="btn btn-sm btn-outline-info">
+                                            Details &rarr;
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr class="collapse" id="session-@session.SessionId">
+                                    <td colspan="6" class="bg-light">
+                                        <div class="p-3">
+                                            <h6 class="fw-bold mb-3">Screen Journey Breakdown (Session #@session.SessionId)</h6>
+                                            <table class="table table-sm table-bordered bg-white mb-0">
+                                                <thead class="table-secondary">
+                                                    <tr>
+                                                        <th>Fragment Name</th>
+                                                        <th>Time Entered</th>
+                                                        <th>Time Exited</th>
+                                                        <th>Time Spent</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (session.Visits != null && session.Visits.Any())
+                                                    {
+                                                        @foreach (var visit in session.Visits.OrderBy(v => v.EnteredAt))
+                                                        {
+                                                            <tr>
+                                                                <td><code>@visit.FragmentName</code></td>
+                                                                <td>@visit.EnteredAt.ToLocalTime().ToString("T")</td>
+                                                                <td>@visit.ExitedAt.ToLocalTime().ToString("T")</td>
+                                                                <td><strong>@visit.DurationSeconds.ToString("0.0") sec</strong></td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td colspan="4" class="text-center text-muted">No screen visits recorded for this session.</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">
+                                    No app sessions recorded yet.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
