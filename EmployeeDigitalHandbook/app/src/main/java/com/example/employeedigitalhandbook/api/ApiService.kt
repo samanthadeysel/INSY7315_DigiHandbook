@@ -7,7 +7,7 @@ import com.example.employeedigitalhandbook.data.Policy
 import com.example.employeedigitalhandbook.data.Quiz
 import com.example.employeedigitalhandbook.data.QuizSubmission
 import com.example.employeedigitalhandbook.data.Resource
-import com.example.employeedigitalhandbook.api.ApiResponse
+import com.example.employeedigitalhandbook.sessions.UserSessionPayload
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -76,4 +76,8 @@ interface ApiService {
 
     @GET("api/policies/{id}")
     suspend fun getPolicyById(@Path("id") id: Int): Response<ApiResponse<Policy>>
+
+    // --- Sessions ---
+    @POST("api/Users/sessions/log")
+    suspend fun logUserSession(@Body sessionPayload: UserSessionPayload): Response<Unit>
 }

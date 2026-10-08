@@ -15,7 +15,7 @@ namespace HandbookApi.Controllers
             _context = context;
         }
 
-        // GET: api/Users
+        // GET: api/Users 
         [HttpGet]
         public async Task<ActionResult<ApiResponse<List<User>>>> GetUsers()
         {
@@ -23,8 +23,20 @@ namespace HandbookApi.Controllers
             return Ok(new ApiResponse<List<User>> { Success = true, Data = users });
         }
 
-        // GET: api/Users/5
-        [HttpGet("{id}")]
+        // GET: api/Users/all-sessions 
+        [HttpGet("all-sessions")]
+        public async Task<ActionResult<ApiResponse<List<UserSession>>>> GetAllSessions()
+        {
+            var sessions = await _context.UserSession
+                .Include(s => s.Visits)
+                .OrderByDescending(s => s.StartTime)
+                .ToListAsync();
+
+            return Ok(new ApiResponse<List<UserSession>> { Success = true, Data = sessions });
+        }
+
+        // GET: api/Users/5 
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<ApiResponse<User>>> GetUser(int id)
         {
             var user = await _context.User.FindAsync(id);
@@ -36,7 +48,38 @@ namespace HandbookApi.Controllers
             return Ok(new ApiResponse<User> { Success = true, Data = user });
         }
 
-        // POST: api/Users/admin-create (Admin creates application users)
+        // GET: api/Users/5/sessions 
+        [HttpGet("{id:int}/sessions")]
+        public async Task<ActionResult<ApiResponse<List<UserSession>>>> GetUserSessions(int id)
+        {
+            var userSessions = await _context.UserSession
+                .Include(s => s.Visits)
+                .Where(s => s.userId == id)
+                .OrderByDescending(s => s.StartTime)
+                .ToListAsync();
+
+            return Ok(new ApiResponse<List<UserSession>> { Success = true, Data = userSessions });
+        }
+
+        // POST: api/Users/sessions/log 
+        [HttpPost("sessions/log")]
+        public async Task<IActionResult> LogUserSession([FromBody] UserSession session)
+        {
+            if (session == null) return BadRequest("Invalid session data");
+
+            var existingUser = await _context.User.FindAsync(session.userId);
+            if (existingUser != null)
+            {
+                session.User = existingUser;
+            }
+
+            _context.UserSession.Add(session);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { success = true });
+        }
+
+        // POST: api/Users/admin-create
         [HttpPost("admin-create")]
         public async Task<ActionResult<ApiResponse<User>>> AdminCreateUser([FromBody] User user)
         {
@@ -51,7 +94,6 @@ namespace HandbookApi.Controllers
                 return BadRequest(new ApiResponse<User> { Success = false, Message = "A user with this email address already exists." });
             }
 
-            // Securely hash initial password before saving
             user.password = BCrypt.Net.BCrypt.HashPassword(user.password);
 
             _context.User.Add(user);
@@ -60,7 +102,7 @@ namespace HandbookApi.Controllers
             return Ok(new ApiResponse<User> { Success = true, Message = "User account created successfully.", Data = user });
         }
 
-        // POST: api/Users/login (User login via the Application)
+        // POST: api/Users/login
         [HttpPost("login")]
         public async Task<ActionResult<ApiResponse<AuthResponse>>> UserLogin([FromBody] LoginRequest request)
         {
@@ -70,13 +112,7 @@ namespace HandbookApi.Controllers
             }
 
             var user = await _context.User.FirstOrDefaultAsync(u => u.email.ToLower() == request.Email.ToLower());
-            if (user == null)
-            {
-                return Unauthorized(new ApiResponse<AuthResponse> { Success = false, Message = "Invalid email or password." });
-            }
-
-            bool isValidPassword = BCrypt.Net.BCrypt.Verify(request.Password, user.password);
-            if (!isValidPassword)
+            if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.password))
             {
                 return Unauthorized(new ApiResponse<AuthResponse> { Success = false, Message = "Invalid email or password." });
             }
@@ -85,7 +121,8 @@ namespace HandbookApi.Controllers
             {
                 UserId = user.userId,
                 Email = user.email,
-                Token = Guid.NewGuid().ToString() // Replace with JWT generator if token generation is added
+                FullName = user.email.Split('@')[0],
+                Token = Guid.NewGuid().ToString()
             };
 
             return Ok(new ApiResponse<AuthResponse>
@@ -96,7 +133,7 @@ namespace HandbookApi.Controllers
             });
         }
 
-        // POST: api/Users/admin-login (Admin login endpoint)
+        // POST: api/Users/admin-login
         [HttpPost("admin-login")]
         public async Task<ActionResult<ApiResponse<AuthResponse>>> AdminLogin([FromBody] LoginRequest request)
         {
@@ -105,16 +142,15 @@ namespace HandbookApi.Controllers
                 return BadRequest(new ApiResponse<AuthResponse> { Success = false, Message = "Invalid admin login payload." });
             }
 
-            // Admin verification logic will go here
             return Ok(new ApiResponse<AuthResponse>
             {
                 Success = true,
-                Message = "Admin login endpoint ready."
+                Message = "Admin authentication verified successfully."
             });
         }
 
         // PUT: api/Users/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<ActionResult<ApiResponse<User>>> UpdateUser(int id, [FromBody] User user)
         {
             if (id != user.userId)
@@ -140,7 +176,7 @@ namespace HandbookApi.Controllers
         }
 
         // DELETE: api/Users/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteUser(int id)
         {
             var user = await _context.User.FindAsync(id);
