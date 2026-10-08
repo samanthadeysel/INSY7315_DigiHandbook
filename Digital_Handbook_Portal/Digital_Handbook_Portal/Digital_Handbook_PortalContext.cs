@@ -11,4 +11,6 @@ public class Digital_Handbook_PortalContext(DbContextOptions<Digital_Handbook_Po
     public DbSet<Digital_Handbook_Portal.Models.Quiz> Quiz { get; set; } = default!;
 
     public DbSet<Digital_Handbook_Portal.Models.Doctor> Doctor { get; set; } = default!;
+
+    public DbSet<Digital_Handbook_Portal.Models.QuizResult> QuizResult { get; set; } = default!;
 }
