@@ -17,6 +17,12 @@
                         <input type="hidden" asp-for="userId" />
 
                         <div class="mb-3">
+                            <label asp-for="FullName" class="form-label fw-semibold"></label>
+                            <input asp-for="FullName" type="text" class="form-control" placeholder="Enter staff member name" />
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
                             <label asp-for="email" class="form-label fw-semibold"></label>
                             <input asp-for="email" type="email" class="form-control" />
                             <span asp-validation-for="email" class="text-danger small"></span>

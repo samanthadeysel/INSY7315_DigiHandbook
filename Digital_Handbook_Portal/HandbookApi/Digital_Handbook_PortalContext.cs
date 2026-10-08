@@ -13,6 +13,8 @@ public class Digital_Handbook_PortalContext(DbContextOptions<Digital_Handbook_Po
     public DbSet<Doctor> Doctor { get; set; } = default!;
     public DbSet<UserSession> UserSession { get; set; } = default!;
     public DbSet<FragmentVisit> FragmentVisit { get; set; } = default!;
+    public DbSet<QuizResult> QuizResult { get; set; } = default!;
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

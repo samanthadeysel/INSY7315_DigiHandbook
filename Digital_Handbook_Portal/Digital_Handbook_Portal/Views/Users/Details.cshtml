@@ -14,6 +14,9 @@
                 </div>
                 <div class="card-body p-4">
                     <dl class="row mb-0">
+                        <dt class="col-sm-4 text-muted">Full Name</dt>
+                        <dd class="col-sm-8 fw-bold">@(string.IsNullOrWhiteSpace(Model.FullName) ? "N/A" : Model.FullName)</dd>
+
                         <dt class="col-sm-4 text-muted">@Html.DisplayNameFor(model => model.email)</dt>
                         <dd class="col-sm-8 fw-bold">@Html.DisplayFor(model => model.email)</dd>
 
