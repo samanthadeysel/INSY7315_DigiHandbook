@@ -48,18 +48,10 @@ data class Quiz(
 )
 
 data class QuizSubmission(
-    @SerializedName("quizId")
-    val quizId: Int,
-
-    @SerializedName("scoreFraction")
-    val scoreFraction: String,
-
-    @SerializedName("percentage")
-    val percentage: Int,
-
-    @SerializedName("passed")
-    val passed: Boolean,
-
-    @SerializedName("cpdPointsEarned")
-    val cpdPointsEarned: Double
+    @SerializedName("quizId") val quizId: Int,
+    @SerializedName("scoreFraction") val scoreFraction: String,
+    @SerializedName("percentage") val percentage: Int,
+    @SerializedName("passed") val passed: Boolean,
+    @SerializedName("cpdPointsEarned") val cpdPointsEarned: Double,
+    @SerializedName("userId") val userId: Int?
 )

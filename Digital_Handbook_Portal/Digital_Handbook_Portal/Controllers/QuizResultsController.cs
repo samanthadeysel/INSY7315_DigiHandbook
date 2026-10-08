@@ -1,7 +1,7 @@
-
+using Digital_Handbook_Portal.Models;
+using Digital_Handbook_Portal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Digital_Handbook_Portal.Models;
 
 public class QuizResultsController : Controller
 {
@@ -12,138 +12,68 @@ public class QuizResultsController : Controller
         _context = context;
     }
 
-    // GET: QUIZRESULTS
-    public async Task<IActionResult> Index()    
+    // GET: QuizResults (User CPD Leaderboard/Summary)
+    public async Task<IActionResult> Index()
     {
-        return View(await _context.QuizResult.ToListAsync());
-    }
+        var results = await _context.QuizResult
+            .Include(q => q.Quiz)
+            .Include(q => q.User)
+            .ToListAsync();
 
-    // GET: QUIZRESULTS/Details/5
-    public async Task<IActionResult> Details(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var quizresult = await _context.QuizResult
-            .FirstOrDefaultAsync(m => m.Id == id);
-        if (quizresult == null)
-        {
-            return NotFound();
-        }
-
-        return View(quizresult);
-    }
-
-    // GET: QUIZRESULTS/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: QUIZRESULTS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,UserId,User,QuizId,Quiz,ScorePercentage,CpdPointsAwarded,IsPassed,CompletedAt")] QuizResult quizresult)
-    {
-        if (ModelState.IsValid)
-        {
-            _context.Add(quizresult);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(quizresult);
-    }
-
-    // GET: QUIZRESULTS/Edit/5
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var quizresult = await _context.QuizResult.FindAsync(id);
-        if (quizresult == null)
-        {
-            return NotFound();
-        }
-        return View(quizresult);
-    }
-
-    // POST: QUIZRESULTS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,UserId,User,QuizId,Quiz,ScorePercentage,CpdPointsAwarded,IsPassed,CompletedAt")] QuizResult quizresult)
-    {
-        if (id != quizresult.Id)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
-            try
+        var userSummaries = results
+            .GroupBy(q => q.UserId)
+            .Select(g =>
             {
-                _context.Update(quizresult);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!QuizResultExists(quizresult.Id))
+                var firstUser = g.FirstOrDefault()?.User;
+                string userEmail = firstUser?.email ?? g.Key.ToString();
+
+                string derivedName = userEmail.Contains("@")
+                    ? string.Join(" ", userEmail.Split('@')[0].Split('.', '_', '-').Select(s => s.Length > 0 ? char.ToUpper(s[0]) + s.Substring(1) : s))
+                    : "Staff Member";
+
+                string displayName = !string.IsNullOrWhiteSpace(firstUser?.FullName)
+                    ? firstUser.FullName
+                    : derivedName;
+
+                return new UserCpdSummaryViewModel
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        return View(quizresult);
+                    UserId = g.Key.ToString(),
+                    UserName = displayName,
+                    Email = userEmail,
+                    TotalCpdPoints = g.Sum(q => q.CpdPointsAwarded),
+                    TotalQuizzesAttempted = g.Count(),
+                    TotalQuizzesPassed = g.Count(q => q.IsPassed)
+                };
+            })
+            .OrderByDescending(u => u.TotalCpdPoints)
+            .ToList();
+
+        return View(userSummaries);
     }
 
-    // GET: QUIZRESULTS/Delete/5
-    public async Task<IActionResult> Delete(int? id)
+    // GET: QuizResults/UserDetails/1 (All quiz attempts for a specific user)
+    public async Task<IActionResult> UserDetails(string id)
     {
-        if (id == null)
-        {
+        if (string.IsNullOrEmpty(id) || !int.TryParse(id, out int parsedUserId))
             return NotFound();
-        }
 
-        var quizresult = await _context.QuizResult
-            .FirstOrDefaultAsync(m => m.Id == id);
-        if (quizresult == null)
-        {
-            return NotFound();
-        }
+        var userAttempts = await _context.QuizResult
+            .Include(q => q.Quiz)
+            .Include(q => q.User)
+            .Where(q => q.UserId == parsedUserId)
+            .OrderByDescending(q => q.CompletedAt)
+            .ToListAsync();
 
-        return View(quizresult);
-    }
+        var selectedUser = userAttempts.FirstOrDefault()?.User;
+        string userEmail = selectedUser?.email ?? id;
 
-    // POST: QUIZRESULTS/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? id)
-    {
-        var quizresult = await _context.QuizResult.FindAsync(id);
-        if (quizresult != null)
-        {
-            _context.QuizResult.Remove(quizresult);
-        }
+        string derivedName = userEmail.Contains("@")
+            ? string.Join(" ", userEmail.Split('@')[0].Split('.', '_', '-').Select(s => s.Length > 0 ? char.ToUpper(s[0]) + s.Substring(1) : s))
+            : "Staff Member";
 
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
+        ViewData["UserName"] = !string.IsNullOrWhiteSpace(selectedUser?.FullName) ? selectedUser.FullName : derivedName;
+        ViewData["UserEmail"] = userEmail;
 
-    private bool QuizResultExists(int? id)
-    {
-        return _context.QuizResult.Any(e => e.Id == id);
+        return View(userAttempts);
     }
 }

@@ -1,53 +1,36 @@
-@model IEnumerable<Digital_Handbook_Portal.Models.User>
+@model Digital_Handbook_Portal.Models.User
 
 @{
-    ViewData["Title"] = "User Management";
+    ViewData["Title"] = "Delete User Account";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h2">User Management</h1>
-    <a asp-action="Create" class="btn btn-primary">
-        <i class="fa-solid fa-plus me-1"></i> Create New User
-    </a>
-</div>
+<div class="container py-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-danger shadow-sm">
+                <div class="card-header bg-danger text-white py-3">
+                    <h5 class="card-title mb-0 fw-bold">Revoke Account Access</h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-danger fw-semibold">Are you sure you want to permanently delete this user account? They will immediately lose access to the portal.</p>
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover align-middle border">
-        <thead class="table-dark">
-            <tr>
-                <th>Email Address</th>
-                <th>Password</th>
-                <th style="width: 220px;" class="text-center">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (!Model.Any())
-            {
-                <tr>
-                    <td colspan="3" class="text-center text-muted py-4">
-                        No registered user accounts found.
-                    </td>
-                </tr>
-            }
-            else
-            {
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(model => item.email)
-                        </td>
-                        <td>
-                            ••••••••
-                        </td>
-                        <td class="text-center">
-                            <a asp-action="Edit" asp-route-userid="@item.userId" class="btn btn-sm btn-outline-secondary">Edit</a>
-                            <a asp-action="Details" asp-route-userid="@item.userId" class="btn btn-sm btn-outline-info">Details</a>
-                            <a asp-action="Delete" asp-route-userid="@item.userId" class="btn btn-sm btn-outline-danger">Delete</a>
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4 text-muted">Full Name</dt>
+                        <dd class="col-sm-8 fw-bold text-dark">@(string.IsNullOrWhiteSpace(Model.FullName) ? "N/A" : Model.FullName)</dd>
+
+                        <dt class="col-sm-4 text-muted">@Html.DisplayNameFor(model => model.email)</dt>
+                        <dd class="col-sm-8 fw-bold text-dark">@Html.DisplayFor(model => model.email)</dd>
+                    </dl>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="userId" />
+                        <div class="d-flex gap-2 mt-4">
+                            <input type="submit" value="Revoke & Delete" class="btn btn-danger px-3" />
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

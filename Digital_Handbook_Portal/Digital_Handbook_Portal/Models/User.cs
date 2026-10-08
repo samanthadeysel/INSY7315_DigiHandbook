@@ -14,6 +14,9 @@ namespace Digital_Handbook_Portal.Models
         [Display(Name = "Work Email")]
         public string email { get; set; } = string.Empty;
 
+        [Display(Name = "Full Name")]
+        public string? FullName { get; set; }
+
         [Required(ErrorMessage = "A default password must be set")]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters long")]
         [DataType(DataType.Password)]
