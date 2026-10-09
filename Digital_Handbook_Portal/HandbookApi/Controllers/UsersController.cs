@@ -1,4 +1,5 @@
 ﻿using Digital_Handbook_Portal.Models;
+using HandbookApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,12 @@ namespace HandbookApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly Digital_Handbook_PortalContext _context;
+        private readonly IEmailService _emailService;
 
-        public UsersController(Digital_Handbook_PortalContext context)
+        public UsersController(Digital_Handbook_PortalContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: api/Users 
@@ -94,12 +97,33 @@ namespace HandbookApi.Controllers
                 return BadRequest(new ApiResponse<User> { Success = false, Message = "A user with this email address already exists." });
             }
 
+            string rawPassword = user.password;
+
             user.password = BCrypt.Net.BCrypt.HashPassword(user.password);
 
             _context.User.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok(new ApiResponse<User> { Success = true, Message = "User account created successfully.", Data = user });
+            try
+            {
+                await _emailService.SendWelcomeEmailAsync(
+                    recipientEmail: user.email,
+                    fullName: !string.IsNullOrWhiteSpace(user.FullName) ? user.FullName : "Staff Member",
+                    temporaryPassword: rawPassword,
+                    changePasswordHours: 1
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Email Error] Failed to send welcome email: {ex.Message}");
+            }
+
+            return Ok(new ApiResponse<User>
+            {
+                Success = true,
+                Message = "User account created successfully. Welcome email dispatched.",
+                Data = user
+            });
         }
 
         // POST: api/Users/login
@@ -121,7 +145,7 @@ namespace HandbookApi.Controllers
             {
                 UserId = user.userId,
                 Email = user.email,
-                FullName = user.email.Split('@')[0],
+                FullName = !string.IsNullOrWhiteSpace(user.FullName) ? user.FullName : user.email.Split('@')[0],
                 Token = Guid.NewGuid().ToString()
             };
 
@@ -165,6 +189,7 @@ namespace HandbookApi.Controllers
             }
 
             existingUser.email = user.email;
+            existingUser.FullName = user.FullName;
 
             if (!string.IsNullOrWhiteSpace(user.password) && !user.password.StartsWith("$2a$"))
             {
@@ -173,6 +198,44 @@ namespace HandbookApi.Controllers
 
             await _context.SaveChangesAsync();
             return Ok(new ApiResponse<User> { Success = true, Message = "User updated successfully.", Data = existingUser });
+        }
+
+        // POST: api/Users/change-password
+        [HttpPost("change-password")]
+        public async Task<ActionResult<ApiResponse<bool>>> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            if (!ModelState.IsValid || request == null)
+            {
+                return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid request payload.", Data = false });
+            }
+
+            if (string.IsNullOrWhiteSpace(request.NewPassword) || request.NewPassword.Length < 6)
+            {
+                return BadRequest(new ApiResponse<bool> { Success = false, Message = "New password must be at least 6 characters long.", Data = false });
+            }
+
+            var user = await _context.User.FindAsync(request.UserId);
+            if (user == null)
+            {
+                return NotFound(new ApiResponse<bool> { Success = false, Message = "User not found.", Data = false });
+            }
+
+            bool isCurrentPasswordValid = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.password);
+            if (!isCurrentPasswordValid)
+            {
+                return BadRequest(new ApiResponse<bool> { Success = false, Message = "Current password provided is incorrect.", Data = false });
+            }
+
+            user.password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new ApiResponse<bool>
+            {
+                Success = true,
+                Message = "Password updated successfully in existing User table.",
+                Data = true
+            });
         }
 
         // DELETE: api/Users/5
@@ -190,5 +253,12 @@ namespace HandbookApi.Controllers
 
             return Ok(new ApiResponse<bool> { Success = true, Message = "User deleted successfully.", Data = true });
         }
+    }
+
+    public class ChangePasswordRequest
+    {
+        public int UserId { get; set; }
+        public string CurrentPassword { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
     }
 }
