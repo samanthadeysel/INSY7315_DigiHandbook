@@ -102,18 +102,27 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <!-- THIS WILL ALLOW US TO RENDER PDF INSIDE THE APP -->
-                    <WebView
-                        android:id="@+id/pdfWebView"
+                    <!-- PDF Scroll Container so full pages can be read -->
+                    <ScrollView
+                        android:id="@+id/pdfScrollView"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginBottom="12dp"
+                        android:fillViewport="true"
                         app:layout_constraintBottom_toTopOf="@id/breadcrumbTextView"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent">
 
-                    <!-- Loading Spinner for Document Network Call -->
+                        <ImageView
+                            android:id="@+id/pdfImageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="Rendered Policy PDF" />
+                    </ScrollView>
+
+                    <!-- Loading Spinner for Document Network Call (Fixed anchor constraints) -->
                     <ProgressBar
                         android:id="@+id/pdfProgressBar"
                         style="?android:attr/progressBarStyle"
@@ -121,10 +130,10 @@
                         android:layout_height="wrap_content"
                         android:indeterminateTint="#2690CF"
                         android:visibility="visible"
-                        app:layout_constraintBottom_toBottomOf="@+id/pdfWebView"
-                        app:layout_constraintEnd_toEndOf="@+id/pdfWebView"
-                        app:layout_constraintStart_toStartOf="@+id/pdfWebView"
-                        app:layout_constraintTop_toTopOf="@+id/pdfWebView" />
+                        app:layout_constraintBottom_toTopOf="@+id/breadcrumbTextView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <!-- Breadcrumbs / Categorical File Path -->
                     <TextView
@@ -167,6 +176,18 @@
                             android:src="@android:drawable/ic_media_previous"
                             app:tint="@color/black" />
 
+                        <TextView
+                            android:id="@+id/pageNumberTextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:fontFamily="@font/raleway_bold"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="1 / 1" />
+
                         <ImageView
                             android:id="@+id/searchPdfIcon"
                             android:layout_width="0dp"
@@ -200,7 +221,5 @@
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

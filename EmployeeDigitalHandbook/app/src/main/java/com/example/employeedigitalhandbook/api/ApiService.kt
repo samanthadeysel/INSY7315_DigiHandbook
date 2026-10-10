@@ -8,11 +8,14 @@ import com.example.employeedigitalhandbook.data.Quiz
 import com.example.employeedigitalhandbook.data.QuizSubmission
 import com.example.employeedigitalhandbook.data.Resource
 import com.example.employeedigitalhandbook.api.ApiResponse
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Streaming
+import retrofit2.http.Url
 
 interface ApiService {
 
@@ -22,6 +25,10 @@ interface ApiService {
 //    suspend fun login(@Body request: ApiLoginRequest): Response<ApiLoginResponse>
 
 
+    //TEST - trying to make pdfs show
+    @Streaming
+    @GET
+    suspend fun downloadFile(@Url fileUrl: String): Response<ResponseBody>
     @POST("api/Auth/login")
     suspend fun login(@Body request: ApiLoginRequest): Response<ApiLoginResponse>
 
