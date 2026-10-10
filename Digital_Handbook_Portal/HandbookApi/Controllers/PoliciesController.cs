@@ -1,4 +1,5 @@
 ﻿using Digital_Handbook_Portal.Models;
+using Google.Cloud.Storage.V1;
 using HandbookApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +19,6 @@ namespace HandbookApi.Controllers
             _storageService = storageService;
         }
 
-<<<<<<< Updated upstream
-=======
         // GET: api/Policies/5/file
         [HttpGet("{id:int}/file")]
         public async Task<IActionResult> DownloadPolicyFile(int id)
@@ -42,8 +41,7 @@ namespace HandbookApi.Controllers
 
             return File(memoryStream, "application/pdf");
         }
-
->>>>>>> Stashed changes
+        
         // GET: api/Policies
         [HttpGet]
         public async Task<ActionResult<ApiResponse<List<Policy>>>> GetPolicies()

@@ -26,7 +26,6 @@ namespace Digital_Handbook_Portal.Controllers
         // GET: Users - will display list of users and sessions side by side
 
         // GET: Users (Staff Account List)
- main
         public async Task<IActionResult> Index()
         {
             //call api/Users to get list of users
