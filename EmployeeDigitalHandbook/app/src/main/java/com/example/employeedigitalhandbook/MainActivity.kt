@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.employeedigitalhandbook.sessions.SessionManager
+import com.example.employeedigitalhandbook.api.ApiClient
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,10 +27,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        //initalize pdf viewing
+        ApiClient.init(applicationContext)
 
         // Initialize SessionManager
         sessionManager = SessionManager(applicationContext)
+
+        setContentView(R.layout.activity_main)
 
         // Register FragmentLifecycleCallbacks to automatically track screen switches
         supportFragmentManager.registerFragmentLifecycleCallbacks(
