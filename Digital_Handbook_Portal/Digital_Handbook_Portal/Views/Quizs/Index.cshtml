@@ -1,91 +1,239 @@
-@model IEnumerable<Digital_Handbook_Portal.Models.Quiz>
+@model Digital_Handbook_Portal.ViewModels.QuizIndexViewModel
 
 @{
-    ViewData["Title"] = "CPD Quizzes";
+    ViewData["Title"] = "CPD Quizzes & Results";
 }
 
 <div class="container-fluid p-0">
+    <!-- Top Header -->
     <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
         <div>
-            <h2 class="fw-bold text-dark mb-1">CPD Quizzes & Assessments</h2>
-            <p class="text-muted small mb-0">Create and oversee multiple choice knowledge checks for hospital staff.</p>
+            <h2 class="fw-bold text-dark mb-1">CPD Quizzes & Results Dashboard</h2>
+            <p class="text-muted small mb-0">Manage clinical questionnaires and monitor staff CPD performance & compliance.</p>
         </div>
         <a asp-action="Create" class="btn btn-primary shadow-sm" style="background-color: #2690CF; border-color: #2690CF;">
             <i class="fa-solid fa-plus me-1"></i> Create New Quiz
         </a>
     </div>
 
-    <div class="card shadow-sm border-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light text-uppercase fs-7 fw-semibold border-bottom">
-                    <tr>
-                        <th class="ps-4" style="width: 30%;">Quiz Title</th>
-                        <th style="width: 15%;">Questions</th>
-                        <th style="width: 15%;">Passing Score</th>
-                        <th style="width: 15%;">Est. Time</th>
-                        <th style="width: 15%;">Created</th>
-                        <th class="text-end pe-4" style="width: 10%;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model != null && Model.Any())
-                    {
-                        foreach (var item in Model)
-                        {
+    <!-- 50/50 Split View Grid - quiz and quiz results will appear side by side -->
+    <div class="row g-4">
+        <!-- LEFT COLUMN: Quizzes List -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold text-dark mb-0">
+                        <i class="fa-solid fa-list-check text-primary me-2"></i>Active Quizzes
+                    </h5>
+                    <span class="badge bg-light text-dark border">@Model.Quizs.Count() Quizzes</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-uppercase fs-7 fw-semibold border-bottom">
                             <tr>
-                                <td class="ps-4 fw-bold text-dark">
-                                    <i class="fa-solid fa-list-check text-primary me-2"></i> @item.title
-                                </td>
-
-                                <td>
-                                    <span class="badge bg-light text-dark border">
-                                        <i class="fa-regular fa-circle-question me-1 text-info"></i>
-                                        @(item.questions?.Count ?? item.totalQuestions) Questions
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                        <i class="fa-solid fa-bullseye me-1"></i> @item.passingScore% Pass
-                                    </span>
-                                </td>
-
-                                <td class="text-secondary small">
-                                    <i class="fa-regular fa-clock me-1 text-muted"></i> @item.estimateTime
-                                </td>
-
-                                <td class="text-secondary small">
-                                    @item.createdAt.ToString("dd MMM yyyy")
-                                </td>
-
-                                <td class="text-end pe-4">
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <a asp-action="Edit" asp-route-id="@item.quizId" class="btn btn-outline-secondary" title="Edit Quiz">
-                                            <i class="fa-solid fa-pen"></i>
-                                        </a>
-                                        <a asp-action="Details" asp-route-id="@item.quizId" class="btn btn-outline-info" title="Quiz Details">
-                                            <i class="fa-solid fa-circle-info"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.quizId" class="btn btn-outline-danger" title="Delete Quiz">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </a>
-                                    </div>
-                                </td>
+                                <th class="ps-3">Title</th>
+                                <th>Pass Mark</th>
+                                <th>Est. Time</th>
+                                <th class="text-end pe-3">Actions</th>
                             </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="6" class="text-center py-5 text-muted">
-                                <i class="fa-solid fa-clipboard-question fs-2 mb-2 d-block text-black-50"></i>
-                                No CPD quizzes recorded yet. Click "Create New Quiz" to add one.
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                            @if (Model.Quizzes != null && Model.Quizzes.Any())
+                            {
+                                foreach (var item in Model.Quizzes)
+                                {
+                                    <tr>
+                                        <td class="ps-3 fw-bold text-dark">
+                                            @item.title
+                                            <div class="text-muted small fw-normal">
+                                                @(item.questions?.Count ?? item.totalQuestions) questions
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                                @item.passingScore%
+                                            </span>
+                                        </td>
+                                        <td class="text-secondary small">
+                                            @item.estimateTime
+                                        </td>
+                                        <td class="text-end pe-3">
+                                            <div class="btn-group btn-group-sm">
+                                                <a asp-action="Edit" asp-route-id="@item.quizId" class="btn btn-outline-secondary" title="Edit">
+                                                    <i class="fa-solid fa-pen"></i>
+                                                </a>
+                                                <a asp-action="Details" asp-route-id="@item.quizId" class="btn btn-outline-info" title="Details">
+                                                    <i class="fa-solid fa-circle-info"></i>
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@item.quizId" class="btn btn-outline-danger" title="Delete">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-muted">No quizzes available.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Staff Quiz Results & Download Report -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="fw-bold text-dark mb-0">
+                            <i class="fa-solid fa-award text-warning me-2"></i>Staff Results & CPD
+                        </h5>
+                        <button type="button" class="btn btn-sm btn-outline-success" onclick="printFilteredReport()">
+                            <i class="fa-solid fa-print me-1"></i> Print / Save Report
+                        </button>
+                    </div>
+
+                    <!-- User Filter Dropdown -->
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-light text-muted">
+                            <i class="fa-solid fa-filter me-1"></i> Filter by Staff:
+                        </span>
+                        <select id="userFilterDropdown" class="form-select" onchange="filterResultsByUser()">
+                            <option value="ALL">-- All Staff Members --</option>
+                            @foreach (var user in Model.DistinctUsers)
+                            {
+                                <option value="@user">@user</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive" id="printableResultsArea">
+                    <div class="d-none d-print-block p-3">
+                        <h3 class="fw-bold">Pietermaritzburg Eye Hospital</h3>
+                        <h4>Staff CPD & Quiz Compliance Report</h4>
+                        <p class="small text-muted" id="printReportSubtitle">All Staff Members</p>
+                        <hr />
+                    </div>
+
+                    <table class="table table-hover align-middle mb-0" id="resultsTable">
+                        <thead class="table-light text-uppercase fs-7 fw-semibold border-bottom">
+                            <tr>
+                                <th class="ps-3">Staff / User</th>
+                                <th>Quiz</th>
+                                <th>Score</th>
+                                <th>CPD</th>
+                                <th class="pe-3 text-end">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.QuizResults != null && Model.QuizResults.Any())
+                            {
+                                foreach (var result in Model.QuizResults)
+                                {
+                                    <tr class="result-row" data-userid="@result.UserId">
+                                        <td class="ps-3 fw-semibold text-dark">
+                                            @result.StaffName
+                                        </td>
+                                        <td class="small text-dark">
+                                            @result.QuizTitle
+                                        </td>
+                                        <td>
+                                            @if (result.IsPassed)
+                                            {
+                                                <span class="badge bg-success-subtle text-success">@result.ScorePercentage%</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger-subtle text-danger">@result.ScorePercentage%</span>
+                                            }
+                                        </td>
+                                        <td class="fw-bold text-success">
+                                            +@result.CpdPointsAwarded
+                                        </td>
+                                        <td class="pe-3 text-end text-muted small">
+                                            @result.CompletedAt.ToString("dd MMM yyyy")
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr id="noResultsFallback">
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        No quiz completions recorded yet.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- JavaScript for Filter & Clean Print/Download -->
+@section Scripts {
+    <script>
+        function filterResultsByUser() {
+            var selectedUser = document.getElementById("userFilterDropdown").value;
+            var rows = document.querySelectorAll(".result-row");
+            var visibleCount = 0;
+
+            rows.forEach(function (row) {
+                var rowUser = row.getAttribute("data-userid");
+                if (selectedUser === "ALL" || rowUser === selectedUser) {
+                    row.style.display = "";
+                    visibleCount++;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            // Update print subtitle
+            var subtitle = document.getElementById("printReportSubtitle");
+            if (subtitle) {
+                subtitle.innerText = selectedUser === "ALL" ? "Report for: All Staff Members" : "Report for: " + selectedUser;
+            }
+        }
+
+        function printFilteredReport() {
+            var filterVal = document.getElementById("userFilterDropdown").value;
+            var originalTitle = document.title;
+            document.title = "CPD_Report_" + (filterVal === "ALL" ? "AllStaff" : filterVal);
+
+            window.print();
+
+            document.title = originalTitle;
+        }
+    </script>
+
+    <style>
+        @@media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #printableResultsArea, #printableResultsArea * {
+                visibility: visible;
+            }
+
+            #printableResultsArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            .result-row[style*="display: none"] {
+                display: none !important;
+            }
+        }
+    </style>
+}
