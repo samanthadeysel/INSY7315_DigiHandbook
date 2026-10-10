@@ -23,8 +23,8 @@ namespace HandbookApi.Controllers
         [HttpGet("{id:int}/file")]
         public async Task<IActionResult> DownloadPolicyFile(int id)
         {
-            var policy = await _context.Policies.FindAsync(id);
-            if (policy == null || string.IsNullOrEmpty(policy.pdfUrl))
+            var policy = await _context.Policy.FindAsync(id); // Fixed: _context.Policy
+            if (policy == null || string.IsNullOrEmpty(policy.fileUrl)) // Also ensure property name matches (fileUrl vs pdfUrl)
             {
                 return NotFound("Policy or document not found.");
             }
@@ -34,14 +34,14 @@ namespace HandbookApi.Controllers
             var memoryStream = new MemoryStream();
 
             //extract object name
-            string objectName = Path.GetFileName(new Uri(policy.pdfUrl).LocalPath);
+            string objectName = Path.GetFileName(new Uri(policy.fileUrl).LocalPath);
 
             await storage.DownloadObjectAsync("digihandbook-bucket", objectName, memoryStream);
             memoryStream.Position = 0;
 
             return File(memoryStream, "application/pdf");
         }
-
+        
         // GET: api/Policies
         [HttpGet]
         public async Task<ActionResult<ApiResponse<List<Policy>>>> GetPolicies()
