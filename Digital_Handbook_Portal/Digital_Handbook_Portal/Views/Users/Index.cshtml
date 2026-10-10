@@ -1,34 +1,153 @@
-@model Digital_Handbook_Portal.Models.User
+@model Digital_Handbook_Portal.ViewModels.UserManagementIndexViewModel
 
 @{
-    ViewData["Title"] = "Delete User Account";
+    ViewData["Title"] = "User & Session Management";
 }
 
-<div class="container py-3">
-    <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="card border-danger shadow-sm">
-                <div class="card-header bg-danger text-white py-3">
-                    <h5 class="card-title mb-0 fw-bold">Revoke Account Access</h5>
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0">👥 User Directory & Activity Monitor</h2>
+            <p class="text-muted small mb-0">Staff management alongside live mobile usage sessions.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fa-solid fa-plus me-1"></i> Create New User
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- LEFT: Staff Accounts -->
+        <div class="col-xl-5 col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fs-6 fw-bold">Staff Accounts</h5>
+                    <span class="badge bg-light text-dark">@Model.Users.Count()</span>
                 </div>
-                <div class="card-body p-4">
-                    <p class="text-danger fw-semibold">Are you sure you want to permanently delete this user account? They will immediately lose access to the portal.</p>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Work Email</th>
+                                    <th class="text-end pe-3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!Model.Users.Any())
+                                {
+                                    <tr>
+                                        <td colspan="2" class="text-center text-muted py-4">No accounts found.</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <tr>
+                                            <td class="fw-medium text-break">@user.email</td>
+                                            <td class="text-end pe-3 text-nowrap">
+                                                <a asp-action="Edit" asp-route-id="@user.userId" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                                <a asp-action="Details" asp-route-id="@user.userId" class="btn btn-sm btn-outline-primary">Details</a>
+                                                <a asp-action="Delete" asp-route-id="@user.userId" class="btn btn-sm btn-outline-danger">Delete</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4 text-muted">Full Name</dt>
-                        <dd class="col-sm-8 fw-bold text-dark">@(string.IsNullOrWhiteSpace(Model.FullName) ? "N/A" : Model.FullName)</dd>
-
-                        <dt class="col-sm-4 text-muted">@Html.DisplayNameFor(model => model.email)</dt>
-                        <dd class="col-sm-8 fw-bold text-dark">@Html.DisplayFor(model => model.email)</dd>
-                    </dl>
-
-                    <form asp-action="Delete">
-                        <input type="hidden" asp-for="userId" />
-                        <div class="d-flex gap-2 mt-4">
-                            <input type="submit" value="Revoke & Delete" class="btn btn-danger px-3" />
-                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
-                        </div>
-                    </form>
+        <!-- RIGHT: All Sessions Feed -->
+        <div class="col-xl-7 col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fs-6 fw-bold">📱 Recent App Sessions</h5>
+                    <span class="badge bg-light text-primary">@Model.Sessions.Count()</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>User</th>
+                                    <th>Duration</th>
+                                    <th>Started</th>
+                                    <th class="text-end pe-3">Journey</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!Model.Sessions.Any())
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-4">No app sessions recorded yet.</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    @foreach (var session in Model.Sessions)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <span class="fw-semibold d-block text-truncate" style="max-width: 180px;">
+                                                    @(string.IsNullOrEmpty(session.Email) ? session.FullName : session.Email)
+                                                </span>
+                                                <small class="text-muted"><code>#@session.SessionId</code></small>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info text-dark">
+                                                    @TimeSpan.FromSeconds(session.TotalDurationSeconds).ToString(@"hh\:mm\:ss")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">@session.StartTime.ToLocalTime().ToString("g")</small>
+                                            </td>
+                                            <td class="text-end pe-3">
+                                                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#sess-@session.SessionId">
+                                                    Breakdown
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="collapse bg-light" id="sess-@session.SessionId">
+                                            <td colspan="4" class="p-3">
+                                                <h6 class="fw-bold small mb-2">Screen Breakdown (@(session.Visits?.Count ?? 0) screens)</h6>
+                                                @if (session.Visits != null && session.Visits.Any())
+                                                {
+                                                    <div class="table-responsive">
+                                                        <table class="table table-sm table-bordered bg-white mb-0 small">
+                                                            <thead class="table-secondary">
+                                                                <tr>
+                                                                    <th>Fragment</th>
+                                                                    <th>Entered</th>
+                                                                    <th>Time Spent</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var visit in session.Visits.OrderBy(v => v.EnteredAt))
+                                                                {
+                                                                    <tr>
+                                                                        <td><code>@visit.FragmentName</code></td>
+                                                                        <td>@visit.EnteredAt.ToLocalTime().ToString("T")</td>
+                                                                        <td><strong>@visit.DurationSeconds.ToString("0.0")s</strong></td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted small">No screen visits recorded for this session.</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

@@ -25,7 +25,7 @@
                     <h5 class="fw-bold text-dark mb-0">
                         <i class="fa-solid fa-list-check text-primary me-2"></i>Active Quizzes
                     </h5>
-                    <span class="badge bg-light text-dark border">@Model.Quizs.Count() Quizzes</span>
+                    <span class="badge bg-light text-dark border">@Model.Quizzes.Count() Quizzes</span>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
@@ -207,9 +207,9 @@
             var filterVal = document.getElementById("userFilterDropdown").value;
             var originalTitle = document.title;
             document.title = "CPD_Report_" + (filterVal === "ALL" ? "AllStaff" : filterVal);
-
+            
             window.print();
-
+            
             document.title = originalTitle;
         }
     </script>
@@ -219,18 +219,15 @@
             body * {
                 visibility: hidden;
             }
-
             #printableResultsArea, #printableResultsArea * {
                 visibility: visible;
             }
-
             #printableResultsArea {
                 position: absolute;
                 left: 0;
                 top: 0;
                 width: 100%;
             }
-
             .result-row[style*="display: none"] {
                 display: none !important;
             }

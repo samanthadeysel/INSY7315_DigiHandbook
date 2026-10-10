@@ -21,11 +21,26 @@ namespace Digital_Handbook_Portal.Controllers
             }
         }
 
+        // GET: Users
+        // GET: Users - will display list of users and sessions side by side
+
         // GET: Users (Staff Account List)
+ main
         public async Task<IActionResult> Index()
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<User>>>("api/Users");
-            return View(response?.Data ?? new List<User>());
+            //call api/Users to get list of users
+            var usersResponse = await _httpClient.GetFromJsonAsync<ApiResponse<List<User>>>("api/Users");
+
+            //call api/Users/all-sessions to get list of sessions
+            var sessionsResponse = await _httpClient.GetFromJsonAsync<ApiResponse<List<UserSession>>>("api/Users/all-sessions");
+
+            var viewModel = new UserManagementViewModel
+            {
+                Users = usersResponse?.Data ?? new List<User>(),
+                Sessions = sessionsResponse?.Data ?? new List<UserSession>()
+            };
+
+            return View(viewModel);
         }
 
         // GET: Users/AllSessions (Hit when clicking the "User Sessions" tile on the Home Dashboard)
@@ -57,10 +72,16 @@ namespace Digital_Handbook_Portal.Controllers
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiResponse<User>>($"api/Users/{id}");
-            if (response == null || !response.Success) return NotFound();
+            //calls api/Users/{id} to get user details and api/Users/{id}/sessions to get user sessions
+            var userResponse = await _httpClient.GetFromJsonAsync<ApiResponse<User>>($"api/Users/{id}");
+            if (userResponse == null || !userResponse.Success) return NotFound();
 
-            return View(response.Data);
+            var sessionsResponse = await _httpClient.GetFromJsonAsync<ApiResponse<List<UserSession>>>($"api/Users/{id}/sessions");
+
+            var user = userResponse.Data;
+            user.Sessions = sessionsResponse?.Data ?? new List<UserSession>();
+
+            return View(user);
         }
 
         // GET: Users/Create

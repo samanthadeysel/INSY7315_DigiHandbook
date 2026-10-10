@@ -44,7 +44,7 @@ namespace HandbookApi.Services
                             </div>
 
                             <p style='color: #d9534f; font-weight: bold;'>
-                                ⚠️ For security purposes, you are required to log in to the Android App and change this password within {changePasswordHours} hour (by {expirationHour}).
+                                ⚠️ For security purposes, you are required to log in to the Android App and change this password within {changePasswordHours} hours (by {expirationHour}).
                             </p>
 
                             <p>Please log in using the mobile application and update your password immediately upon first launch.</p>

@@ -1,5 +1,6 @@
 package com.example.employeedigitalhandbook.api
 
+import android.content.Context
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -11,6 +12,9 @@ object ApiClient {
 
     //connecting android app to API
     private const val BASE_URL = "https://handbook-api-770247469632.europe-west3.run.app/"
+
+    private var appContext: Context? = null
+
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }

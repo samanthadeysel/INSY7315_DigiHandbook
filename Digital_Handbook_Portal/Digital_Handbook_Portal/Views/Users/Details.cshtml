@@ -1,33 +1,122 @@
 @model Digital_Handbook_Portal.Models.User
 
 @{
-    ViewData["Title"] = "User Account Details";
+    ViewData["Title"] = "User Details";
 }
 
-<div class="container py-3">
-    <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                    <h4 class="card-title fw-bold mb-0">Account Details</h4>
-                    <span class="badge bg-primary">ID: #@Model.userId</span>
-                </div>
-                <div class="card-body p-4">
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4 text-muted">Full Name</dt>
-                        <dd class="col-sm-8 fw-bold">@(string.IsNullOrWhiteSpace(Model.FullName) ? "N/A" : Model.FullName)</dd>
+<div class="container-fluid py-4">
+    <div class="mb-3">
+        <a asp-action="Index" class="btn btn-sm btn-outline-secondary">&larr; Back to Directory</a>
+    </div>
 
-                        <dt class="col-sm-4 text-muted">@Html.DisplayNameFor(model => model.email)</dt>
-                        <dd class="col-sm-8 fw-bold">@Html.DisplayFor(model => model.email)</dd>
+    <!-- User Account Summary -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
+            <div>
+                <h4 class="card-title fw-bold mb-0">Staff Profile: @Model.email</h4>
+                <small class="text-muted">User ID: #@Model.userId</small>
+            </div>
+            <div class="d-flex gap-2">
+                <a asp-action="Edit" asp-route-id="@Model.userId" class="btn btn-sm btn-primary">Edit Account</a>
+                <a asp-action="Delete" asp-route-id="@Model.userId" class="btn btn-sm btn-outline-danger">Delete</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-2 text-muted">@Html.DisplayNameFor(model => model.email)</dt>
+                <dd class="col-sm-10 fw-bold">@Html.DisplayFor(model => model.email)</dd>
 
-                        <dt class="col-sm-4 text-muted">Password</dt>
-                        <dd class="col-sm-8 text-secondary">•••••••• (Encrypted / Protected)</dd>
-                    </dl>
-                </div>
-                <div class="card-footer bg-light py-3 d-flex gap-2">
-                    <a asp-action="Edit" asp-route-id="@Model?.userId" class="btn btn-primary">Edit Account</a>
-                    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
-                </div>
+                <dt class="col-sm-2 text-muted">Initial Password</dt>
+                <dd class="col-sm-10 text-secondary">•••••••• (Protected)</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- This User's App Sessions -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fs-6 fw-bold">📱 App Activity History</h5>
+            <span class="badge bg-light text-dark">@(Model.Sessions?.Count ?? 0) sessions</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Session ID</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Duration</th>
+                            <th>Screens Visited</th>
+                            <th class="text-end pe-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Sessions != null && Model.Sessions.Any())
+                        {
+                            @foreach (var session in Model.Sessions)
+                            {
+                                <tr>
+                                    <td><code>#@session.SessionId</code></td>
+                                    <td>@session.StartTime.ToLocalTime().ToString("g")</td>
+                                    <td>@session.EndTime.ToLocalTime().ToString("g")</td>
+                                    <td>
+                                        <span class="badge bg-info text-dark">
+                                            @TimeSpan.FromSeconds(session.TotalDurationSeconds).ToString(@"hh\:mm\:ss")
+                                        </span>
+                                    </td>
+                                    <td>@(session.Visits?.Count ?? 0) screens</td>
+                                    <td class="text-end pe-3">
+                                        <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#user-sess-@session.SessionId">
+                                            View Tracked Journey
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="collapse bg-light" id="user-sess-@session.SessionId">
+                                    <td colspan="6" class="p-3">
+                                        <h6 class="fw-bold mb-2 small">Screen Journey Breakdown</h6>
+                                        @if (session.Visits != null && session.Visits.Any())
+                                        {
+                                            <table class="table table-sm table-bordered bg-white mb-0">
+                                                <thead class="table-secondary">
+                                                    <tr>
+                                                        <th>Fragment Name</th>
+                                                        <th>Entered</th>
+                                                        <th>Exited</th>
+                                                        <th>Duration</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var visit in session.Visits.OrderBy(v => v.EnteredAt))
+                                                    {
+                                                        <tr>
+                                                            <td><code>@visit.FragmentName</code></td>
+                                                            <td>@visit.EnteredAt.ToLocalTime().ToString("T")</td>
+                                                            <td>@visit.ExitedAt.ToLocalTime().ToString("T")</td>
+                                                            <td><strong>@visit.DurationSeconds.ToString("0.0") sec</strong></td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted small">No screen visits recorded for this session.</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">
+                                    No app activity recorded for this user yet.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
