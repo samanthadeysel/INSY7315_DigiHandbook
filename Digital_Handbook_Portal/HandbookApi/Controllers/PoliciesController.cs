@@ -1,4 +1,5 @@
 ﻿using Digital_Handbook_Portal.Models;
+using Google.Cloud.Storage.V1;
 using HandbookApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,29 @@ namespace HandbookApi.Controllers
         {
             _context = context;
             _storageService = storageService;
+        }
+
+        // GET: api/Policies/5/file
+        [HttpGet("{id:int}/file")]
+        public async Task<IActionResult> DownloadPolicyFile(int id)
+        {
+            var policy = await _context.Policies.FindAsync(id);
+            if (policy == null || string.IsNullOrEmpty(policy.pdfUrl))
+            {
+                return NotFound("Policy or document not found.");
+            }
+
+            //initialize storage client
+            var storage = StorageClient.Create();
+            var memoryStream = new MemoryStream();
+
+            //extract object name
+            string objectName = Path.GetFileName(new Uri(policy.pdfUrl).LocalPath);
+
+            await storage.DownloadObjectAsync("digihandbook-bucket", objectName, memoryStream);
+            memoryStream.Position = 0;
+
+            return File(memoryStream, "application/pdf");
         }
 
         // GET: api/Policies
