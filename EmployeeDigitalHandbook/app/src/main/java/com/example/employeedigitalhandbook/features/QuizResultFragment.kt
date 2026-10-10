@@ -13,6 +13,7 @@ import com.example.employeedigitalhandbook.R
 import com.example.employeedigitalhandbook.api.ApiClient
 import com.example.employeedigitalhandbook.data.QuizSubmission
 import com.example.employeedigitalhandbook.databinding.FragmentQuizResultBinding
+import com.example.employeedigitalhandbook.sessions.SessionManager
 import kotlinx.coroutines.launch
 
 class QuizResultFragment : Fragment() {
@@ -78,12 +79,16 @@ class QuizResultFragment : Fragment() {
         val numericPercentage = percentageStr.replace("%", "").toIntOrNull() ?: 0
         val numericPoints = pointsStr.replace("+", "").toDoubleOrNull() ?: 0.0
 
+        val sessionManager = SessionManager(requireContext().applicationContext)
+        val userIdInt = sessionManager.getSession()?.userId?.toIntOrNull() ?: 1
+
         val submission = QuizSubmission(
             quizId = quizId,
             scoreFraction = fraction,
             percentage = numericPercentage,
             passed = passed,
-            cpdPointsEarned = numericPoints
+            cpdPointsEarned = numericPoints,
+            userId = userIdInt
         )
 
         lifecycleScope.launch {

@@ -1,10 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Digital_Handbook_Portal
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
+            var connectionString = builder.Configuration.GetConnectionString("Digital_Handbook_PortalContext") ?? throw new InvalidOperationException("Connection string 'Digital_Handbook_PortalContext' not found.");
+
+            //temp for scaffolding purposes
+            builder.Services.AddDbContext<Digital_Handbook_PortalContext>(options =>
+    options.UseInMemoryDatabase("ScaffoldingDb"));
+
 
             builder.Services.AddControllersWithViews();
 

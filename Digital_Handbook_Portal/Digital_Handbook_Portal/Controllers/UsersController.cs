@@ -21,11 +21,11 @@ namespace Digital_Handbook_Portal.Controllers
             }
         }
 
-<<<<<<< Updated upstream
         // GET: Users
-=======
         // GET: Users - will display list of users and sessions side by side
->>>>>>> Stashed changes
+
+        // GET: Users (Staff Account List)
+ main
         public async Task<IActionResult> Index()
         {
             //call api/Users to get list of users
@@ -41,6 +41,32 @@ namespace Digital_Handbook_Portal.Controllers
             };
 
             return View(viewModel);
+        }
+
+        // GET: Users/AllSessions (Hit when clicking the "User Sessions" tile on the Home Dashboard)
+        public async Task<IActionResult> AllSessions()
+        {
+            var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<UserSession>>>("api/Users/all-sessions");
+            return View(response?.Data ?? new List<UserSession>());
+        }
+
+        // GET: Users/Sessions/5 (Hit when clicking "Details" on a specific user's sessions)
+        public async Task<IActionResult> Sessions(int id)
+        {
+            if (id <= 0) return RedirectToAction(nameof(Index));
+
+            var userResponse = await _httpClient.GetFromJsonAsync<ApiResponse<User>>($"api/Users/{id}");
+            if (userResponse == null || !userResponse.Success || userResponse.Data == null)
+            {
+                return NotFound();
+            }
+
+            var sessionsResponse = await _httpClient.GetFromJsonAsync<ApiResponse<List<UserSession>>>($"api/Users/{id}/sessions");
+
+            ViewBag.UserEmail = userResponse.Data.email;
+            ViewBag.UserId = userResponse.Data.userId;
+
+            return View(sessionsResponse?.Data ?? new List<UserSession>());
         }
 
         // GET: Users/Details/5

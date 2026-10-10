@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HandbookApi.Migrations
 {
     [DbContext(typeof(Digital_Handbook_PortalContext))]
-    partial class Digital_Handbook_PortalContextModelSnapshot : ModelSnapshot
+    [Migration("20261008111809_addusersessionlogs")]
+    partial class addusersessionlogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,11 +160,14 @@ namespace HandbookApi.Migrations
                     b.Property<int>("SessionId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("UserSessionSessionId")
+                        .HasColumnType("integer");
+
                     b.HasKey("VisitId");
 
-                    b.HasIndex("SessionId");
+                    b.HasIndex("UserSessionSessionId");
 
-                    b.ToTable("FragmentVisit", (string)null);
+                    b.ToTable("FragmentVisit");
                 });
 
             modelBuilder.Entity("Digital_Handbook_Portal.Models.Policy", b =>
@@ -306,41 +312,6 @@ namespace HandbookApi.Migrations
                     b.ToTable("QuizQuestion");
                 });
 
-            modelBuilder.Entity("Digital_Handbook_Portal.Models.QuizResult", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CompletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("CpdPointsAwarded")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsPassed")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("QuizId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ScorePercentage")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuizId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("QuizResult");
-                });
-
             modelBuilder.Entity("Digital_Handbook_Portal.Models.Resource", b =>
                 {
                     b.Property<int>("Id")
@@ -388,9 +359,6 @@ namespace HandbookApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("userId"));
 
-                    b.Property<string>("FullName")
-                        .HasColumnType("text");
-
                     b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -417,6 +385,10 @@ namespace HandbookApi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("timestamp with time zone");
 
@@ -430,23 +402,20 @@ namespace HandbookApi.Migrations
                     b.Property<double>("TotalDurationSeconds")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("userId")
-                        .HasColumnType("integer");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("SessionId");
 
-                    b.HasIndex("userId");
-
-                    b.ToTable("UserSession", (string)null);
+                    b.ToTable("UserSession");
                 });
 
             modelBuilder.Entity("Digital_Handbook_Portal.Models.FragmentVisit", b =>
                 {
                     b.HasOne("Digital_Handbook_Portal.Models.UserSession", null)
                         .WithMany("Visits")
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserSessionSessionId");
                 });
 
             modelBuilder.Entity("Digital_Handbook_Portal.Models.Policy", b =>
@@ -488,36 +457,6 @@ namespace HandbookApi.Migrations
                     b.Navigation("quiz");
                 });
 
-            modelBuilder.Entity("Digital_Handbook_Portal.Models.QuizResult", b =>
-                {
-                    b.HasOne("Digital_Handbook_Portal.Models.Quiz", "Quiz")
-                        .WithMany()
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Digital_Handbook_Portal.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Quiz");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Digital_Handbook_Portal.Models.UserSession", b =>
-                {
-                    b.HasOne("Digital_Handbook_Portal.Models.User", "User")
-                        .WithMany("Sessions")
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Digital_Handbook_Portal.Models.PolicyCategory", b =>
                 {
                     b.Navigation("Policies");
@@ -531,11 +470,6 @@ namespace HandbookApi.Migrations
             modelBuilder.Entity("Digital_Handbook_Portal.Models.QuizQuestion", b =>
                 {
                     b.Navigation("options");
-                });
-
-            modelBuilder.Entity("Digital_Handbook_Portal.Models.User", b =>
-                {
-                    b.Navigation("Sessions");
                 });
 
             modelBuilder.Entity("Digital_Handbook_Portal.Models.UserSession", b =>

@@ -1,6 +1,5 @@
 using System.Net.Http.Headers;
 using Digital_Handbook_Portal.Models;
-using Digital_Handbook_Portal;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Digital_Handbook_Portal.Controllers

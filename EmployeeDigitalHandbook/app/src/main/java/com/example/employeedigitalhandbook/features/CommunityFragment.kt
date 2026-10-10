@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +22,7 @@ class CommunityFragment : Fragment() {
 
     private lateinit var communityViewModel: CommunityViewModel
     private lateinit var eventAdapter: EventAdapter
+    private lateinit var btnBack: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +48,10 @@ class CommunityFragment : Fragment() {
             ).show()
         }
         recyclerView.adapter = eventAdapter
+
+        btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         communityViewModel.eventsState.observe(viewLifecycleOwner) { result ->
             when (result) {
