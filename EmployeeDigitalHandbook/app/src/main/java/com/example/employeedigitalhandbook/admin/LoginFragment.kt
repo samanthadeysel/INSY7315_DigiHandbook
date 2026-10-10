@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.employeedigitalhandbook.R
+import com.example.employeedigitalhandbook.sessions.SessionManager
 import com.example.employeedigitalhandbook.viewmodel.LoginViewModel
+import com.example.employeedigitalhandbook.viewmodel.LoginViewModelFactory
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
@@ -27,7 +29,9 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        val sessionManager = SessionManager(requireContext().applicationContext)
+        val factory = LoginViewModelFactory(sessionManager)
+        viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
 
         val emailEditText = view.findViewById<TextInputEditText>(R.id.emailEditText)
         val passwordEditText = view.findViewById<TextInputEditText>(R.id.passwordEditText)
@@ -59,7 +63,9 @@ class LoginFragment : Fragment() {
                     Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
                     viewModel.clearState()
                 }
-                null -> { /* Initial State */ }
+                null -> {
+
+                }
             }
         }
     }

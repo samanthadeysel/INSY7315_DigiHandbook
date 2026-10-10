@@ -146,41 +146,47 @@ namespace HandbookApi.Controllers
             public int? UserId { get; set; }
         }
 
-        // POST: api/Quizzes/submit
         [HttpPost("submit")]
         public async Task<ActionResult<ApiResponse<object>>> SubmitQuizResult([FromBody] QuizSubmissionRequest submission)
         {
             if (submission == null)
             {
-                return BadRequest(new ApiResponse<object>
-                {
-                    Success = false,
-                    Message = "Invalid submission payload."
-                });
+                return BadRequest(new ApiResponse<object> { Success = false, Message = "Invalid submission payload." });
             }
 
             var quiz = await _context.Quiz.FindAsync(submission.QuizId);
             if (quiz == null)
             {
-                return NotFound(new ApiResponse<object>
-                {
-                    Success = false,
-                    Message = "Quiz not found."
-                });
+                return NotFound(new ApiResponse<object> { Success = false, Message = "Quiz not found." });
             }
 
-            //returns the quiz result and earned CPD points
+            int resolvedUserId = submission.UserId ?? 1;
+
+            var quizResult = new QuizResult
+            {
+                UserId = resolvedUserId,
+                QuizId = submission.QuizId,
+                ScorePercentage = submission.Percentage,
+                CpdPointsAwarded = (int)Math.Round(submission.CpdPointsEarned),
+                IsPassed = submission.Passed,
+                CompletedAt = DateTime.UtcNow
+            };
+
+            _context.QuizResult.Add(quizResult);
+            await _context.SaveChangesAsync();
+
             return Ok(new ApiResponse<object>
             {
                 Success = true,
                 Message = $"Quiz result recorded. Earned {submission.CpdPointsEarned} CPD points.",
                 Data = new
                 {
+                    id = quizResult.Id,
                     quizId = submission.QuizId,
                     passed = submission.Passed,
                     cpdPointsEarned = submission.CpdPointsEarned,
-                    userId = submission.UserId,
-                    submittedAt = DateTime.UtcNow
+                    userId = resolvedUserId,
+                    submittedAt = quizResult.CompletedAt
                 }
             });
         }

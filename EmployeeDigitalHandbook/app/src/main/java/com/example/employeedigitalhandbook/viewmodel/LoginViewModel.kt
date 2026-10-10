@@ -3,14 +3,16 @@ package com.example.employeedigitalhandbook.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.employeedigitalhandbook.repositories.AuthRepository
 import com.example.employeedigitalhandbook.admin.AuthResult
+import com.example.employeedigitalhandbook.sessions.SessionManager
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(private val sessionManager: SessionManager) : ViewModel() {
 
-    private val repository = AuthRepository()
+    private val repository = AuthRepository(sessionManager)
 
     private val _loginState = MutableLiveData<AuthResult?>()
     val loginState: LiveData<AuthResult?> = _loginState
@@ -29,5 +31,15 @@ class LoginViewModel : ViewModel() {
 
     fun clearState() {
         _loginState.value = null
+    }
+}
+
+class LoginViewModelFactory(private val sessionManager: SessionManager) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return LoginViewModel(sessionManager) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

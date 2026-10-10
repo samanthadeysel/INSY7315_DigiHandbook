@@ -40,7 +40,7 @@ namespace Digital_Handbook_Portal.Controllers
                 if (result != null && result.Success && result.Data != null)
                 {
                     HttpContext.Session.SetString("AdminEmail", result.Data.Email);
-                    HttpContext.Session.SetString("AdminName", result.Data.Name);
+                    HttpContext.Session.SetString("AdminName", result.Data.FullName);
                     HttpContext.Session.SetString("AdminToken", result.Data.Token);
 
                     return RedirectToAction("Index", "Home");

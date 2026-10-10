@@ -29,6 +29,7 @@ namespace HandbookApi
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddScoped<ICloudStorageService, CloudStorageService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             builder.Services.AddSwaggerGen();
 
