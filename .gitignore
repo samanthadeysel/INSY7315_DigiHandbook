@@ -17,3 +17,7 @@ Digital_Handbook_Portal/Digital_Handbook_Portal/appsettings.json
 Digital_Handbook_Portal/HandbookApi/Credentials/digitalhandbook-37a30108df42.json
 
 Digital_Handbook_Portal/HandbookApi/appsettings.json
+
+# secrets
+google-services.json
+.idea/caches/deviceStreaming.xml

@@ -75,31 +75,9 @@
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="@font/raleway_bold"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="12dp"
             android:text="Policies"
-            android:textAlignment="viewEnd"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:paddingHorizontal="32dp"
-            android:paddingVertical="12dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/menuSettings"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/menuCpdInfo" />
-
-        <!-- 4. Settings -->
-        <TextView
-            android:id="@+id/menuSettings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:fontFamily="@font/raleway_bold"
-            android:paddingHorizontal="32dp"
-            android:paddingVertical="12dp"
-            android:text="Settings"
             android:textAlignment="viewEnd"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -107,9 +85,9 @@
             app:layout_constraintBottom_toTopOf="@id/menuFAQ"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/menuPolicies" />
+            app:layout_constraintTop_toBottomOf="@id/menuCpdInfo" />
 
-        <!-- 5. FAQ Chatbot -->
+        <!-- 4. FAQ Chatbot -->
         <TextView
             android:id="@+id/menuFAQ"
             android:layout_width="match_parent"
@@ -129,9 +107,9 @@
             app:layout_constraintBottom_toTopOf="@id/menuReset"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/menuSettings" />
+            app:layout_constraintTop_toBottomOf="@id/menuPolicies" />
 
-        <!-- 6. Reset Password -->
+        <!-- 5. Reset Password -->
         <TextView
             android:id="@+id/menuReset"
             android:layout_width="match_parent"
@@ -165,7 +143,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- 7. Log Out -->
+        <!-- 6. Log Out -->
         <TextView
             android:id="@+id/menuLogOut"
             android:layout_width="match_parent"
