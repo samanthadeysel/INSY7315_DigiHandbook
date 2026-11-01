@@ -21,3 +21,4 @@ Digital_Handbook_Portal/HandbookApi/appsettings.json
 # secrets
 google-services.json
 .idea/caches/deviceStreaming.xml
+/.idea
