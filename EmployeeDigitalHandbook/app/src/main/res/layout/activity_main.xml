@@ -33,7 +33,7 @@
 
         <!-- 1. Policies -->
         <TextView
-            android:id="@+id/menuQuiz"
+            android:id="@+id/menuPolicies"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
@@ -55,7 +55,7 @@
 
         <!-- 2. Quiz -->
         <TextView
-            android:id="@+id/menuCpdInfo"
+            android:id="@+id/menuQuiz"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -77,7 +77,7 @@
 
         <!-- 3. Resources / CPD Info -->
         <TextView
-            android:id="@+id/menuPolicies"
+            android:id="@+id/menuResources"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -98,24 +98,24 @@
             app:layout_constraintTop_toBottomOf="@id/menuCpdInfo" />
 
         <!-- 4. Reset Password -->
-<!--        <TextView-->
-<!--            android:id="@+id/menuReset"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="?attr/selectableItemBackground"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:fontFamily="@font/raleway_bold"-->
-<!--            android:gravity="end|center_vertical"-->
-<!--            android:paddingHorizontal="16dp"-->
-<!--            android:paddingVertical="14dp"-->
-<!--            android:text="Reset Password"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="20sp"-->
-<!--            android:textStyle="bold"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/menuPolicies" />-->
+        <TextView
+            android:id="@+id/menuReset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/raleway_bold"
+            android:gravity="end|center_vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="14dp"
+            android:text="Reset Password"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/menuPolicies" />
 
         <!-- 4. FAQ Chatbot -->
         <TextView
@@ -137,7 +137,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/menuCpdInfo" />
+            app:layout_constraintTop_toBottomOf="@id/menuResources" />
 
         <!-- 5. Reset Password -->
         <TextView

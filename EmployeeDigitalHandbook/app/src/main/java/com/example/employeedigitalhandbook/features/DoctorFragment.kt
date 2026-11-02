@@ -145,5 +145,8 @@ class DoctorFragment : Fragment() {
             .placeholder(R.drawable.placeholder_doctor)
             .error(R.drawable.placeholder_doctor)
             .into(imgDoctorProfile)
+
+
+
     }
 }
