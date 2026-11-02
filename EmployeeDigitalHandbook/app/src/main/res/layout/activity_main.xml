@@ -95,7 +95,6 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-<<<<<<< Updated upstream
             app:layout_constraintTop_toBottomOf="@id/menuCpdInfo" />
 
         <!-- 4. Reset Password -->
@@ -117,9 +116,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/menuPolicies" />
-=======
-            app:layout_constraintTop_toBottomOf="@id/menuQuiz" />
->>>>>>> Stashed changes
 
         <!-- 4. FAQ Chatbot -->
         <TextView
